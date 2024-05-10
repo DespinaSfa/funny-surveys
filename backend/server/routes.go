@@ -1,7 +1,6 @@
 package server
 
 import (
-	"backend/db"
 	_ "backend/docs"
 	"backend/models"
 	"encoding/json"
