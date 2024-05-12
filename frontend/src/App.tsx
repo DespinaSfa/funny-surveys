@@ -8,6 +8,9 @@ import SelectTemplate from "./pages/SelectTemplate";
 import PartyTemplate from "./pages/PartyTemplate";
 import RoomTemplate from "./pages/RoomTemplate";
 import WeddingTemplate from "./pages/WeddingTemplate";
+import PollResultsPageWedding from "./pages/PollResultsPageWedding";
+import PollResultsPageParty from "./pages/PollResultsPageParty";
+import PollResultsPageRoom from "./pages/PollResultsPageRoom";
 
 
 export default function App() {
@@ -22,6 +25,9 @@ export default function App() {
           <Route path="selectTemplate/partyTemplate" element={<PartyTemplate />} />
           <Route path="selectTemplate/roomTemplate" element={<RoomTemplate />} />
           <Route path="selectTemplate/weddingTemplate" element={<WeddingTemplate />} />
+          <Route path="pollResultsPageWedding" element={<PollResultsPageWedding />} />
+          <Route path="pollResultsPageParty" element={<PollResultsPageParty />} />
+          <Route path="pollResultsPageRoom" element={<PollResultsPageRoom />} />
         </Route>
       </Routes>
     </div>
