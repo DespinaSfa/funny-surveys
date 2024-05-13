@@ -5,7 +5,7 @@ import {PollData, calculateCounts} from './PollResultsHelpers';
 
 const PollResultsPageParty = () => {
 
-    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU1NDk1NjgsImlhdCI6MTcxNTU0ODEyOCwidXNlcl9pZCI6MX0.6ttZOUFetKNVuxEwMQIn4xnsWxZMrnqNdaQTPl0mWes"
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU2MDI5ODcsImlhdCI6MTcxNTYwMTU0NywidXNlcl9pZCI6MX0.qGI8tE4934s4j15OAIfUCLmy7v9iKVcbC3zexxRZYe8"
 
     const [pollData, setPollData] = useState<PollData | null>(null); // Specify PollData type for useState
     const [alcoholLevelCounts, setAlcoholLevelCounts] = useState<{ [key: string]: number }>({});
@@ -25,15 +25,17 @@ const PollResultsPageParty = () => {
                     throw new Error("Failed to fetch poll data");
                 }
                 const data = await response.json();
-                setPollData(data);
-                if (pollData) {
-                    const alcoholCounts = calculateCounts(pollData.PollParties, 'CurrentAlcoholLevel');
-                    setAlcoholLevelCounts(alcoholCounts);
-                    const goalAlcoholCounts = calculateCounts(pollData.PollParties, 'PreferredAlcoholLevel');
-                    setGoalAlcoholLevelCounts(goalAlcoholCounts);
-                    const favPartyActivityCount = calculateCounts(pollData.PollParties, 'FavoriteActivity');
-                    setFavPartyActivityCounts(favPartyActivityCount);
-                }
+                setPollData(currentData => {
+                    if (currentData) {
+                        const alcoholCounts = calculateCounts(currentData.PollParties, 'CurrentAlcoholLevel');
+                        setAlcoholLevelCounts(alcoholCounts);
+                        const goalAlcoholCounts = calculateCounts(currentData.PollParties, 'PreferredAlcoholLevel');
+                        setGoalAlcoholLevelCounts(goalAlcoholCounts);
+                        const favPartyActivityCount = calculateCounts(currentData.PollParties, 'FavoriteActivity');
+                        setFavPartyActivityCounts(favPartyActivityCount);
+                    }
+                    return data;
+                });
             } catch (error) {
                 console.error("Error fetching poll data:", error);
             }

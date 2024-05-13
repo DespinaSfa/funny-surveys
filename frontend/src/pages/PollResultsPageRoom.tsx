@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 
 const PollResultsPageParty = () => {
 
-    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU1NDI5ODYsImlhdCI6MTcxNTU0MTU0NiwidXNlcl9pZCI6MX0.jpJklzZKtV1JQAE0sYT7qOzhl4hkh29D7uRt9NxYjzY"
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU2MDI5ODcsImlhdCI6MTcxNTYwMTU0NywidXNlcl9pZCI6MX0.qGI8tE4934s4j15OAIfUCLmy7v9iKVcbC3zexxRZYe8"
 
     interface PollData {
         ID: number;
