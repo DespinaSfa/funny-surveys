@@ -2,10 +2,11 @@ import c from './Page_styles.module.scss';
 import PageHeader from "../Components/PageHeader/PageHeader";
 import {useEffect, useState} from "react";
 import {PollData, calculateCounts} from './PollResultsHelpers';
+import MyBarChartComponent from "../Components/BarChart";
 
 const PollResultsPageParty = () => {
 
-    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU2MDI5ODcsImlhdCI6MTcxNTYwMTU0NywidXNlcl9pZCI6MX0.qGI8tE4934s4j15OAIfUCLmy7v9iKVcbC3zexxRZYe8"
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU2OTQzNTcsImlhdCI6MTcxNTY5MjkxNywidXNlcl9pZCI6MX0.Q6wfapB0H0y8SwFsy7U6DBXygJCuW7fmGYeew3QSCzM"
 
     const [pollData, setPollData] = useState<PollData | null>(null); // Specify PollData type for useState
     const [alcoholLevelCounts, setAlcoholLevelCounts] = useState<{ [key: string]: number }>({});
@@ -57,21 +58,15 @@ const PollResultsPageParty = () => {
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What is your current alcohol level? 📈</h3>
-                        {Object.entries(alcoholLevelCounts).map(([level, count]) => (
-                            <p key={level}>Level {level}: {count}</p>
-                        ))}
+                        <MyBarChartComponent counts={alcoholLevelCounts} />
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What alcohol level have you set as your goal for today? 🍺</h3>
-                        {Object.entries(goalAlcoholLevelCounts).map(([level, count]) => (
-                            <p key={level}>Level {level}: {count}</p>
-                        ))}
+                        <MyBarChartComponent counts={goalAlcoholLevelCounts} />
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What is your favortite party activity?</h3>
-                        {Object.entries(favPartyActivity).map(([activity, count]) => (
-                            <p key={activity}>{activity}: {count}</p>
-                        ))}
+                        <MyBarChartComponent counts={favPartyActivity} />
                     </div>
                     <div className={c.pollResCard}>
                         <h3>Which snacks or drinks would you like for the next party? 🍔</h3>

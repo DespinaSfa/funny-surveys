@@ -2,11 +2,12 @@ import c from './Page_styles.module.scss';
 import PageHeader from "../Components/PageHeader/PageHeader";
 import {useEffect, useState} from "react";
 import { PollData, calculateAverageKnownCoupleSince, calculateWeddingCounts } from './PollResultsHelpers';
+import MyBarChartComponent from "../Components/BarChart";
 
 
 const PollResultsPageWedding = () => {
 
-    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU1NDgwODgsImlhdCI6MTcxNTU0NjY0OCwidXNlcl9pZCI6MX0.ecBrURjKRjDV-yVFBPcn9NSh1AEtiw13LFdIlfu1zsE"
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU2OTIxNjQsImlhdCI6MTcxNTY5MDcyNCwidXNlcl9pZCI6MX0.hEeCgWL3eIZ6UQ4-FcPM22aXozstkuHVySoyDBtUdcY"
 
     const [pollData, setPollData] = useState<PollData | null>(null); // Specify PollData type for useState
     const [inviteCounts, setInviteCounts] = useState<{ [key: string]: number }>({});
@@ -46,13 +47,11 @@ const PollResultsPageWedding = () => {
                     <p>Description: {pollData.Description}</p>
                     <div className={c.pollResCard}>
                         <h3>Who did you invite to the wedding?</h3>
-                        {Object.entries(inviteCounts).map(([invite, count]) => (
-                            <p key={invite}>{invite}: {count}</p>
-                        ))}
+                        <MyBarChartComponent counts={inviteCounts} />
                     </div>
                     <div className={c.pollResCard}>
                         <h3>How long have you known the bride and groom?</h3>
-                        <p>Average: {averageKnownCoupleSince.toFixed(2)} years</p>
+                        <p>Average: {averageKnownCoupleSince.toFixed(0)} years</p>
                     </div>
                     <div className={c.pollResCard}>
                         <h3>How do you know the bride and groom?</h3>
@@ -62,9 +61,7 @@ const PollResultsPageWedding = () => {
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What was your highlight of the wedding??</h3>
-                        {Object.entries(highlightCounts).map(([item, count]) => (
-                            <p key={item}>{item}: {count}</p>
-                        ))}
+                        <MyBarChartComponent counts={highlightCounts} />
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What do you wish the bride and groom?</h3>
