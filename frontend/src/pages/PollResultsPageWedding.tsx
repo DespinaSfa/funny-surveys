@@ -46,7 +46,7 @@ const PollResultsPageWedding = () => {
                     <PageHeader heading={`Title: ${pollData.Title}`} link="/" />
                     <p>Description: {pollData.Description}</p>
                     <div className={c.pollResCard}>
-                        <h3>Who did you invite to the wedding?</h3>
+                        <h3>Who did invite you to the wedding?</h3>
                         <MyBarChartComponent counts={inviteCounts} />
                     </div>
                     <div className={c.pollResCard}>
