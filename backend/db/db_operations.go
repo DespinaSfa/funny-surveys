@@ -216,6 +216,10 @@ func populateDatabase(db *gorm.DB) {
 	partyDetails := []models.PollParty{
 		{PollID: polls[1].ID, SongToBePlayed: "tempo - cro", CurrentAlcoholLevel: 1, PreferredAlcoholLevel: 3, FavoriteActivity: "dance", WishSnack: "Pizza"},
 		{PollID: polls[1].ID, SongToBePlayed: "Friesenjung - Ski Aggu", CurrentAlcoholLevel: 5, PreferredAlcoholLevel: 1, FavoriteActivity: "karaoke", WishSnack: "Brownies"},
+		{PollID: polls[1].ID, SongToBePlayed: "cro bad chick", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 4, FavoriteActivity: "karaoke", WishSnack: "Burger"},
+		{PollID: polls[1].ID, SongToBePlayed: "dancing queen", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 3, FavoriteActivity: "dance", WishSnack: "Chips"},
+		{PollID: polls[1].ID, SongToBePlayed: "last friday night", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 5, FavoriteActivity: "dance", WishSnack: "Muffins!!"},
+		{PollID: polls[1].ID, SongToBePlayed: "snoop dog", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 4, FavoriteActivity: "dance", WishSnack: "idk"},
 	}
 	for _, detail := range partyDetails {
 		if err := db.Create(&detail).Error; err != nil {

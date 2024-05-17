@@ -1,60 +1,83 @@
 import React from 'react';
-import { BarChart } from '@mui/x-charts';
+import { Bar } from 'react-chartjs-2';
 
-interface HighlightCounts {
-    [key: string]: number;
+import {
+    Chart as ChartJS,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    ChartOptions
+} from 'chart.js';
+
+ChartJS.register(
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip
+);
+
+// Define the type for the counts prop
+interface HorizontalBarChartProps {
+    counts: { [key: string]: number };
 }
 
-interface MyBarChartComponentProps {
-    counts: HighlightCounts;
-}
+const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
+    // Generate labels and data from the counts prop
+    const labels = Object.keys(counts);
+    const dataValues = Object.values(counts);
 
-class MyBarChartComponent extends React.Component<MyBarChartComponentProps> {
-    render() {
-        const { counts } = this.props;
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Highlights',
+                data: dataValues,
+                backgroundColor: '#DBF881'
+            }
+        ]
+    };
 
-        const xAxisConfig = {
-            tickLabelInterval: (value: any, index: any) => Number.isInteger(value), // only full numbers bc these are counts
-            valueFormatter: (value: any) => value.toFixed(0),
-            label:'Votes'
-        };
-
-        // Transform the highlightCounts object into an array suitable for the BarChart
-        const dataset = Object.entries(counts).map(([name, value]) => ({
-            name,
-            value
-        }));
-
-        return (
-            <BarChart
-                dataset={dataset}
-                yAxis={[{ scaleType: 'band', dataKey: 'name' }]}
-                xAxis={[xAxisConfig]}
-                series={[
-                    {
-                        color:'#DBF881',
-                        dataKey: 'value',
-                        valueFormatter: (value) => `${value} votes`
-                    }
-                ]}
-                width={500}
-                height={200}
-                layout="horizontal"
-                borderRadius={5}
-                margin={{ left: 75 }}
-                sx={{
-                    "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel, & .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel, &.MuiChartsAxis-tick, .MuiChartsAxis-label": {
-                        strokeWidth: "0.4",
-                        fill: "#fff"
+    const options: ChartOptions<'bar'> = {
+        indexAxis: 'y',
+        scales: {
+            x: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1, // Ensure ticks increment by 1 bc it's a count
+                    callback: function(value) {
+                        if (Number.isInteger(value)) {
+                            return value;
+                        }
+                        return null;
                     },
-                    "& .MuiChartsAxis-left .MuiChartsAxis-line, & .MuiChartsAxis-bottom .MuiChartsAxis-line, .MuiChartsAxis-tick": {
-                        stroke: "#fff",
-                        strokeWidth: 0.4,
-                    }
-                }}
-            />
-        );
-    }
+                    color: '#fff'
+                },
+                title: {
+                    display: true,
+                    text: 'Count',
+                    color: '#fff'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#fff'
+                },
+                title: {
+                    color: '#fff'
+                }
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: false
+    };
+
+    return (
+        <div>
+            <Bar data={data} options={options}></Bar>
+        </div>
+    );
 }
 
-export default MyBarChartComponent;
+export default HorizontalBarChart;

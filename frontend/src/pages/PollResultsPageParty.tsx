@@ -3,10 +3,11 @@ import PageHeader from "../Components/PageHeader/PageHeader";
 import {useEffect, useState} from "react";
 import {PollData, calculateCounts} from './PollResultsHelpers';
 import MyBarChartComponent from "../Components/BarChart";
+import HorizontalBarChart from "../Components/BarChart";
 
 const PollResultsPageParty = () => {
 
-    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU2OTQzNTcsImlhdCI6MTcxNTY5MjkxNywidXNlcl9pZCI6MX0.Q6wfapB0H0y8SwFsy7U6DBXygJCuW7fmGYeew3QSCzM"
+    const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE3MTU4NjM1NzIsImlhdCI6MTcxNTg2MjEzMiwidXNlcl9pZCI6MX0.no4EXBRFuxNbZRqAP_cuNhi7kiy7p-AsGX4OtPkSr4o"
 
     const [pollData, setPollData] = useState<PollData | null>(null); // Specify PollData type for useState
     const [alcoholLevelCounts, setAlcoholLevelCounts] = useState<{ [key: string]: number }>({});
@@ -48,25 +49,25 @@ const PollResultsPageParty = () => {
         <div>
             {pollData && (
                 <div>
-                    <PageHeader heading={`Title: ${pollData.Title}`} link="/" />
+                    <PageHeader heading={`Title: ${pollData.Title}`} link="/"/>
                     <p>Description: {pollData.Description}</p>
                     <div className={c.pollResCard}>
                         <h3>Which songs should definitely be played tonight? 📻</h3>
-                        {pollData.PollParties.map((wedding, index) => (
-                            <div key={index}>{wedding.SongToBePlayed}</div>
+                        {pollData.PollParties.map((item, index) => (
+                            <div key={index}>{item.SongToBePlayed}</div>
                         ))}
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What is your current alcohol level? 📈</h3>
-                        <MyBarChartComponent counts={alcoholLevelCounts} />
+                        <HorizontalBarChart counts={alcoholLevelCounts}/>
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What alcohol level have you set as your goal for today? 🍺</h3>
-                        <MyBarChartComponent counts={goalAlcoholLevelCounts} />
+                        <HorizontalBarChart counts={goalAlcoholLevelCounts}/>
                     </div>
                     <div className={c.pollResCard}>
-                        <h3>What is your favortite party activity?</h3>
-                        <MyBarChartComponent counts={favPartyActivity} />
+                        <h3>What is your favorite party activity?</h3>
+                        <HorizontalBarChart counts={favPartyActivity}/>
                     </div>
                     <div className={c.pollResCard}>
                         <h3>Which snacks or drinks would you like for the next party? 🍔</h3>
@@ -81,4 +82,3 @@ const PollResultsPageParty = () => {
 };
 
 export default PollResultsPageParty;
-

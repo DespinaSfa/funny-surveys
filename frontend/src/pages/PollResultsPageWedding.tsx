@@ -3,6 +3,7 @@ import PageHeader from "../Components/PageHeader/PageHeader";
 import {useEffect, useState} from "react";
 import { PollData, calculateAverageKnownCoupleSince, calculateWeddingCounts } from './PollResultsHelpers';
 import MyBarChartComponent from "../Components/BarChart";
+import HorizontalBarChart from "../Components/BarChart";
 
 
 const PollResultsPageWedding = () => {
@@ -43,11 +44,11 @@ const PollResultsPageWedding = () => {
         <div>
             {pollData && (
                 <div>
-                    <PageHeader heading={`Title: ${pollData.Title}`} link="/" />
+                    <PageHeader heading={`Title: ${pollData.Title}`} link="/"/>
                     <p>Description: {pollData.Description}</p>
                     <div className={c.pollResCard}>
                         <h3>Who did invite you to the wedding?</h3>
-                        <MyBarChartComponent counts={inviteCounts} />
+                        <HorizontalBarChart counts={inviteCounts}/>
                     </div>
                     <div className={c.pollResCard}>
                         <h3>How long have you known the bride and groom?</h3>
@@ -61,7 +62,7 @@ const PollResultsPageWedding = () => {
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What was your highlight of the wedding??</h3>
-                        <MyBarChartComponent counts={highlightCounts} />
+                        <HorizontalBarChart counts={highlightCounts}/>
                     </div>
                     <div className={c.pollResCard}>
                         <h3>What do you wish the bride and groom?</h3>
@@ -76,4 +77,3 @@ const PollResultsPageWedding = () => {
 };
 
 export default PollResultsPageWedding;
-
