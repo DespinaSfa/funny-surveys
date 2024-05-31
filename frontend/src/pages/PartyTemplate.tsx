@@ -5,7 +5,7 @@ import PageHeader from "../Components/PageHeader/PageHeader";
 import PollHeader from "../Components/PollHeader/PollHeader";
 import RangeSelector from "../Components/RangeSelector";
 import './template.scss';
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 const PartyTemplate = () => {
 
@@ -33,11 +33,39 @@ const PartyTemplate = () => {
         checkToken();
     }, []);
 
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const pollType = "party";
+    const token = localStorage.getItem('token');
+
+
+    const handleHeadingChange = (value: string) => {
+        setTitle(value);
+    };
+
+    const handleDescriptionChange = (value: string) => {
+        setDescription(value);
+    };
+
+    const handleGeneratePoll = async () => {
+        try {
+        const response = await fetch('http://localhost:3001/polls', {
+            method: 'POST',
+            headers: {
+                Authorization: `${token}`
+            },
+            body: JSON.stringify({ description, pollType, title })
+        });
+        } catch (error) {
+        console.error('Error occurred during generate poll:', error);
+        }
+    };
+
     return (
         <>
             <PageHeader heading="Create Party Poll" link="/select-template" />
             <div className="template">
-            <PollHeader />
+                <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
                 <p className="question">Which songs should definitely be played tonight? 📻</p>
                 <InputField label={"Songs"} placeholder={"I would like to listen to..."} onChange={function (value: string): void { }} />
                 <p className="question">What is your current alcohol level? 📈</p>
@@ -53,7 +81,7 @@ const PartyTemplate = () => {
                     4. Everything Correct? Then Generate Your Poll!
                 </p>
                 <div className="generateButton">
-                    <GenerateButton label={""} onClick={function (): void { } } />
+                    <GenerateButton label={""} onClick={handleGeneratePoll} />
                 </div>
             </div>
         </>
