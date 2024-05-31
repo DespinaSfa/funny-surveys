@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -27,7 +28,7 @@ func CreateToken(userID float64) (string, error) {
 	return tokenString, nil
 }
 
-func ParseToken(tokenStr string) (bool, error) {
+func GetUserIdFromToken(tokenStr string) (string, error) {
 	claims := &jwt.MapClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
@@ -35,15 +36,17 @@ func ParseToken(tokenStr string) (bool, error) {
 	})
 
 	if err != nil {
-		return false, err
+		return "", err
 	}
 
 	if claims, ok := token.Claims.(*jwt.MapClaims); ok && token.Valid {
-		_ = (*claims)["user_id"]
-		return true, nil
+		if userID, ok := (*claims)["user_id"].(string); ok {
+			return userID, nil
+		}
+		return "", errors.New("user_id not found in token")
 	}
 
-	return false, nil
+	return "", errors.New("invalid token")
 }
 
 func RefreshToken(refreshTokenStr string, userID float64) (string, error) {
