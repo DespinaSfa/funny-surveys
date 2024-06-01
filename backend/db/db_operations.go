@@ -227,9 +227,11 @@ func DeletePollByID(db *gorm.DB, pollID string) error {
 }
 
 func populateDatabase(db *gorm.DB) {
-	// Drop existing schema
-	if err := db.Migrator().DropTable(&models.PollWedding{}, &models.PollParty{}, &models.PollPlanning{}, &models.Poll{}, &models.User{}); err != nil {
-		fmt.Println("Failed to drop tables:", err)
+	// Check if the database is empty by checking for existing users
+	var countUsers int64
+	db.Model(&models.User{}).Count(&countUsers)
+	if countUsers > 0 {
+		fmt.Println("Database is not empty, skipping population.")
 		return
 	}
 
