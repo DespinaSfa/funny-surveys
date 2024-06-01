@@ -3,6 +3,8 @@ package server
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -28,7 +30,7 @@ func CreateToken(userID float64) (string, error) {
 	return tokenString, nil
 }
 
-func GetUserIdFromToken(tokenStr string) (string, error) {
+func getUserIdFromToken(tokenStr string) (*int, error) {
 	claims := &jwt.MapClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
@@ -36,17 +38,32 @@ func GetUserIdFromToken(tokenStr string) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	if claims, ok := token.Claims.(*jwt.MapClaims); ok && token.Valid {
-		if userID, ok := (*claims)["user_id"].(string); ok {
-			return userID, nil
+		if userID, ok := (*claims)["user_id"].(float64); ok {
+			userIDInt := int(userID)
+			return &userIDInt, nil
 		}
-		return "", errors.New("user_id not found in token")
+		return nil, errors.New("user_id not found in token")
 	}
 
-	return "", errors.New("invalid token")
+	return nil, errors.New("invalid token")
+}
+
+func GetUserId(r *http.Request) (*int, error) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		return nil, errors.New("authorization header missing")
+	}
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return nil, errors.New("invalid authorization header format")
+	}
+
+	return getUserIdFromToken(parts[1])
 }
 
 func RefreshToken(refreshTokenStr string, userID float64) (string, error) {
