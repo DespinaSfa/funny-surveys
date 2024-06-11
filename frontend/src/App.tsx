@@ -8,9 +8,6 @@ import SelectTemplate from "./pages/SelectTemplate";
 import PartyTemplate from "./pages/PartyTemplate";
 import PlanningTemplate from "./pages/PlanningTemplate";
 import WeddingTemplate from "./pages/WeddingTemplate";
-import PollResultsPageWedding from "./pages/PollResultsPageWedding";
-import PollResultsPageParty from "./pages/PollResultsPageParty";
-import PollResultsPageRoom from "./pages/PollResultsPageRoom";
 
 
 export default function App() {

@@ -10,7 +10,7 @@ const LandingPage = () => {
             <div className="button">
                 <MainButton text="Login" link="/login"/>
             </div>
-            <div className={c.button}>
+            <div className="button">
                 <MainButton text="results page dummy - party" link="/pollResultsPageParty"/>
                 <MainButton text="results page dummy - wedding" link="/pollResultsPageWedding"/>
                 <MainButton text="results page dummy - room" link="/pollResultsPageRoom"/>
