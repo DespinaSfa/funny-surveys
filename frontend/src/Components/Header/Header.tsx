@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import c from './Header.module.scss';
 import MainButton from '../MainButton/MainButton';
 
@@ -26,14 +27,18 @@ const Header = () => {
     if (!isLoggedIn) {
         return (
             <div className={c.header}>
-                <h1 className={c.icon}>Party Poll</h1>
+                <Link to="/" className={c.icon}>
+                    Party Poll
+                </Link>
                 {<MainButton text='Login' link='/login'/>}
             </div>
         );
     } else {
         return (
             <div className={c.header}>
-                <h1 className={c.icon}>Party Poll</h1>
+                <Link to="/" className={c.icon}>
+                    Party Poll
+                </Link>
                 {<div className={c.user_handling}>
                     <h4 className={c.username}>{username}</h4>
                     <MainButton text='Logout' onClick={handleLogout}/>
