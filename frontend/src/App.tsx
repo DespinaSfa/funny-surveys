@@ -8,23 +8,61 @@ import SelectTemplate from "./pages/SelectTemplate";
 import PartyTemplate from "./pages/PartyTemplate";
 import PlanningTemplate from "./pages/PlanningTemplate";
 import WeddingTemplate from "./pages/WeddingTemplate";
-
+import { AuthProvider } from './context/AuthProvider';
+import ProtectedRoute from './context/ProtectedRoute';
 
 export default function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="select-template" element={<SelectTemplate />} />
-          <Route path="select-template/party" element={<PartyTemplate />} />
-          <Route path="select-template/planning" element={<PlanningTemplate />} />
-          <Route path="select-template/wedding" element={<WeddingTemplate />} />
-        </Route>
-      </Routes>
-    </div>
+      <AuthProvider>
+        <div>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<LandingPage />} />
+              <Route path="login" element={<Login />} />
+
+              <Route
+                  path="dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="select-template"
+                  element={
+                    <ProtectedRoute>
+                      <SelectTemplate />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="select-template/party"
+                  element={
+                    <ProtectedRoute>
+                      <PartyTemplate />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="select-template/planning"
+                  element={
+                    <ProtectedRoute>
+                      <PlanningTemplate />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="select-template/wedding"
+                  element={
+                    <ProtectedRoute>
+                      <WeddingTemplate />
+                    </ProtectedRoute>
+                  }
+              />
+            </Route>
+          </Routes>
+        </div>
+      </AuthProvider>
   );
 }
-

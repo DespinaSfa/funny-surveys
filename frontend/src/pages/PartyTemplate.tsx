@@ -9,29 +9,6 @@ import {useEffect, useState} from "react";
 
 const PartyTemplate = () => {
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/login';
-        }
-
-        const checkToken = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/check-token-validToken`, { headers: { 'Authorization': `Bearer ${token}` } });
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        localStorage.removeItem('token');
-                        window.location.href = '/login';
-                        return;
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking token:', error);
-            }
-        };
-
-        checkToken();
-    }, []);
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
