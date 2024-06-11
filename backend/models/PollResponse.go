@@ -1,9 +1,12 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type PollInfo struct {
 	Title       string `json:"title"`
+	ID          string `json:"id"`
 	Description string `json:"description"`
 	PollType    string `json:"pollType"`
 }
@@ -26,8 +29,16 @@ type PollWeddingResponse struct {
 	CoupleWish          string `json:"coupleWish"`
 }
 
+type PollPlanningResponse struct {
+	EssentialDrink  string `json:"essentialDrink"`
+	EssentialFood   string `json:"essentialFood"`
+	MusicToBePlayed string `json:"musicToBePlayed"`
+	Activities      string `json:"activities"`
+	EventWish       string `json:"eventWish"`
+}
+
 type GenericPollResponse struct {
-	PollID   uint            `json:"poll_id"`
+	PollID   string          `json:"poll_id"`
 	PollType string          `json:"poll_type"`
 	Data     json.RawMessage `json:"data"` // Use json.RawMessage for deferred unmarshalling
 }

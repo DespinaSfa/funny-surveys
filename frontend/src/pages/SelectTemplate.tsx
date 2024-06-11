@@ -1,22 +1,47 @@
 import { Outlet, Link } from "react-router-dom";
-import c from './Page_styles.module.scss';
+import './selectTemplate.scss';
 import Button from "@mui/material/Button";
 import PageHeader from "../Components/PageHeader/PageHeader";
+import {useEffect} from "react";
 
 const SelectTemplate = () => {
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        const checkToken = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/check-token-valid`, {headers: { 'Authorization': `Bearer ${token}` } });
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('token');
+                        window.location.href = '/login';
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking token:', error);
+            }
+        };
+
+        checkToken();
+    }, []);
+
     return(
-        <div className={c.content}>
-            <PageHeader heading="Select poll type" link="/"/>
-            <div className={c.selectContainer}>
-                <Button className={`${c.selectButton} ${c.party}`} variant="contained" component={Link} to='partyTemplate'>
-                    <div className={c.buttonText}>Party</div>
+        <div className="content">
+            <PageHeader heading="Select poll type" link="/dashboard"/>
+            <div className="selectContainer">
+                <Button className="selectButton party" variant="contained" component={Link} to='party'>
+                    <div className="buttonText">Party</div>
                 </Button>
-                <Button className={`${c.selectButton} ${c.room}`} variant="contained" component={Link} to='roomTemplate'>
-                    <div className={c.buttonText}>Room</div>
+                <Button className="selectButton room" variant="contained" component={Link} to='planning'>
+                    <div className="buttonText">Planning</div>
                 </Button>
-                <Button className={`${c.selectButton} ${c.wedding}`} variant="contained" component={Link} to='weddingTemplate'>
+                <Button className="selectButton wedding" variant="contained" component={Link} to='wedding'>
                         
-                    <div className={c.buttonText}>Wedding</div>
+                    <div className="buttonText">Wedding</div>
                 </Button>
             </div>
 

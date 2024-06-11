@@ -3,11 +3,10 @@ import InputField from "../Components/InputField";
 import MultipleChoiceSelector from "../Components/MultipleChoiceSelector";
 import PageHeader from "../Components/PageHeader/PageHeader";
 import PollHeader from "../Components/PollHeader/PollHeader";
-import RangeSelector from "../Components/RangeSelector";
 import './template.scss';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
-const WeddingTemplate = () => {
+const PlanningTemplate = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -35,7 +34,7 @@ const WeddingTemplate = () => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const pollType = "wedding";
+    const pollType = "planning";
     const token = localStorage.getItem('token');
 
 
@@ -63,19 +62,19 @@ const WeddingTemplate = () => {
     
     return (
         <>
-            <PageHeader heading="Create Wedding Poll" link="/select-template"/>
+            <PageHeader heading="Create Event Planning Poll" link="/select-template"/>
             <div className='template'>
                 <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
-                <p className='question'>Who invited you to the wedding?</p>
-                <MultipleChoiceSelector options={['Bride', 'Groom', 'Both']} onChange={function (option: string): void {} } />
-                <p className='question'>How long have you known the bride and groom?</p>
-                <RangeSelector min={0} max={30} step={1} onChange={function (value: number): void {} } />
-                <p className='question'>How do you know the bride and groom?</p>
-                <InputField label={"History"} placeholder={"I know you..."} onChange={function (value: string): void {} } />
-                <p className='question'>What was your highlight of the wedding?</p>
-                <MultipleChoiceSelector options={['Wedding Ceremony', 'Food', 'Wedding dance', 'Program', 'After Party']} onChange={function (option: string): void {} } />
-                <p className='question'>What do you wish the bride and groom?</p>
-                <InputField label={"Wishes"} placeholder={"I wish you..."} onChange={function (value: string): void {} } />
+                <p className='question'>Which drinks are absolutely essential?</p>
+                <InputField label={"drinks"} placeholder={"I would like to drink..."} onChange={function (value: string): void { }} />
+                <p className='question'>Which food are absolutely essential?</p>
+                <InputField label={"food"} placeholder={"I would like to eat..."} onChange={function (value: string): void { }} />
+                <p className='question'>What kind of music should be played?</p>
+                <MultipleChoiceSelector options={['Pop', 'Rock', 'Rap', 'EDM', 'Indie']} onChange={function (option: string): void { }} />
+                <p className='question'>What activities should be at the event?</p>
+                <MultipleChoiceSelector options={['Theme', 'Photobooth', 'Beer Pong Table', 'Karaoke']} onChange={function (option: string): void { }} />
+                <p className='question'>What do you wish for the event?</p>
+                <InputField label={"wish"} placeholder={"For this event I need..."} onChange={function (value: string): void { }} />
                 <p className='heading'>
                     4. Everything Correct? Then Generate Your Poll!
                 </p>
@@ -87,4 +86,4 @@ const WeddingTemplate = () => {
      );
   };
   
-  export default WeddingTemplate;
+  export default PlanningTemplate;
