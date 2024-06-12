@@ -31,7 +31,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 });
                 if (response.ok) {
                     setIsAuthenticated(true);
-                    console.log(token, 'is valid')
                 } else {
                     if (response.status === 401) {
                         localStorage.removeItem('token');
