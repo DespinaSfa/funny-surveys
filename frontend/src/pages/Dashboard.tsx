@@ -7,16 +7,26 @@ import MainButton from "../Components/MainButton/MainButton";
 
 const Dashboard = () => {
     const [polls, setPolls] = useState<Poll[]>([]);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        const fetchPolls = async () => {
+            const fetchPolls = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`);
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },});
                 if (!response.ok) {
                     throw new Error('Failed to fetch polls');
                 }
                 const data = await response.json();
-                setPolls(data);
+                if(data !== null){
+                    setPolls(data);
+                }
+                else{
+                    setPolls([])
+                }
             } catch (error) {
                 console.error('Error fetching polls:', error);
             }
