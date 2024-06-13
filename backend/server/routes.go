@@ -424,18 +424,25 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token, "refreshToken": refreshToken})
 }
 
-func setupRoutes(r *chi.Mux, dbInstance *gorm.DB) {
+func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	server := &Server{DBInst: dbInstance}
-	r.Mount("/swagger", httpSwagger.WrapHandler)
 
-	r.Post("/login", server.LoginHandler)
-	r.Post("/refresh-token", server.RefreshToken)
-	r.Get("/qr", server.GenerateQRHandler)
-	r.Get("/check-token-valid", server.CheckTokenValid)
+	// Public routes (no auth middleware)
+	r.Group(func(r chi.Router) {
+		r.Mount("/swagger", httpSwagger.WrapHandler)
+		r.Post("/login", server.LoginHandler)
+		r.Get("/polls/{pollId}", server.GetPollByIDHandler)
+	})
 
-	r.Get("/polls", server.GetPollsHandler)
-	r.Post("/polls", server.PostPollsHandler)
-	r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
-	r.Get("/polls/{pollId}", server.GetPollByIDHandler)
-	r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+	// Routes with auth middleware
+	r.Group(func(r chi.Router) {
+		r.Use(AuthenticationMiddleware)
+		r.Post("/refresh-token", server.RefreshToken)
+		r.Get("/qr", server.GenerateQRHandler)
+		r.Get("/check-token-valid", server.CheckTokenValid)
+		r.Get("/polls", server.GetPollsHandler)
+		r.Post("/polls", server.PostPollsHandler)
+		r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
+		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+	})
 }

@@ -11,19 +11,13 @@ import (
 )
 
 func setupMiddleware(r *chi.Mux) {
-	r.Use(middleware.Logger)    //log every request
-	r.Use(middleware.Recoverer) //recover from panics without crashing the server return 500
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 	r.Use(corsMiddleware)
-	r.Use(AuthenticationMiddleware)
 }
 
 func AuthenticationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		if (r.URL.Path == "/login") || (strings.HasPrefix(r.URL.Path, "/swagger")) {
-			next.ServeHTTP(w, r)
-			return
-		}
 		// Get the token from the 'Authorization' header
 		tokenString := r.Header.Get("Authorization")
 		if tokenString == "" {
