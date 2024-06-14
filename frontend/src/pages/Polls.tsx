@@ -36,7 +36,7 @@ const Polls = () => {
             <>
                 <CostumePollHeader heading={pollData.Title} description={pollData.Description} />
                 {pollData.PollType == 'party' && <Party poll_id={pollData.ID} />}
-                {pollData.PollType == 'wedding' && <Wedding />}
+                {pollData.PollType == 'wedding' && <Wedding poll_id={pollData.ID} />}
                 {pollData.PollType == 'room' && <Room />}
             </>
      );

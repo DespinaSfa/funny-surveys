@@ -7,13 +7,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"io"
-	"net/http"
 )
 
 type Server struct {
@@ -432,6 +433,7 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 		r.Mount("/swagger", httpSwagger.WrapHandler)
 		r.Post("/login", server.LoginHandler)
 		r.Get("/polls/{pollId}", server.GetPollByIDHandler)
+		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
 	})
 
 	// Routes with auth middleware
@@ -443,6 +445,5 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 		r.Get("/polls", server.GetPollsHandler)
 		r.Post("/polls", server.PostPollsHandler)
 		r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
-		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
 	})
 }
