@@ -234,6 +234,16 @@ func populateDatabase(db *gorm.DB) {
 		return
 	}
 
+	/*
+		// Check if the database is empty by checking for existing users
+		var countUsers int64
+		db.Model(&models.User{}).Count(&countUsers)
+		if countUsers > 0 {
+			fmt.Println("Database is not empty, skipping population.")
+			return
+		}
+	*/
+
 	// Automatically migrate your schema
 	migrate := []interface{}{&models.User{}, &models.Poll{}, &models.PollParty{}, &models.PollWedding{}, &models.PollPlanning{}}
 	for _, model := range migrate {
