@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -227,11 +228,9 @@ func DeletePollByID(db *gorm.DB, pollID string) error {
 }
 
 func populateDatabase(db *gorm.DB) {
-	// Check if the database is empty by checking for existing users
-	var countUsers int64
-	db.Model(&models.User{}).Count(&countUsers)
-	if countUsers > 0 {
-		fmt.Println("Database is not empty, skipping population.")
+	// Drop all tables
+	if err := db.Migrator().DropTable(&models.User{}, &models.Poll{}, &models.PollParty{}, &models.PollWedding{}, &models.PollPlanning{}); err != nil {
+		fmt.Printf("Failed to drop tables: %v\n", err)
 		return
 	}
 
@@ -246,8 +245,8 @@ func populateDatabase(db *gorm.DB) {
 
 	// Populate users
 	users := []models.User{
-		{Username: "CrazyCatLady", PasswordHash: hashPassword("meowmix")},
-		{Username: "TheRealElvis", PasswordHash: hashPassword("thankyouverymuch")},
+		{Username: "User1", PasswordHash: hashPassword("User1")},
+		{Username: "User2", PasswordHash: hashPassword("User2")},
 	}
 
 	for i := range users {
