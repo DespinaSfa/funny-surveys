@@ -10,6 +10,7 @@ import PlanningTemplate from "./pages/PlanningTemplate";
 import WeddingTemplate from "./pages/WeddingTemplate";
 import { AuthProvider } from './context/AuthProvider';
 import ProtectedRoute from './context/ProtectedRoute';
+import Polls from './pages/Polls';
 
 export default function App() {
   return (
@@ -19,6 +20,8 @@ export default function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<LandingPage />} />
               <Route path="login" element={<Login />} />
+              <Route path="polls/:id" element={<Polls />} />
+              <Route path="results/:id" element={<div>Test</div>} />
 
               <Route
                   path="dashboard"
