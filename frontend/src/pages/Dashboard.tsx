@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Poll from "./models/Poll";
 import StatisticCard from "../Components/StatisticCard/StatisticCard";
 import MainButton from "../Components/MainButton/MainButton";
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     const [polls, setPolls] = useState<Poll[]>([]);
@@ -53,7 +54,9 @@ const Dashboard = () => {
                     <p className="empty-message">No polls available</p>
                 ) : (
                     polls.map((poll, index) => (
-                        <ListItem key={index} title={poll.title} description={poll.description} />
+                        <Link key={index} to={`/results/${poll.id}`} className="list-item-link">
+                            <ListItem title={poll.title} description={poll.description} />
+                        </Link>
                     ))
                 )}
             </div>

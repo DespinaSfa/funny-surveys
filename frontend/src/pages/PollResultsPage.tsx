@@ -14,7 +14,8 @@ const ResultsPage = () => {
             try {
                 const response = await fetch(`http://localhost:3001/polls/${id}`);
                 if (!response.ok) {
-                    throw new Error("Failed to fetch poll data");
+                    console.error("Failed to fetch poll data");
+                    return;
                 }
                 const data = await response.json();
                 setPollData(data);
@@ -29,7 +30,7 @@ const ResultsPage = () => {
 
     return (
         <div>
-            <PageHeader heading={`Title: ${pollData.Title}`} link="/" />
+            <PageHeader heading={`Title: ${pollData.Title}`} link="/dashboard" />
             <p>Description: {pollData.Description}</p>
             {pollData.PollType === 'wedding' && <PollResultsWedding data={pollData} />}
             {pollData.PollType === 'party' && <PollResultsParty data={pollData} />}
