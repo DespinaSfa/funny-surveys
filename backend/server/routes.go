@@ -27,11 +27,17 @@ type Server struct {
 // @Success      200  {array}   models.PollInfo
 //
 // @Router       /polls [get]
-func (s *Server) GetPollsHandler(w http.ResponseWriter, _ *http.Request) {
-	//Get User ID
-	userID := 2 // TODO: Get user ID from Auth @Maik
+func (s *Server) GetPollsHandler(w http.ResponseWriter, r *http.Request) {
+	// Get User ID from the auth-header
+	userID, err := GetUserId(r)
+	if err != nil {
+		fmt.Println("Error getting user ID from token:", err)
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
 	// Read user polls
-	polls, err := db.ReadUserPolls(userID)
+	polls, err := db.ReadUserPolls(*userID)
 	if err != nil {
 		fmt.Println("Error reading user polls:", err)
 		http.Error(w, "Failed to read user polls", http.StatusInternalServerError)
@@ -64,8 +70,13 @@ func (s *Server) GetPollsHandler(w http.ResponseWriter, _ *http.Request) {
 //
 // @Router       /polls [post]
 func (s *Server) PostPollsHandler(w http.ResponseWriter, r *http.Request) {
-	// Get User ID
-	userID := uint(2) // TODO: Get user ID from Auth @Maik
+	// Get User ID from the auth-header
+	userID, err := GetUserId(r)
+	if err != nil {
+		fmt.Println("Error getting user ID from token:", err)
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
 
 	// Read the request body
 	body, err := io.ReadAll(r.Body)
@@ -93,7 +104,7 @@ func (s *Server) PostPollsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newPoll := &models.Poll{
-		UserID:      userID,
+		UserID:      uint(*userID),
 		Title:       requestBody.Title,
 		Description: requestBody.Description,
 		PollType:    requestBody.PollType,
@@ -136,10 +147,36 @@ func (s *Server) PostPollsHandler(w http.ResponseWriter, r *http.Request) {
 //		@Param			id	path		string	true	"Poll ID"
 //		@Success		204	string Poll successfully deleted
 //		@Router			/polls/{id} [delete]
+//
+// DeletePollByIDHandler handles the deletion of a poll by ID
 func (s *Server) DeletePollByIDHandler(w http.ResponseWriter, r *http.Request) {
+	// Get User ID from the auth-header
+	userID, err := GetUserId(r)
+	if err != nil {
+		fmt.Println("Error getting user ID from token:", err)
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	// Extract poll ID from URL
 	pollIDStr := chi.URLParam(r, "pollId")
 
-	err := db.DeletePollByID(s.DBInst, pollIDStr)
+	// Read poll from the database
+	poll, err := db.ReadPollByID(s.DBInst, pollIDStr)
+	if err != nil {
+		fmt.Println("Error reading poll from database:", err)
+		http.Error(w, "Poll not found", http.StatusNotFound)
+		return
+	}
+
+	// Check if the user ID matches the poll owner ID
+	if poll.UserID != uint(*userID) {
+		http.Error(w, "Forbidden: user is not allowed to delete this poll", http.StatusForbidden)
+		return
+	}
+
+	// Run DeletePollByID
+	err = db.DeletePollByID(s.DBInst, pollIDStr)
 	if err != nil {
 		http.Error(w, "Failed to delete poll: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -387,17 +424,25 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token, "refreshToken": refreshToken})
 }
 
-func setupRoutes(r *chi.Mux, dbInstance *gorm.DB) {
+func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	server := &Server{DBInst: dbInstance}
-	r.Mount("/swagger", httpSwagger.WrapHandler)
 
-	r.Post("/login", server.LoginHandler)
-	r.Post("/refresh-token", server.RefreshToken)
-	r.Get("/qr", server.GenerateQRHandler)
+	// Public routes (no auth middleware)
+	r.Group(func(r chi.Router) {
+		r.Mount("/swagger", httpSwagger.WrapHandler)
+		r.Post("/login", server.LoginHandler)
+		r.Get("/polls/{pollId}", server.GetPollByIDHandler)
+	})
 
-	r.Get("/polls", server.GetPollsHandler)
-	r.Post("/polls", server.PostPollsHandler)
-	r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
-	r.Get("/polls/{pollId}", server.GetPollByIDHandler)
-	r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+	// Routes with auth middleware
+	r.Group(func(r chi.Router) {
+		r.Use(AuthenticationMiddleware)
+		r.Post("/refresh-token", server.RefreshToken)
+		r.Get("/qr", server.GenerateQRHandler)
+		r.Get("/check-token-valid", server.CheckTokenValid)
+		r.Get("/polls", server.GetPollsHandler)
+		r.Post("/polls", server.PostPollsHandler)
+		r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
+		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+	})
 }

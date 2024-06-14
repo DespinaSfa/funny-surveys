@@ -4,19 +4,30 @@ import { useEffect, useState } from "react";
 import Poll from "./models/Poll";
 import StatisticCard from "../Components/StatisticCard/StatisticCard";
 import MainButton from "../Components/MainButton/MainButton";
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     const [polls, setPolls] = useState<Poll[]>([]);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        const fetchPolls = async () => {
+            const fetchPolls = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`);
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },});
                 if (!response.ok) {
                     throw new Error('Failed to fetch polls');
                 }
                 const data = await response.json();
-                setPolls(data);
+                if(data !== null){
+                    setPolls(data);
+                }
+                else{
+                    setPolls([])
+                }
             } catch (error) {
                 console.error('Error fetching polls:', error);
             }
@@ -43,7 +54,9 @@ const Dashboard = () => {
                     <p className="empty-message">No polls available</p>
                 ) : (
                     polls.map((poll, index) => (
-                        <ListItem key={index} title={poll.title} description={poll.description} />
+                        <Link key={index} to={`/results/${poll.id}`} className="list-item-link">
+                            <ListItem title={poll.title} description={poll.description} />
+                        </Link>
                     ))
                 )}
             </div>
