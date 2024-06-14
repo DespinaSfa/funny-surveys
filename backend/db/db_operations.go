@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -227,13 +228,21 @@ func DeletePollByID(db *gorm.DB, pollID string) error {
 }
 
 func populateDatabase(db *gorm.DB) {
-	// Check if the database is empty by checking for existing users
-	var countUsers int64
-	db.Model(&models.User{}).Count(&countUsers)
-	if countUsers > 0 {
-		fmt.Println("Database is not empty, skipping population.")
+	// Drop all tables
+	if err := db.Migrator().DropTable(&models.User{}, &models.Poll{}, &models.PollParty{}, &models.PollWedding{}, &models.PollPlanning{}); err != nil {
+		fmt.Printf("Failed to drop tables: %v\n", err)
 		return
 	}
+
+	/*
+		// Check if the database is empty by checking for existing users
+		var countUsers int64
+		db.Model(&models.User{}).Count(&countUsers)
+		if countUsers > 0 {
+			fmt.Println("Database is not empty, skipping population.")
+			return
+		}
+	*/
 
 	// Automatically migrate your schema
 	migrate := []interface{}{&models.User{}, &models.Poll{}, &models.PollParty{}, &models.PollWedding{}, &models.PollPlanning{}}
@@ -246,8 +255,8 @@ func populateDatabase(db *gorm.DB) {
 
 	// Populate users
 	users := []models.User{
-		{Username: "CrazyCatLady", PasswordHash: hashPassword("meowmix")},
-		{Username: "TheRealElvis", PasswordHash: hashPassword("thankyouverymuch")},
+		{Username: "User1", PasswordHash: hashPassword("User1")},
+		{Username: "User2", PasswordHash: hashPassword("User2")},
 	}
 
 	for i := range users {
@@ -273,6 +282,10 @@ func populateDatabase(db *gorm.DB) {
 	partyResults := []models.PollParty{
 		{PollID: polls[1].ID, SongToBePlayed: "tempo - cro", CurrentAlcoholLevel: 1, PreferredAlcoholLevel: 3, FavoriteActivity: "dance", WishSnack: "Pizza"},
 		{PollID: polls[1].ID, SongToBePlayed: "Friesenjung - Ski Aggu", CurrentAlcoholLevel: 5, PreferredAlcoholLevel: 1, FavoriteActivity: "karaoke", WishSnack: "Brownies"},
+		{PollID: polls[1].ID, SongToBePlayed: "cro bad chick", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 4, FavoriteActivity: "karaoke", WishSnack: "Burger"},
+		{PollID: polls[1].ID, SongToBePlayed: "dancing queen", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 3, FavoriteActivity: "dance", WishSnack: "Chips"},
+		{PollID: polls[1].ID, SongToBePlayed: "last friday night", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 5, FavoriteActivity: "dance", WishSnack: "Muffins!!"},
+		{PollID: polls[1].ID, SongToBePlayed: "snoop dog", CurrentAlcoholLevel: 2, PreferredAlcoholLevel: 4, FavoriteActivity: "dance", WishSnack: "idk"},
 	}
 	for _, result := range partyResults {
 		if err := db.Create(&result).Error; err != nil {
