@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import './landingPage.scss';
 import MainButton from "../Components/MainButton/MainButton";
 
@@ -11,6 +12,8 @@ const LandingPage = () => {
                     <MainButton text="Create Poll" link="/select-template"/>
                 </div>
             </div>
+
+            <Outlet />
         </div>
     )
   };

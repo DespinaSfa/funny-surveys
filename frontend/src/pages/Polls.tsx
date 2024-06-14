@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CostumePollHeader from "../Components/CostumePollHeader/CostumePollHeader"
 import Party from "../Components/Templates/Party";
 import { useParams } from "react-router-dom"
-import { PollData } from "./PollHelper";
+import { PollData } from "./PollHelpers";
 import Wedding from "../Components/Templates/Wedding";
 import Room from "../Components/Templates/Planning";
 
