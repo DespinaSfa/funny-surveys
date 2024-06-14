@@ -24,7 +24,6 @@ func InitServer() {
 
 	r := chi.NewRouter()
 
-	setupMiddleware(r)
 	setupRoutes(r, dbInstance) // Pass the dbInstance to the setupRoutes function
 
 	const port int = 3001

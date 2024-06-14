@@ -3,18 +3,10 @@ package server
 import (
 	"context"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"net/http"
 	"strings"
 )
-
-func setupMiddleware(r *chi.Mux) {
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
-	r.Use(corsMiddleware)
-}
 
 func AuthenticationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

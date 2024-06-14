@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-chi/chi/v5/middleware"
 	"io"
 	"net/http"
 
@@ -427,6 +428,10 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	server := &Server{DBInst: dbInstance}
+
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(corsMiddleware)
 
 	// Public routes (no auth middleware)
 	r.Group(func(r chi.Router) {
