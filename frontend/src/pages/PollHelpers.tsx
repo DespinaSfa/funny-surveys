@@ -1,5 +1,5 @@
 export interface PollData {
-    ID: number;
+    ID: string;
     CreatedAt: string;
     UpdatedAt: string;
     DeletedAt: string | null;

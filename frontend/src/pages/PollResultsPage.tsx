@@ -4,7 +4,7 @@ import PageHeader from "../Components/PageHeader/PageHeader";
 import PollResultsWedding from './PollResultsWedding';
 import PollResultsParty from './PollResultsParty';
 import PollResultsPlanning from './PollResultsPlanning';
-import { PollData } from './PollResultsHelpers';
+import { PollData } from './PollHelpers';
 
 const ResultsPage = () => {
     const [pollData, setPollData] = useState<PollData | null>(null);

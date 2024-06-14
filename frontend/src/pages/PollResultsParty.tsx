@@ -1,6 +1,6 @@
 import HorizontalBarChart from "../Components/BarChart";
 import c from './Page_styles.module.scss';
-import { calculateCounts, PollData } from './PollResultsHelpers';
+import { calculateCounts, PollData } from './PollHelpers';
 
 const PollResultsParty = ({ data }: { data: PollData }) => {
     const alcoholLevelCounts = calculateCounts(data.PollParties, 'CurrentAlcoholLevel');

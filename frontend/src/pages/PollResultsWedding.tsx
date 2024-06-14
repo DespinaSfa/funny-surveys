@@ -1,6 +1,6 @@
 import HorizontalBarChart from "../Components/BarChart";
 import c from './Page_styles.module.scss';
-import { calculateAverageKnownCoupleSince, calculateWeddingCounts, PollData } from './PollResultsHelpers';
+import { calculateAverageKnownCoupleSince, calculateWeddingCounts, PollData } from './PollHelpers';
 
 const PollResultsWedding = ({ data }: { data: PollData }) => {
     const inviteCounts = calculateWeddingCounts(data.PollWeddings, 'WeddingInvite');

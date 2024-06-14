@@ -31,7 +31,7 @@ const PlanningTemplate = () => {
         const response = await fetch('http://localhost:3001/polls', {
             method: 'POST',
             headers: {
-                Authorization: `${token}`
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ description, pollType, title })
         });
