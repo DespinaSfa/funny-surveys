@@ -5,9 +5,11 @@ import Poll from "./models/Poll";
 import StatisticCard from "../Components/StatisticCard/StatisticCard";
 import MainButton from "../Components/MainButton/MainButton";
 import { Link } from 'react-router-dom';
+import Stats from "./models/Stats";
 
 const Dashboard = () => {
     const [polls, setPolls] = useState<Poll[]>([]);
+    const [stats, setStats] = useState<Stats>();
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -33,17 +35,37 @@ const Dashboard = () => {
             }
         };
 
+        const fetchStats = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/stats`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },});
+                if (!response.ok) {
+                    throw new Error('Failed to fetch stats');
+                }
+                const data = await response.json();
+                if(data !== null){
+                    setStats(data);
+                }
+            } catch (error) {
+                console.error('Error fetching polls:', error);
+            }
+        };
+
         fetchPolls();
+        fetchStats();
     }, []);
 
     return (
         <>
             <h2 className="dashboard-title">About Your Polls</h2>
             <div className="poll-stats">
-                <StatisticCard title={"Total Polls"} value={"123"}/>
-                <StatisticCard title={"Total Participants"} value={"1234"}/>
-                <StatisticCard title={"Most Popular Polls"} value={"Freds Fette Fete"}/>
-                <StatisticCard title={"Least Popular Polls"} value={"Unsere Hochzeit"}/>
+                <StatisticCard title={"Total Polls"} value={stats?.totalPolls.toString()}/>
+                <StatisticCard title={"Total Participants"} value={stats?.totalAnswers.toString()}/>
+                <StatisticCard title={"Most Popular Polls"} value={stats?.mostPopularPoll}/>
+                <StatisticCard title={"Least Popular Polls"} value={stats?.leastPopularPoll}/>
             </div>
             <div className="spread">
                 <h2 className="dashboard-title">Your Polls</h2>

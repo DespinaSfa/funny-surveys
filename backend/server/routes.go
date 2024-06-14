@@ -426,6 +426,43 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token, "refreshToken": refreshToken})
 }
 
+// StatsHandler godoc TODO
+// @Summary  get user stats
+// @Tags Poll
+// @Router       /stats [get]
+func (s *Server) StatsHandler(w http.ResponseWriter, r *http.Request) {
+	// Get User ID from the auth-header
+	userID, err := GetUserId(r)
+	if err != nil {
+		fmt.Println("Error getting user ID from token:", err)
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	// Read user polls
+	polls, err := db.ReadUserStats(s.DBInst, *userID)
+	if err != nil {
+		fmt.Println("Error reading user stats:", err)
+		http.Error(w, "Failed to read user stats", http.StatusInternalServerError)
+		return
+	}
+
+	statsJSON, err := json.Marshal(polls)
+	if err != nil {
+		fmt.Println("Error marshaling JSON response:", err)
+		http.Error(w, "Failed to marshal JSON response", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(statsJSON)
+	if err != nil {
+		fmt.Println("Error writing response:", err)
+		http.Error(w, "Failed to write response", http.StatusInternalServerError)
+		return
+	}
+}
+
 func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	server := &Server{DBInst: dbInstance}
 
@@ -445,8 +482,9 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	r.Group(func(r chi.Router) {
 		r.Use(AuthenticationMiddleware)
 		r.Post("/refresh-token", server.RefreshToken)
-		r.Get("/qr", server.GenerateQRHandler)
 		r.Get("/check-token-valid", server.CheckTokenValid)
+		r.Get("/qr", server.GenerateQRHandler)
+		r.Get("/stats", server.StatsHandler)
 		r.Get("/polls", server.GetPollsHandler)
 		r.Post("/polls", server.PostPollsHandler)
 		r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
