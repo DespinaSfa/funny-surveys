@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import PageHeader from "../Components/PageHeader/PageHeader";
 import PollResultsWedding from './PollResultsWedding';
 import PollResultsParty from './PollResultsParty';
+import PollResultsPlanning from './PollResultsPlanning';
 import { PollData } from './PollResultsHelpers';
 
 const ResultsPage = () => {
@@ -34,6 +35,7 @@ const ResultsPage = () => {
             <p>Description: {pollData.Description}</p>
             {pollData.PollType === 'wedding' && <PollResultsWedding data={pollData} />}
             {pollData.PollType === 'party' && <PollResultsParty data={pollData} />}
+            {pollData.PollType === 'planning' && <PollResultsPlanning data={pollData} />}
             {/* Add more conditions here for other poll types */}
         </div>
     );
