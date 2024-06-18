@@ -294,6 +294,11 @@ func (s *Server) PostPollByIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// This struct is needed to generate the correct Swagger documentation example.
+type QRRequest struct {
+	URL string `json:"url"`
+}
+
 // GenerateQRHandler handles requests to generate QR codes from URLs
 // @Summary Generate QR code
 // @Description Generate a QR code from the provided URL
@@ -301,42 +306,48 @@ func (s *Server) PostPollByIDHandler(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  png
 // @Param   qrRequest body QRRequest true "QR request"
+// @Example {json} QR request example:
+//
+//	{
+//	  "url": "https://example.com"
+//	}
+//
 // @Success 200 {file} file "QR code image"
 // @Failure 400 {object} string "Invalid request format"
 // @Failure 500 {object} string "Failed to generate QR code"
 // @Router /qr [post]
-// GenerateQRHandler handles requests to generate QR codes from URLs
 func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
-	type QRRequest struct {
-		URL string `json:"url"`
-	}
-
-	var qrRequest QRRequest
+	var qrRequest map[string]string
 
 	// Read and decode the request body
 	if err := json.NewDecoder(r.Body).Decode(&qrRequest); err != nil {
-		fmt.Println("Error parsing request body:", err)
 		http.Error(w, "Invalid request format", http.StatusBadRequest)
+		fmt.Println("Error parsing request body:", err)
+		return
+	}
+
+	// Get the URL from the map
+	url, exists := qrRequest["url"]
+	if !exists {
+		http.Error(w, "URL not provided", http.StatusBadRequest)
 		return
 	}
 
 	// Generate the QR code bytes from the URL
-	qrBytes, err := generateQR(qrRequest.URL)
+	qrBytes, err := generateQR(url)
 	if err != nil {
-		fmt.Println("Error generating QR code:", err)
 		http.Error(w, "Failed to generate QR code", http.StatusInternalServerError)
+		fmt.Println("Error generating QR code:", err)
 		return
 	}
 
 	// Set header for content type to 'image/png'
 	w.Header().Set("Content-Type", "image/png")
-	w.WriteHeader(http.StatusOK)
 
 	// Write the QR code byte slice to the response
 	if _, err := w.Write(qrBytes); err != nil {
-		fmt.Println("Error writing response:", err)
 		http.Error(w, "Failed to send QR code", http.StatusInternalServerError)
-		return
+		fmt.Println("Error writing response:", err)
 	}
 }
 

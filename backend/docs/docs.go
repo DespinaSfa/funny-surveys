@@ -85,8 +85,7 @@ const docTemplate = `{
                 "summary": "Get a poll and it's results",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
                         "description": "Poll ID",
                         "name": "id",
                         "in": "path",
@@ -112,8 +111,7 @@ const docTemplate = `{
                 "summary": "Post a poll result",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
                         "description": "Poll ID",
                         "name": "id",
                         "in": "path",
@@ -151,8 +149,7 @@ const docTemplate = `{
                 "summary": "Delete a poll",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
                         "description": "Poll ID",
                         "name": "id",
                         "in": "path",
@@ -162,6 +159,52 @@ const docTemplate = `{
                 "responses": {
                     "204": {
                         "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/qr": {
+            "post": {
+                "description": "Generate a QR code from the provided URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "QR"
+                ],
+                "summary": "Generate QR code",
+                "parameters": [
+                    {
+                        "description": "QR request",
+                        "name": "qrRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.QRRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "QR code image",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to generate QR code",
                         "schema": {
                             "type": "string"
                         }
@@ -189,10 +232,21 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "pollType": {
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.QRRequest": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }
@@ -202,12 +256,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:3001",
+	Version:          "",
+	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "PartyPoll API",
-	Description:      "This is the API for the PartyPoll web application",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
