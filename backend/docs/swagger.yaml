@@ -5,17 +5,20 @@ definitions:
     properties:
       description:
         type: string
+      id:
+        type: string
       pollType:
         type: string
       title:
         type: string
     type: object
-host: localhost:3001
+  server.QRRequest:
+    properties:
+      url:
+        type: string
+    type: object
 info:
   contact: {}
-  description: This is the API for the PartyPoll web application
-  title: PartyPoll API
-  version: "1.0"
 paths:
   /login:
     post:
@@ -61,11 +64,10 @@ paths:
       - application/json
       parameters:
       - description: Poll ID
-        format: int64
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -79,11 +81,10 @@ paths:
     get:
       parameters:
       - description: Poll ID
-        format: int64
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -97,11 +98,10 @@ paths:
     post:
       parameters:
       - description: Poll ID
-        format: int64
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Add poll response
         in: body
         name: poll
@@ -118,6 +118,36 @@ paths:
       summary: Post a poll result
       tags:
       - Polls
+  /qr:
+    post:
+      consumes:
+      - application/json
+      description: Generate a QR code from the provided URL
+      parameters:
+      - description: QR request
+        in: body
+        name: qrRequest
+        required: true
+        schema:
+          $ref: '#/definitions/server.QRRequest'
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: QR code image
+          schema:
+            type: file
+        "400":
+          description: Invalid request format
+          schema:
+            type: string
+        "500":
+          description: Failed to generate QR code
+          schema:
+            type: string
+      summary: Generate QR code
+      tags:
+      - QR
   /refresh-token:
     post:
       responses: {}
