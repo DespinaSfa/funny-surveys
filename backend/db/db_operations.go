@@ -213,6 +213,69 @@ func ReadPollByID(db *gorm.DB, pollID string) (*models.Poll, error) {
 	return &poll, nil
 }
 
+func ReadUserStats(db *gorm.DB, userID int) (*models.UserStats, error) {
+	// Count total polls created by the user
+	var totalPolls int64
+	if err := db.Model(&models.Poll{}).Where("user_id = ?", userID).Count(&totalPolls).Error; err != nil {
+		return nil, err
+	}
+
+	// Count total answers across PollParty, PollWedding, and PollPlanning
+	var totalAnswers int64
+	var pollPartyCount int64
+	var pollWeddingCount int64
+	var pollPlanningCount int64
+
+	if err := db.Model(&models.PollParty{}).
+		Joins("JOIN polls ON poll_parties.poll_id = polls.id").
+		Where("polls.user_id = ?", userID).Count(&pollPartyCount).Error; err != nil {
+		return nil, err
+	}
+	totalAnswers += pollPartyCount
+
+	if err := db.Model(&models.PollWedding{}).
+		Joins("JOIN polls ON poll_weddings.poll_id = polls.id").
+		Where("polls.user_id = ?", userID).Count(&pollWeddingCount).Error; err != nil {
+		return nil, err
+	}
+	totalAnswers += pollWeddingCount
+
+	if err := db.Model(&models.PollPlanning{}).
+		Joins("JOIN polls ON poll_plannings.poll_id = polls.id").
+		Where("polls.user_id = ?", userID).Count(&pollPlanningCount).Error; err != nil {
+		return nil, err
+	}
+	totalAnswers += pollPlanningCount
+
+	// Read the most and least popular poll
+	var mostPopularPoll models.Poll
+	var leastPopularPoll models.Poll
+	if err := db.Model(&models.Poll{}).
+		Select("polls.*, (SELECT COUNT(*) FROM poll_parties WHERE poll_parties.poll_id = polls.id) + (SELECT COUNT(*) FROM poll_weddings WHERE poll_weddings.poll_id = polls.id) + (SELECT COUNT(*) FROM poll_plannings WHERE poll_plannings.poll_id = polls.id) AS answer_count").
+		Where("polls.user_id = ?", userID).
+		Order("answer_count DESC").
+		First(&mostPopularPoll).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	if err := db.Model(&models.Poll{}).
+		Select("polls.*, (SELECT COUNT(*) FROM poll_parties WHERE poll_parties.poll_id = polls.id) + (SELECT COUNT(*) FROM poll_weddings WHERE poll_weddings.poll_id = polls.id) + (SELECT COUNT(*) FROM poll_plannings WHERE poll_plannings.poll_id = polls.id) AS answer_count").
+		Where("polls.user_id = ?", userID).
+		Order("answer_count ASC").
+		First(&leastPopularPoll).Error; err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	stats := models.UserStats{
+		TotalPolls:       int(totalPolls),
+		TotalAnswers:     int(totalAnswers),
+		MostPopularPoll:  mostPopularPoll.Title,
+		LeastPopularPoll: leastPopularPoll.Title,
+	}
+
+	return &stats, nil
+}
+
 func DeletePollByID(db *gorm.DB, pollID string) error {
 	// Delete the poll; associated PollParty and PollWedding records will be deleted automatically
 	result := db.Delete(&models.Poll{}, "id = ?", pollID)
