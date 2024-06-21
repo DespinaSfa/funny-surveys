@@ -1,6 +1,4 @@
 import GenerateButton from "../Components/GenerateButton/GenerateButton";
-import InputField from "../Components/InputField";
-import MultipleChoiceSelector from "../Components/MultipleChoiceSelector";
 import PageHeader from "../Components/PageHeader/PageHeader";
 import PollHeader from "../Components/PollHeader/PollHeader";
 import RangeSelector from "../Components/RangeSelector";
@@ -13,6 +11,8 @@ const WeddingTemplate = () => {
     const [description, setDescription] = useState('');
     const pollType = "wedding";
     const token = localStorage.getItem('token');
+    const optionsInvited = ['Bride', 'Groom', 'Both'];
+    const highlightOptions = ['Wedding Ceremony', 'Food', 'Wedding dance', 'Program', 'After Party'];
 
 
     const handleHeadingChange = (value: string) => {
@@ -41,26 +41,39 @@ const WeddingTemplate = () => {
         <>
             <PageHeader heading="Create Wedding Poll" link="/select-template"/>
             <div className='template'>
-                <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
+                <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange}/>
                 <p className='question'>Who invited you to the wedding?</p>
-                <MultipleChoiceSelector options={['Bride', 'Groom', 'Both']} onChange={function (option: string): void {} } />
+                <p className="explanation">Your guests will be able to select from these options:</p>
+                <ul className="explanation">
+                    {optionsInvited.map((option, index) => (
+                        <li key={index}>{option}</li>
+                    ))}
+                </ul>
                 <p className='question'>How long have you known the bride and groom?</p>
-                <RangeSelector min={0} max={30} step={1} onChange={function (value: number): void {} } />
+                <p className="explanation">Your guests will be able to select a value between 0 and 5!</p>
+                <RangeSelector min={0} max={5} step={1} disabled={true} onChange={function (value: number): void {
+                }}/><br/>
                 <p className='question'>How do you know the bride and groom?</p>
-                <InputField label={"History"} placeholder={"I know you..."} onChange={function (value: string): void {} } />
+                <p className="explanation">Your guests will be able to enter any text answer!</p>
                 <p className='question'>What was your highlight of the wedding?</p>
-                <MultipleChoiceSelector options={['Wedding Ceremony', 'Food', 'Wedding dance', 'Program', 'After Party']} onChange={function (option: string): void {} } />
+                <p className="explanation">Your guests will be able to select from these options:</p>
+                <ul className="explanation">
+                    {highlightOptions.map((option, index) => (
+                        <li key={index}>{option}</li>
+                    ))}
+                </ul>
                 <p className='question'>What do you wish the bride and groom?</p>
-                <InputField label={"Wishes"} placeholder={"I wish you..."} onChange={function (value: string): void {} } />
+                <p className="explanation">Your guests will be able to enter any text answer!</p>
+                <hr/>
                 <p className='heading'>
                     4. Everything Correct? Then Generate Your Poll!
                 </p>
                 <div className='generateButton'>
-                    <GenerateButton label={""} onClick={handleGeneratePoll} />
+                    <GenerateButton label={""} onClick={handleGeneratePoll}/>
                 </div>
             </div>
         </>
-     );
-  };
-  
-  export default WeddingTemplate;
+    );
+};
+
+export default WeddingTemplate;
