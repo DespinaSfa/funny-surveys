@@ -1,0 +1,89 @@
+.Button {
+  background-color: #DBF881 !important;
+  color: #000000 !important;
+  font-family: "Raleway" !important;
+  font-weight: 400 !important;
+  padding: 0.5rem !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .endIcon {
+    font-size: 2rem !important;
+  }
+
+  &:hover {
+    background-color: #887EF1 !important;
+    color: #ffffff !important;
+  }
+}
+
+.MenuItem {
+  background-color: #DBF881 !important;
+  color: #000000 !important;
+  font-family: "Raleway" !important;
+  padding: 1rem 1rem 0.5rem 1rem !important;
+  text-align: right;
+  border: none !important;
+  justify-content: flex-end;
+  box-shadow: none !important; // Ensure no shadow is added
+  margin: 0 !important; // Ensure no margin is added
+
+  &:hover {
+    background-color: #887EF1 !important;
+    color: #ffffff !important;
+  }
+
+  &.MuiMenuItem-root {
+    min-height: auto !important; // Ensure no minimum height is set
+  }
+}
+
+.Menu {
+  .MuiPaper-root {
+    background-color: #333333 !important;
+    border-radius: 0.5rem !important;
+    margin: 0 !important;  // Ensure no margin is added
+    padding: 0!important; // Ensure no padding is added
+  }
+
+  .MuiMenu-list {
+    background-color: #DBF881 !important;
+    padding: 0 !important; // Ensure no padding is added to the list
+  }
+}
+
+.DialogPaper {
+  background-color: #333333 !important;
+  color: white !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+}
+
+.DialogTitle {
+  font-family: "Raleway" !important;
+  color: white !important;
+  font-weight: 700 !important;
+}
+
+.DialogContentText {
+  font-family: "Raleway" !important;
+  color: white !important;
+}
+
+.DialogActions {
+  .MuiButton-root {
+    background-color: #333333 !important;
+    color: white !important;
+    font-family: "Raleway" !important;
+    font-weight: 700 !important;
+
+    &:hover {
+      background-color: #887EF1 !important;
+      color: #ffffff !important;
+    }
+  }
+}

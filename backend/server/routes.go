@@ -294,7 +294,7 @@ func (s *Server) PostPollByIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// This struct is needed to generate the correct Swagger documentation example.
+// QRRequest This struct is needed to generate the correct Swagger documentation example.
 type QRRequest struct {
 	URL string `json:"url"`
 }
@@ -349,6 +349,34 @@ func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to send QR code", http.StatusInternalServerError)
 		fmt.Println("Error writing response:", err)
 	}
+}
+
+func (s *Server) UpdateUsername(w http.ResponseWriter, r *http.Request) {
+	// Get the user ID from the context
+	userID, err := GetUserId(r)
+	if err != nil {
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	// Parse the request body
+	var requestBody struct {
+		NewUsername string `json:"newUsername"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&requestBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+	fmt.Println("Received request to update username to:", requestBody.NewUsername)
+
+	// Update the username in the database
+	_, err = db.UpdateUsername(*userID, requestBody.NewUsername)
+	if err != nil {
+		http.Error(w, "Failed to update username", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 // RefreshToken godoc TODO
@@ -492,6 +520,7 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	// Routes with auth middleware
 	r.Group(func(r chi.Router) {
 		r.Use(AuthenticationMiddleware)
+		r.Put("/update-username", server.UpdateUsername)
 		r.Post("/refresh-token", server.RefreshToken)
 		r.Get("/check-token-valid", server.CheckTokenValid)
 		r.Get("/qr", server.GenerateQRHandler)
