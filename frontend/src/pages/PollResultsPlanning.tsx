@@ -1,6 +1,6 @@
 import React from 'react';
 import HorizontalBarChart from "../Components/BarChart";
-import c from './Page_styles.module.scss';
+import c from './Page_styles.module.scss'; // Assuming you are using SCSS for styles
 import { calculateCountsPlanning, PollData } from './PollHelpers';
 
 const PollResultsPlanning = ({ data }: { data: PollData }) => {
@@ -11,27 +11,37 @@ const PollResultsPlanning = ({ data }: { data: PollData }) => {
     return (
         <div>
             <div className={c.pollResCard}>
-                <h3>Which drinks are absolutely essential? 🥤</h3>
+                <h3 className={c.heading}>
+                    <span>Which drinks are absolutely essential?</span> 🥤
+                </h3>
                 {data.PollPlannings.map((item, index) => (
                     <div key={index}>{item.EssentialDrink}</div>
                 ))}
             </div>
             <div className={c.pollResCard}>
-                <h3>Which food are absolutely essential? 🍔</h3>
+                <h3 className={c.heading}>
+                    <span>Which food are absolutely essential?</span> 🍔
+                </h3>
                 {data.PollPlannings.map((item, index) => (
                     <div key={index}>{item.EssentialFood}</div>
                 ))}
             </div>
             <div className={c.pollResCard}>
-                <h3>What kind of music should be played? 🎶</h3>
+                <h3 className={c.heading}>
+                    <span>What kind of music should be played?</span> 🎶
+                </h3>
                 <HorizontalBarChart counts={musicPreferencesCounts} />
             </div>
             <div className={c.pollResCard}>
-                <h3>What activities should be at the event? 🎉</h3>
+                <h3 className={c.heading}>
+                    <span>What activities should be at the event?</span> 🎉
+                </h3>
                 <HorizontalBarChart counts={eventActivitiesCounts} />
             </div>
             <div className={c.pollResCard}>
-                <h3>What do you wish for the event? 🌟</h3>
+                <h3 className={c.heading}>
+                    <span>What do you wish for the event?</span> 🌟
+                </h3>
                 <HorizontalBarChart counts={eventWishesCounts} />
             </div>
         </div>

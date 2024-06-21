@@ -3,17 +3,32 @@
     flex-direction: column;
     justify-content: space-around;
     width: 100%;
-    padding-left: 80px;
-    padding-bottom: 80px;
-    padding-top: 20px;
-    padding-right: 80px;
+    padding: 20px 80px 80px 80px;
 }
 
 .question {
     font-family: "Raleway";
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     margin-top: 16px;
+}
+
+.explanation {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #c6c6c6;
+    font-size: 17px;
+}
+
+ul.explanation {
+    padding-left: 1rem;
+}
+
+hr {
+    background: #000;
+    height: 1px;
+    width: 100%;
+    margin: 2rem 0;
 }
 
 .generateButton {
@@ -29,7 +44,6 @@
 
 @media (max-width: 750px) {
     .template {
-        padding-left: 20px;
         padding-left: 20px;
         padding-right: 20px;
     }
