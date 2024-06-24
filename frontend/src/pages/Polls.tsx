@@ -4,7 +4,7 @@ import Party from "../Components/Templates/Party";
 import { useParams } from "react-router-dom"
 import { PollData } from "./PollHelpers";
 import Wedding from "../Components/Templates/Wedding";
-import Room from "../Components/Templates/Planning";
+import Planning from "../Components/Templates/Planning";
 
 
 const Polls = () => {
@@ -37,7 +37,7 @@ const Polls = () => {
                 <CostumePollHeader heading={pollData.Title} description={pollData.Description} />
                 {pollData.PollType == 'party' && <Party poll_id={pollData.ID} />}
                 {pollData.PollType == 'wedding' && <Wedding poll_id={pollData.ID} />}
-                {pollData.PollType == 'room' && <Room />}
+                {pollData.PollType == 'planning' && <Planning poll_id={pollData.ID}/>}
             </>
      );
   };
