@@ -57,7 +57,7 @@ const Party: React.FC<PartyProps> = (poll_id) => {
         data = {SongToBePlayed: songToBePlayed, CurrentAlcoholLevel: currentAlcoholLevel, PreferredAlcoholLevel: preferredAlcoholLevel, FavoriteActivity: favoriteActivity, WishSnack: wishSnack};
 
         try {
-        const response = await fetch(`http://localhost:3001/polls/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
             method: 'POST',
             body: JSON.stringify({ id, poll_type, data })
         });

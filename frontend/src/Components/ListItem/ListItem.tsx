@@ -4,6 +4,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./ListItem.scss";
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import { Tooltip } from '@mui/material';
 
 const ListItem = ({ title, description, id } : { title: string,  description: string, id: String}) => {
     const token = localStorage.getItem("token")
@@ -12,7 +13,7 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
 
     const deletePoll = async () => {
         try {
-            const response = await fetch('http://localhost:3001/polls/'+id, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -23,6 +24,20 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
         }
         window.location.reload()
     };
+
+    const copyLink = () => {
+        const url = `${process.env.REACT_APP_FRONTEND_URL}/polls/${id}`
+
+        navigator.clipboard.writeText(url).then(() => {
+            alert('URL copied to clipboard!');
+          }).catch((error) => {
+            console.error('Error copying URL: ', error);
+          });
+    };
+
+    const downloadQRCode = () => {
+        
+     }
 
     const navigateToResults = () => {
         window.location.href = `/results/${id}`;
@@ -36,22 +51,28 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
                 <p className="poll-description">{description}</p> */}
             </div>
             <div className="pollOptions">
-                <IconButton aria-label="delete" size="large" onClick={deletePoll}  sx={{color: color, '&:hover': {
-                        color: '#ff1744',
-                    },}}>
-                    <DeleteIcon/>
-                </IconButton>
-                <IconButton aria-label="copy" size="large" sx={{ color: color, '&:hover': {
-                        color: onHoverColor,
-                    }, }}>
-                    <FileCopyIcon />
-                </IconButton>
-                <IconButton aria-label="qr" size="large" sx={{ color: color, '&:hover': {
-                        color: onHoverColor,
-                    }, }}>
-                    <QrCodeScannerIcon/>
-                </IconButton>
-                <IconButton aria-label="seeResults" size="large" onClick={navigateToResults} sx={{ color: color, '&:hover': {
+                <Tooltip title="Delete Poll">
+                    <IconButton aria-label="delete" size="large" onClick={deletePoll}  sx={{color: color, '&:hover': {
+                            color: '#ff1744',
+                        },}}>
+                        <DeleteIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Copy Link to Poll">
+                    <IconButton aria-label="copy" size="large" onClick={copyLink} sx={{ color: color, '&:hover': {
+                            color: onHoverColor,
+                        }, }}>
+                        <FileCopyIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Download QR Code">
+                    <IconButton aria-label="qr" size="large" sx={{ color: color, '&:hover': {
+                            color: onHoverColor,
+                        }, }}>
+                        <QrCodeScannerIcon/>
+                    </IconButton>
+                </Tooltip>
+                <IconButton aria-label="seeResults" onclick={downloadQRCode} size="large" onClick={navigateToResults} sx={{ color: color, '&:hover': {
                         color: onHoverColor,
                     }, }}>
                     <ArrowForwardIcon />

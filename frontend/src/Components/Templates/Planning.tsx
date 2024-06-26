@@ -48,7 +48,7 @@ const Planning: React.FC<PlanningProps> = (poll_id) => {
         data = {EssentialDrink: essentialDrink, EssentialFood: essentialFood, MusicToBePlayed: musicToBePlayed, Activities: activities, EventWish: eventWish};
 
         try {
-        const response = await fetch(`http://localhost:3001/polls/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
             method: 'POST',
             body: JSON.stringify({ id, poll_type, data })
         });

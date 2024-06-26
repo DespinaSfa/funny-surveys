@@ -24,7 +24,7 @@ const PartyTemplate = () => {
 
     const handleGeneratePoll = async () => {
         try {
-        const response = await fetch('http://localhost:3001/polls', {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`

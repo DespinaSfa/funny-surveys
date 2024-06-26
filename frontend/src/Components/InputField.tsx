@@ -21,14 +21,8 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, s
                 display: 'flex',
                 flexDirection: 'column',
                 '& > :not(style)': { m: 0 },
-                width: '30%',
+                width: '100%',
                 ...sx,
-                '@media (max-width: 900px)': {
-                    width: '80%'
-                },
-                '@media (max-width: 600px)': {
-                    width: '100%'
-                },
             }}
             noValidate
             autoComplete="off"

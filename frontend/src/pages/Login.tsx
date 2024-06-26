@@ -21,7 +21,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3001/login', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -52,8 +52,9 @@ const Login = () => {
       <PageHeader heading=" " link="/" />
       <div className={c.container}>
         <h1 className={c.title}>Party Poll</h1>
-        <hr className={c.separator} />
+        <div className={c.separator}></div>
         <p className={c.loginDescription}>Log in to see your polls!</p>
+        <div className={c.inputwidth}>
         <InputField
           startIcon={<PersonSharpIcon className={c.personSVG} />}
           label={"Username"}
@@ -61,6 +62,8 @@ const Login = () => {
           onChange={handleUsernameChange}
           sx={{ marginBottom: '1.5rem' }}
         />
+        </div>
+        <div className={c.inputwidth}>
         <InputField
           startIcon={<VpnKeySharpIcon className={c.personSVG} />}
           label={"Password"}
@@ -69,6 +72,7 @@ const Login = () => {
           onChange={handlePasswordChange}
           sx={{ marginBottom: '3rem' }}
         />
+        </div>
 
         {error && <p className={c.error}>{error}</p>}
         <MainButton text={"Submit"} onClick={handleSubmit} />

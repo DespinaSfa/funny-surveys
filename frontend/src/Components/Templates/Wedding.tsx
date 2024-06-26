@@ -50,7 +50,7 @@ const Wedding:  React.FC<WeddingProps> = (poll_id) => {
         data = {WeddingInvite: weddingInvite, KnowCoupleSince: knowCoupleSince, KnowCoupleFromWhere: knowCoupleFromWhere, WeddingHighlight: weddingHighlight, CoupleWish: coupleWish};
 
         try {
-        const response = await fetch(`http://localhost:3001/polls/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
             method: 'POST',
             body: JSON.stringify({ id, poll_type, data })
         });
