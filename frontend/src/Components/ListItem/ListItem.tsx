@@ -36,7 +36,7 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
     };
 
     const downloadQRCode = () => {
-        
+
      }
 
     const navigateToResults = () => {
@@ -66,13 +66,13 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Download QR Code">
-                    <IconButton aria-label="qr" size="large" sx={{ color: color, '&:hover': {
+                    <IconButton aria-label="qr" size="large" onClick={downloadQRCode} sx={{ color: color, '&:hover': {
                             color: onHoverColor,
                         }, }}>
                         <QrCodeScannerIcon/>
                     </IconButton>
                 </Tooltip>
-                <IconButton aria-label="seeResults" onclick={downloadQRCode} size="large" onClick={navigateToResults} sx={{ color: color, '&:hover': {
+                <IconButton aria-label="seeResults" size="large" onClick={navigateToResults} sx={{ color: color, '&:hover': {
                         color: onHoverColor,
                     }, }}>
                     <ArrowForwardIcon />
