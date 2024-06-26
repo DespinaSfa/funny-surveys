@@ -8,16 +8,17 @@ interface InputFieldProps {
     onChange: (value: string) => void;
     startIcon?: JSX.Element;
     type?: string;
+    sx?: any;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type }) => {
+const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type, sx }) => {
     const [internalValue, setInternalValue] = React.useState('');
 
     return (
         <Box
             component="form"
             sx={{
-                '& > :not(style)': { m: 1, width: '100%', height: '80px' }, // change width here
+                '& > :not(style)': { m: 1, width: '100%', height: '80px' },
             }}
             noValidate
             autoComplete="off"
@@ -48,6 +49,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, s
                         '&.Mui-focused fieldset': { borderColor: '#DBF881' },
                     },
                     '& .MuiInputBase-input': { color: 'white' },
+                    ...sx
                 }}
             />
         </Box>

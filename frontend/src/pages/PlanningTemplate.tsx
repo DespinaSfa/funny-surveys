@@ -17,6 +17,8 @@ const PlanningTemplate = () => {
     const [backButton , setBackButton] = useState<boolean>(false);
     const pollType = "party";
     const token = localStorage.getItem('token');
+    const optionsActivities = ['Theme', 'Photobooth', 'Beer Pong Table', 'Karaoke'];
+    const optionsMusic = ['Pop', 'Rock', 'Rap', 'EDM', 'Indie'];
 
 
     const handleHeadingChange = (value: string) => {
@@ -98,17 +100,28 @@ const PlanningTemplate = () => {
         <>
             <PageHeader heading="Create Event Planning Poll" />
             <div className='template'>
-                <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
+                <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange}/>
                 <p className='question'>Which drinks are absolutely essential?</p>
-                <InputField label={"drinks"} placeholder={"I would like to drink..."} onChange={function (value: string): void { }} />
+                <p className="explanation">Your guests will be able to enter any text answer!</p>
                 <p className='question'>Which food are absolutely essential?</p>
-                <InputField label={"food"} placeholder={"I would like to eat..."} onChange={function (value: string): void { }} />
+                <p className="explanation">Your guests will be able to enter any text answer!</p>
                 <p className='question'>What kind of music should be played?</p>
-                <MultipleChoiceSelector options={['Pop', 'Rock', 'Rap', 'EDM', 'Indie']} onChange={function (option: string): void { }} />
+                <p className="explanation">Your guests will be able to select from these options:</p>
+                <ul className="explanation">
+                    {optionsMusic.map((option, index) => (
+                        <li key={index}>{option}</li>
+                    ))}
+                </ul>
                 <p className='question'>What activities should be at the event?</p>
-                <MultipleChoiceSelector options={['Theme', 'Photobooth', 'Beer Pong Table', 'Karaoke']} onChange={function (option: string): void { }} />
+                <p className="explanation">Your guests will be able to select from these options:</p>
+                <ul className="explanation">
+                    {optionsActivities.map((option, index) => (
+                        <li key={index}>{option}</li>
+                    ))}
+                </ul>
                 <p className='question'>What do you wish for the event?</p>
-                <InputField label={"wish"} placeholder={"For this event I need..."} onChange={function (value: string): void { }} />
+                <p className="explanation">Your guests will be able to enter any text answer!</p>
+                <hr/>
                 <p className='heading'>
                     4. Everything Correct? Then Generate Your Poll!
                 </p>

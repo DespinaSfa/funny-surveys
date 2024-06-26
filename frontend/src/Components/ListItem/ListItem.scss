@@ -1,7 +1,7 @@
 .list-item {
     display: flex;
     justify-content: space-between;
-    margin: 1rem;
+    margin: .5rem;
 
     .text {
         display: flex;
@@ -10,10 +10,18 @@
 
         .list-title {
             font-size: 24px;
+
+            @media (max-width: 750px) {
+                font-size: 18px;
+            }
         }
 
         .poll-description {
             color: #D2D2D2;
         }
+    }
+
+    .pollOptions {
+        display: flex;
     }
 }
