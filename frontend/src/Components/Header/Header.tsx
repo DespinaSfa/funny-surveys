@@ -51,7 +51,7 @@ const Header = () => {
             ) : (
                 <>
                     {window.location.pathname !== '/login' && (
-                        <MainButton text='Register' link='/register' />
+                        <MainButton text='Login' link='/login' />
                     )}
                 </>
             )}
