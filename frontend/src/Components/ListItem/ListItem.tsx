@@ -35,9 +35,37 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
           });
     };
 
-    const downloadQRCode = () => {
+    const generateQR = async () => {
+        try {
+            const url = `${process.env.REACT_APP_FRONTEND_URL}/polls/${id}`;
 
-     }
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/qr?qrUrl=${encodeURIComponent(url)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                console.error(`Server responded with status ${response.status}: ${response.statusText}`);
+                throw new Error('Failed to generate QR code');
+            }
+
+            const qrBlob = await response.blob();
+            const qrCodeUrl = URL.createObjectURL(qrBlob);
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = qrCodeUrl;
+            downloadLink.download = 'qr_code.png';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+        } catch (error) {
+            console.error('Error in handleGenerateQR:', error);
+        }
+    };
 
     const navigateToResults = () => {
         window.location.href = `/results/${id}`;
@@ -66,7 +94,7 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Download QR Code">
-                    <IconButton aria-label="qr" size="large" onClick={downloadQRCode} sx={{ color: color, '&:hover': {
+                    <IconButton aria-label="qr" size="large" onClick={generateQR} sx={{ color: color, '&:hover': {
                             color: onHoverColor,
                         }, }}>
                         <QrCodeScannerIcon/>

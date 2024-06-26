@@ -39,12 +39,14 @@
     margin-bottom: 2rem;
 }
 
+@media (max-width: 1000px) {
+    .inputwidth {
+        width: 80%;
+    }
+}
+
 @media (max-width: 750px) {
     .title {
         font-size: 3rem;
-    }
-
-    .inputwidth {
-        width: 80%;
     }
 }

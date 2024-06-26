@@ -1,12 +1,12 @@
 import React from 'react';
-import './CostumePollHeader.scss';
+import './CustomPollHeader.scss';
 
-interface CostumePollHeaderProps {
+interface CustomPollHeaderProps {
    heading: string;
    description: string;
  }
 
-const CostumePollHeader: React.FC<CostumePollHeaderProps> = ({ heading, description }) => {
+const CustomPollHeader: React.FC<CustomPollHeaderProps> = ({ heading, description }) => {
 
     return (
        <div>
@@ -20,4 +20,4 @@ const CostumePollHeader: React.FC<CostumePollHeaderProps> = ({ heading, descript
     );
   };
   
-  export default CostumePollHeader;
+  export default CustomPollHeader;

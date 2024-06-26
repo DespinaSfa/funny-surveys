@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InputField from "../InputField";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
 import RangeSelector from "../RangeSelector";
@@ -20,7 +20,8 @@ interface WeddingProps {
 
 const Wedding:  React.FC<WeddingProps> = (poll_id) => {
 
-    const poll_type = 'party';
+    const poll_type = 'wedding';
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [weddingInvite, setWeddingInvite] = useState('');
     const [knowCoupleSince, setKnowCoupleSince] = useState(0);
@@ -50,12 +51,21 @@ const Wedding:  React.FC<WeddingProps> = (poll_id) => {
         data = {WeddingInvite: weddingInvite, KnowCoupleSince: knowCoupleSince, KnowCoupleFromWhere: knowCoupleFromWhere, WeddingHighlight: weddingHighlight, CoupleWish: coupleWish};
 
         try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
-            method: 'POST',
-            body: JSON.stringify({ id, poll_type, data })
-        });
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({ id, poll_type, data }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (response.ok) {
+                navigate(`/results/${id}`);
+            } else {
+                console.error('Failed to generate poll:', response.statusText);
+            }
         } catch (error) {
-        console.error('Error occurred during generate poll:', error);
+            console.error('Error occurred during generate poll:', error);
         }
     };
 
@@ -72,7 +82,7 @@ const Wedding:  React.FC<WeddingProps> = (poll_id) => {
             <p className='question'>What do you wish the bride and groom?</p>
             <InputField label={"Wishes"} placeholder={"I wish you..."} onChange={handleCoupleWishChange} />
             <div className="button">
-                <MainButton text={"Send!"} link={`/results/${id}`} onClick={handleSendAnswers} />
+                <MainButton text={"Send!"} onClick={handleSendAnswers} />
             </div>
         </>
     );

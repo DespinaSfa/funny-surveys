@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CostumePollHeader from "../Components/CostumePollHeader/CostumePollHeader"
+import CustomPollHeader from "../Components/CustomPollHeader/CustomPollHeader"
 import Party from "../Components/Templates/Party";
 import { useParams } from "react-router-dom"
 import { PollData } from "./PollHelpers";
@@ -29,12 +29,10 @@ const Polls = () => {
     }, [id]);
 
     if (!pollData) return <div>Loading...</div>;
-
-    console.log(pollData);
     
     return (
             <>
-                <CostumePollHeader heading={pollData.Title} description={pollData.Description} />
+                <CustomPollHeader heading={pollData.Title} description={pollData.Description} />
                 {pollData.PollType == 'party' && <Party poll_id={pollData.ID} />}
                 {pollData.PollType == 'wedding' && <Wedding poll_id={pollData.ID} />}
                 {pollData.PollType == 'planning' && <Planning poll_id={pollData.ID}/>}

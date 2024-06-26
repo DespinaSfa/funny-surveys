@@ -4,7 +4,7 @@ import MultipleChoiceSelector from "../MultipleChoiceSelector";
 import RangeSelector from "../RangeSelector";
 import './Template.scss';
 import MainButton from "../MainButton/MainButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Data {
     SongToBePlayed: string;
@@ -21,6 +21,7 @@ const Party: React.FC<PartyProps> = (poll_id) => {
 
     const poll_type = 'party';
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [songToBePlayed, setSongToBePlayed] = useState('');
     const [currentAlcoholLevel, setCurrentAlcoholLevel] = useState(0);
     const [preferredAlcoholLevel, setPreferredAlcoholLevel] = useState(0);
@@ -52,17 +53,25 @@ const Party: React.FC<PartyProps> = (poll_id) => {
     };
 
     const handleSendAnswers = async () => {
-
         let data: Data;
         data = {SongToBePlayed: songToBePlayed, CurrentAlcoholLevel: currentAlcoholLevel, PreferredAlcoholLevel: preferredAlcoholLevel, FavoriteActivity: favoriteActivity, WishSnack: wishSnack};
 
         try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
-            method: 'POST',
-            body: JSON.stringify({ id, poll_type, data })
-        });
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({ id, poll_type, data }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (response.ok) {
+                navigate(`/results/${id}`);
+            } else {
+                console.error('Failed to generate poll:', response.statusText);
+            }
         } catch (error) {
-        console.error('Error occurred during generate poll:', error);
+            console.error('Error occurred during generate poll:', error);
         }
     };
 
@@ -80,7 +89,7 @@ const Party: React.FC<PartyProps> = (poll_id) => {
             <p className="question">Which snacks or drinks would you like for the next party? 🍔</p>
             <InputField label={"Snack/Drink"} placeholder={"I would like to eat/drink..."} onChange={handleWishSnack} />
             <div className="button">
-                <MainButton text={"Send!"} link={`/results/${id}`} onClick={handleSendAnswers} />
+                <MainButton text={"Send!"} onClick={handleSendAnswers} />
             </div>
         </>
     );
