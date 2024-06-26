@@ -351,6 +351,20 @@ func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// UpdateUsername updates the username
+// @Summary Updates the username
+// @Description Updates the current username with a new chosen username
+// @Tags User
+// @Example {json} Username request example:
+//
+//	{
+//	  "newUsername": "CoolName"
+//	}
+//
+// @Success 200 {object} string "Username update successfully"
+// @Failure 400 {object} string "Invalid request format"
+// @Failure 500 {object} string "Failed to update username"
+// @Router /update-username [put]
 func (s *Server) UpdateUsername(w http.ResponseWriter, r *http.Request) {
 	// Get the user ID from the context
 	userID, err := GetUserId(r)
@@ -379,7 +393,7 @@ func (s *Server) UpdateUsername(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// RefreshToken godoc TODO
+// RefreshToken godoc
 // @Summary Create a refresh token
 // @Tags Auth
 // @Router	/refresh-token [post]
@@ -419,7 +433,7 @@ func (s *Server) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": newToken, "refreshToken": newRefreshToken})
 }
 
-// LoginHandler godoc TODO
+// LoginHandler godoc
 // @Summary  Login an existing user
 // @Tags Auth
 // @Router       /login [post]
@@ -465,9 +479,9 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token, "refreshToken": refreshToken})
 }
 
-// StatsHandler godoc TODO
+// StatsHandler godoc
 // @Summary  get user stats
-// @Tags Poll
+// @Tags Statistics
 // @Router       /stats [get]
 func (s *Server) StatsHandler(w http.ResponseWriter, r *http.Request) {
 	// Get User ID from the auth-header

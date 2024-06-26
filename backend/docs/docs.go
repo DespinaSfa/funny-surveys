@@ -220,6 +220,44 @@ const docTemplate = `{
                 "summary": "Create a refresh token",
                 "responses": {}
             }
+        },
+        "/stats": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "get user stats",
+                "responses": {}
+            }
+        },
+        "/update-username": {
+            "put": {
+                "description": "Updates the current username with a new chosen username",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Updates the username",
+                "responses": {
+                    "200": {
+                        "description": "Username update successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update username",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -256,12 +294,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
+	Version:          "1.0",
+	Host:             "localhost:3001",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "PartyPoll API",
+	Description:      "This is the API for the PartyPoll web application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
