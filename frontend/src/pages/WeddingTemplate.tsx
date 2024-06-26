@@ -98,7 +98,7 @@ const WeddingTemplate = () => {
     
     return (
         <>
-            <PageHeader heading="Create Wedding Poll" link="/select-template"/>
+            <PageHeader heading="Create Wedding Poll" />
             <div className='template'>
                 <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
                 <p className='question'>Who invited you to the wedding?</p>
@@ -125,7 +125,7 @@ const WeddingTemplate = () => {
                     <QrToast />
                 </div>
                 {backButton &&
-                    <div className={"BackButton"}>
+                    <div className={"button"}>
                         <center>
                             <MainButton text={"Back to Dashboard"} link={"/dashboard"} />
                         </center>

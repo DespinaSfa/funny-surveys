@@ -6,13 +6,12 @@ import c from './PageHeader.module.scss';
 
 interface PageHeaderProps {
   heading: string;
-  link: string;
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ heading, link }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ heading }) => {
   return (
     <div className={c.container}>
-        <IconButton component={Link} to={link}>
+        <IconButton onClick={() => {window.history.back()}}>
             <ArrowBackIcon  className={c.backButton} />
         </IconButton>
         <p className={c.heading}>{heading}</p>

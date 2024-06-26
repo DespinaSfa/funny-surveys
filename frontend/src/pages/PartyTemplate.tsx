@@ -15,7 +15,7 @@ const PartyTemplate = () => {
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
     const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-    const [backButton , setBackButton] = useState<boolean>(false);
+    const [button , setBackButton] = useState<boolean>(false);
     const pollType = "party";
     const token = localStorage.getItem('token');
 
@@ -96,7 +96,7 @@ const PartyTemplate = () => {
 
     return (
         <>
-            <PageHeader heading="Create Party Poll" link="/select-template" />
+            <PageHeader heading="Create Party Poll" />
             <div className="template">
                 <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
                 <p className="question">Which songs should definitely be played tonight? 📻</p>
@@ -123,8 +123,8 @@ const PartyTemplate = () => {
                     )}
                     <QrToast />
                 </div>
-                {backButton &&
-                    <div className={"BackButton"}>
+                {button &&
+                    <div className={"button"}>
                         <center>
                             <MainButton text={"Back to Dashboard"} link={"/dashboard"} />
                         </center>

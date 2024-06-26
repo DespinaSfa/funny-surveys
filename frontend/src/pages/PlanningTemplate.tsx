@@ -96,7 +96,7 @@ const PlanningTemplate = () => {
     
     return (
         <>
-            <PageHeader heading="Create Event Planning Poll" link="/select-template"/>
+            <PageHeader heading="Create Event Planning Poll" />
             <div className='template'>
                 <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange} />
                 <p className='question'>Which drinks are absolutely essential?</p>
@@ -123,7 +123,7 @@ const PlanningTemplate = () => {
                     <QrToast />
                 </div>
                 {backButton &&
-                    <div className={"BackButton"}>
+                    <div className={"button"}>
                         <center>
                             <MainButton text={"Back to Dashboard"} link={"/dashboard"} />
                         </center>
