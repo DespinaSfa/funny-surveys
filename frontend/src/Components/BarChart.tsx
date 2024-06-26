@@ -17,13 +17,11 @@ ChartJS.register(
     Tooltip
 );
 
-// Define the type for the counts prop
 interface HorizontalBarChartProps {
     counts: { [key: string]: number };
 }
 
 const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
-    // Generate labels and data from the counts prop
     const labels = Object.keys(counts);
     const dataValues = Object.values(counts);
 
@@ -33,7 +31,8 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
             {
                 label: 'Highlights',
                 data: dataValues,
-                backgroundColor: '#DBF881'
+                backgroundColor: '#DBF881',
+                barThickness: 20
             }
         ]
     };
@@ -57,6 +56,9 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
                     display: true,
                     text: 'Count',
                     color: '#fff'
+                },
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.2)'
                 }
             },
             y: {
@@ -64,8 +66,8 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
                 ticks: {
                     color: '#fff'
                 },
-                title: {
-                    color: '#fff'
+                grid: {
+                    color: 'rgba(255, 255, 255, 0.2)'
                 }
             }
         },
@@ -73,8 +75,12 @@ const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
         maintainAspectRatio: false
     };
 
+    const barCount = labels.length;
+    const minHeight = 150;
+    const chartHeight = Math.max(barCount * 50, minHeight);
+
     return (
-        <div>
+        <div style={{ height: `${chartHeight}px` }}>
             <Bar data={data} options={options}></Bar>
         </div>
     );

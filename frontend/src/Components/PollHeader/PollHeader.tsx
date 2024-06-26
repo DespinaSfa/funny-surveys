@@ -22,19 +22,20 @@ const PollHeader: React.FC<PollHeaderProps> = ({ onChangeHeading, onChangeDescri
     };
 
     return (
-       <div>
-         <p className={c.heading}>
-            1. Select A Fancy Name For Your Poll
-         </p>
-         <InputField label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange} />
-         <p className={c.heading}>
-            2. Write A Nice Description
-         </p>
-         <InputField label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange} />
-         <p className={c.heading}>
-            3. Check The Poll
-         </p>
-       </div> 
+        <div>
+            <p className={c.heading}>
+                1. Select A Fancy Name For Your Poll
+            </p>
+            <InputField label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange}/>
+            <p className={c.heading}>
+                2. Write A Nice Description
+            </p>
+            <InputField label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}/>
+            <hr/>
+            <p className={c.heading}>
+                3. Check The Poll
+            </p>
+        </div>
     );
   };
   

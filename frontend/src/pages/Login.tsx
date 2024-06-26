@@ -59,6 +59,7 @@ const Login = () => {
           label={"Username"}
           placeholder={"Username"}
           onChange={handleUsernameChange}
+          sx={{ marginBottom: '1.5rem' }}
         />
         <InputField
           startIcon={<VpnKeySharpIcon className={c.personSVG} />}
@@ -66,6 +67,7 @@ const Login = () => {
           placeholder={"Password"}
           type={'password'}
           onChange={handlePasswordChange}
+          sx={{ marginBottom: '3rem' }}
         />
 
         {error && <p className={c.error}>{error}</p>}

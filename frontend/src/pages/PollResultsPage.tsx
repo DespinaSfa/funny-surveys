@@ -32,7 +32,7 @@ const ResultsPage = () => {
     return (
         <div>
             <PageHeader heading={`Title: ${pollData.Title}`} link="/dashboard" />
-            <p>Description: {pollData.Description}</p>
+            <p className={'description'}>Description:<br />{pollData.Description}</p>
             {pollData.PollType === 'wedding' && <PollResultsWedding data={pollData} />}
             {pollData.PollType === 'party' && <PollResultsParty data={pollData} />}
             {pollData.PollType === 'planning' && <PollResultsPlanning data={pollData} />}
