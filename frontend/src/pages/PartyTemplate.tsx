@@ -1,8 +1,10 @@
+import { CircularProgress } from "@mui/material";
 import GenerateButton from "../Components/GenerateButton/GenerateButton";
 import InputField from "../Components/InputField";
 import MultipleChoiceSelector from "../Components/MultipleChoiceSelector";
 import PageHeader from "../Components/PageHeader/PageHeader";
 import PollHeader from "../Components/PollHeader/PollHeader";
+import QrToast from "../Components/QrToast/QrToast";
 import RangeSelector from "../Components/RangeSelector";
 import './template.scss';
 import {useEffect, useState} from "react";
@@ -26,17 +28,69 @@ const PartyTemplate = () => {
 
     const handleGeneratePoll = async () => {
         try {
-        const response = await fetch('http://localhost:3001/polls', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ description, pollType, title })
-        });
+            const response = await fetch('http://localhost:3001/polls', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ description, pollType, title })
+            });
+            const responseData = await response.json();
+            const uuid = responseData.pollID || 'No UUID found';
+            console.log(uuid);
+            return uuid;
         } catch (error) {
-        console.error('Error occurred during generate poll:', error);
+            console.error('Error occurred during generate poll:', error);
         }
     };
+    
+    const handleGenerateQR = async () => {
+        console.log('Starting handleGenerateQR');
+        try {
+            const uuid = await handleGeneratePoll();
+            if (!uuid) {
+                console.log('Poll generation failed, exiting handleGenerateQR');
+                return; // If poll generation failed, exit
+            }
+    
+            const url = `http://localhost:3000/polls/${uuid}`;
+            console.log('Poll URL:', url); // Debugging line
+    
+            const response = await fetch(`http://localhost:3001/qr?qrUrl=${encodeURIComponent(url)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+    
+            if (!response.ok) {
+                console.error(`Server responded with status ${response.status}: ${response.statusText}`);
+                throw new Error('Failed to generate QR code');
+            }
+    
+            const responseText = await response.text();
+            let responseData;
+    
+            try {
+                responseData = JSON.parse(responseText);
+            } catch (e) {
+                throw new Error('Received invalid JSON from server');
+            }
+    
+            // Handle the response data as needed
+            console.log('QR Code Data:', responseData);
+    
+        } catch (error) {
+            console.error('Error in handleGenerateQR:', error);
+        }
+    };
+
+    //1. Response von POST abwarten -> Poll ID speichern
+    // 2. Poll ID an QR endpoint weitergeben
+    // 3. QR Code anzeigen
+    // Loading Spinner anzeigen während 1. und 2.
 
     return (
         <>
@@ -58,7 +112,9 @@ const PartyTemplate = () => {
                     4. Everything Correct? Then Generate Your Poll!
                 </p>
                 <div className="generateButton">
-                    <GenerateButton label={""} onClick={handleGeneratePoll} />
+                    <GenerateButton label={""} onClick={handleGenerateQR} />
+                    <CircularProgress />
+                    <QrToast />
                 </div>
             </div>
         </>
