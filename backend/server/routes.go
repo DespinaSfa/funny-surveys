@@ -317,34 +317,24 @@ type QRRequest struct {
 // @Failure 500 {object} string "Failed to generate QR code"
 // @Router /qr [post]
 func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
-	var qrRequest map[string]string
-
-	// Read and decode the request body
-	if err := json.NewDecoder(r.Body).Decode(&qrRequest); err != nil {
-		http.Error(w, "Invalid request format", http.StatusBadRequest)
-		fmt.Println("Error parsing request body:", err)
-		return
-	}
-
-	// Get the URL from the map
-	url, exists := qrRequest["url"]
-	if !exists {
+	qrUrl := r.URL.Query().Get("qrUrl")
+	if qrUrl == "" {
 		http.Error(w, "URL not provided", http.StatusBadRequest)
 		return
 	}
 
-	// Generate the QR code bytes from the URL
-	qrBytes, err := generateQR(url)
+	// Generiere die QR-Code-Bytes aus der URL
+	qrBytes, err := generateQR(qrUrl)
 	if err != nil {
 		http.Error(w, "Failed to generate QR code", http.StatusInternalServerError)
 		fmt.Println("Error generating QR code:", err)
 		return
 	}
 
-	// Set header for content type to 'image/png'
+	// Setze den Header für den Inhaltstyp auf 'image/png'
 	w.Header().Set("Content-Type", "image/png")
 
-	// Write the QR code byte slice to the response
+	// Schreibe die QR-Code-Byte-Slice in die Antwort
 	if _, err := w.Write(qrBytes); err != nil {
 		http.Error(w, "Failed to send QR code", http.StatusInternalServerError)
 		fmt.Println("Error writing response:", err)

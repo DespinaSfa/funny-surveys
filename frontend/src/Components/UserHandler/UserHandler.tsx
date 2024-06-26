@@ -124,11 +124,15 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, open
                     Benutzernamen aktualisieren
                 </DialogTitle>
                 <DialogContent>
-                    <InputField
-                        label="Neuer Benutzername"
-                        placeholder="Geben Sie Ihren neuen Benutzernamen ein"
-                        onChange={setNewUsername}
-                    />
+                    <div className={c.DialogInputField}>
+                        <InputField
+                            label="Neuer Benutzername"
+                            placeholder="Geben Sie Ihren neuen Benutzernamen ein"
+                            onChange={setNewUsername}
+                            sx={{width: '100%'}}
+                        />
+                    </div>
+
                 </DialogContent>
                 <DialogActions>
                     <MainButton

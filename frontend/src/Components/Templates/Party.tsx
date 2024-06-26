@@ -24,8 +24,8 @@ const Party: React.FC<PartyProps> = (poll_id) => {
     const [songToBePlayed, setSongToBePlayed] = useState('');
     const [currentAlcoholLevel, setCurrentAlcoholLevel] = useState(0);
     const [preferredAlcoholLevel, setPreferredAlcoholLevel] = useState(0);
-    const [favoriteActivity, setFavoriteActivity] = useState('');
-    const [wishSnack, setWishSnack] = useState('');
+    const [favoriteActivity, setFavoriteActivity] = useState('dancing');
+    const [wishSnack, setWishSnack] = useState('Wasser');
 
     const handleSongToBePlayedChange = (value: string) => {
         setSongToBePlayed(value);

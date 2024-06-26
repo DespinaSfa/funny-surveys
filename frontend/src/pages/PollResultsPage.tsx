@@ -31,8 +31,8 @@ const ResultsPage = () => {
 
     return (
         <div>
-            <PageHeader heading={`Title: ${pollData.Title}`} link="/dashboard" />
-            <p className={'description'}>Description:<br />{pollData.Description}</p>
+            <PageHeader heading={`Title: ${pollData.Title}`} />
+            <p>Description: {pollData.Description}</p>
             {pollData.PollType === 'wedding' && <PollResultsWedding data={pollData} />}
             {pollData.PollType === 'party' && <PollResultsParty data={pollData} />}
             {pollData.PollType === 'planning' && <PollResultsPlanning data={pollData} />}

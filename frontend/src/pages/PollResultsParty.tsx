@@ -3,6 +3,7 @@ import c from './Page_styles.module.scss';
 import { calculateCounts, PollData } from './PollHelpers';
 
 const PollResultsParty = ({ data }: { data: PollData }) => {
+    console.log(data.PollParties)
     const alcoholLevelCounts = calculateCounts(data.PollParties, 'CurrentAlcoholLevel');
     const goalAlcoholLevelCounts = calculateCounts(data.PollParties, 'PreferredAlcoholLevel');
     const favPartyActivityCounts = calculateCounts(data.PollParties, 'FavoriteActivity');

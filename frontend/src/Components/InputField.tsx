@@ -8,7 +8,7 @@ interface InputFieldProps {
     onChange: (value: string) => void;
     startIcon?: JSX.Element;
     type?: string;
-    sx?: object; // Add this line to accept custom styles
+    sx?: any;
 }
 
 const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type, sx }) => {
@@ -18,36 +18,26 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, s
         <Box
             component="form"
             sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                '& > :not(style)': { m: 0 },
-                width: '30%',
-                ...sx,
-                '@media (max-width: 900px)': {
-                    width: '80%'
-                },
-                '@media (max-width: 600px)': {
-                    width: '100%'
-                },
+                '& > :not(style)': { m: 1, width: '100%', height: '80px' },
             }}
             noValidate
             autoComplete="off"
         >
-            <TextField
+            <TextField 
                 label={label}
                 placeholder={placeholder}
-                variant="outlined"
+                variant="outlined" 
                 value={internalValue}
                 onChange={(event) => {
                     setInternalValue(event.target.value);
                     onChange(event.target.value);
-                }}
+                }} 
                 InputProps={{
-                    startAdornment: startIcon,
+                    startAdornment: startIcon, 
                 }}
                 type={type}
                 sx={{
-                    '& .MuiInputLabel-root': {
+                    '& .MuiInputLabel-root': { 
                         color: 'white',
                         '&.Mui-focused': {
                             color: '#DBF881',
@@ -59,6 +49,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, s
                         '&.Mui-focused fieldset': { borderColor: '#DBF881' },
                     },
                     '& .MuiInputBase-input': { color: 'white' },
+                    ...sx
                 }}
             />
         </Box>
