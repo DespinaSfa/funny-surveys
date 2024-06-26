@@ -6,9 +6,10 @@ interface SliderProps {
   max: number;
   step: number;
   onChange: (value: number) => void;
+  disabled?: boolean;
 }
 
-const SliderComponent: React.FC<SliderProps> = ({ min, max, step, onChange }) => {
+const SliderComponent: React.FC<SliderProps> = ({ min, max, step, onChange, disabled  }) => {
   const defaultValue = Math.ceil((max - min) / 2 + min);
 
   const handleSliderChange = (event: Event, value: number | number[]) => {
@@ -30,6 +31,7 @@ const SliderComponent: React.FC<SliderProps> = ({ min, max, step, onChange }) =>
         width: '100%',
         color: '#DBF881'
       }}
+      disabled={disabled}
       onChange={handleSliderChange} 
     />
   );

@@ -76,9 +76,9 @@ const Dashboard = () => {
                     <p className="empty-message">No polls available</p>
                 ) : (
                     polls.map((poll, index) => (
-                        <Link key={index} to={`/results/${poll.id}`} className="list-item-link">
-                            <ListItem title={poll.title} description={poll.description} />
-                        </Link>
+                        <div key={index} className="list-item-div">
+                            <ListItem title={poll.title} description={poll.description} id={poll.id} />
+                        </div>
                     ))
                 )}
             </div>

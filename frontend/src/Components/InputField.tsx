@@ -8,35 +8,40 @@ interface InputFieldProps {
     onChange: (value: string) => void;
     startIcon?: JSX.Element;
     type?: string;
+    sx?: object; // Add this line to accept custom styles
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type }) => {
+const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type, sx }) => {
     const [internalValue, setInternalValue] = React.useState('');
 
     return (
         <Box
             component="form"
             sx={{
-                '& > :not(style)': { m: 1, width: '100%', height: '80px' }, // change width here
+                display: 'flex',
+                flexDirection: 'column',
+                '& > :not(style)': { m: 0 },
+                width: '100%',
+                ...sx,
             }}
             noValidate
             autoComplete="off"
         >
-            <TextField 
+            <TextField
                 label={label}
                 placeholder={placeholder}
-                variant="outlined" 
+                variant="outlined"
                 value={internalValue}
                 onChange={(event) => {
                     setInternalValue(event.target.value);
                     onChange(event.target.value);
-                }} 
+                }}
                 InputProps={{
-                    startAdornment: startIcon, 
+                    startAdornment: startIcon,
                 }}
                 type={type}
                 sx={{
-                    '& .MuiInputLabel-root': { 
+                    '& .MuiInputLabel-root': {
                         color: 'white',
                         '&.Mui-focused': {
                             color: '#DBF881',

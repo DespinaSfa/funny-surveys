@@ -182,6 +182,21 @@ func GetUserByUsername(username string) (*models.User, error) {
 	}
 	return &user, nil
 }
+func UpdateUsername(userID int, newUsername string) (*models.User, error) {
+	var user models.User
+	result := db.First(&user, userID)
+	if result.Error != nil {
+		return nil, fmt.Errorf("failed to find user: %w", result.Error)
+	}
+
+	user.Username = newUsername
+	result = db.Save(&user)
+	if result.Error != nil {
+		return nil, fmt.Errorf("failed to update username: %w", result.Error)
+	}
+
+	return &user, nil
+}
 
 func ReadUserPolls(userID int) ([]*models.PollInfo, error) {
 	var user *models.User
