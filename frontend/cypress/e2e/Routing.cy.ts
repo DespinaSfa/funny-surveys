@@ -36,7 +36,8 @@ describe('Routing and create a poll', () => {
     cy.get('.generateButton').click()
 
     //logout
-    cy.get('button').contains('Logout').click()
-    cy.url().should('eq', 'http://localhost:3000/')
+    cy.get('button').contains('User2').click()
+    cy.contains('Logout').click()
+    cy.url().should('eq', 'http://localhost:3000/login')
   })
 })
