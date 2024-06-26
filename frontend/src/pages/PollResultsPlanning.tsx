@@ -8,7 +8,6 @@ import { calculateCountsPlanning, PollData } from './PollHelpers';
 const PollResultsPlanning = ({ data }: { data: PollData }) => {
     const musicPreferencesCounts = calculateCountsPlanning(data.PollPlannings, 'MusicToBePlayed');
     const eventActivitiesCounts = calculateCountsPlanning(data.PollPlannings, 'Activities');
-    const eventWishesCounts = calculateCountsPlanning(data.PollPlannings, 'EventWish');
 
     return (
         <div>
@@ -44,7 +43,9 @@ const PollResultsPlanning = ({ data }: { data: PollData }) => {
                 <h3 className={c.heading}>
                     <span>What do you wish for the event?</span> 🌟
                 </h3>
-                <HorizontalBarChart counts={eventWishesCounts} />
+                {data.PollPlannings.map((wish, index) => (
+                    <div className="text-result" key={index}>{`● ${wish.EventWish}`}</div>
+                ))}
             </div>
         </div>
     );
