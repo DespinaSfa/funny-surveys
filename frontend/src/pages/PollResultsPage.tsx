@@ -5,6 +5,7 @@ import PollResultsWedding from './PollResultsWedding';
 import PollResultsParty from './PollResultsParty';
 import PollResultsPlanning from './PollResultsPlanning';
 import { PollData } from './PollHelpers';
+import './PollResultsPage.scss'
 
 const ResultsPage = () => {
     const [pollData, setPollData] = useState<PollData | null>(null);
@@ -13,7 +14,7 @@ const ResultsPage = () => {
     useEffect(() => {
         const fetchPollData = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/polls/${id}`);
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`);
                 if (!response.ok) {
                     console.error("Failed to fetch poll data");
                     return;
@@ -30,13 +31,12 @@ const ResultsPage = () => {
     if (!pollData) return <div>Loading...</div>;
 
     return (
-        <div>
-            <PageHeader heading={`Title: ${pollData.Title}`} />
-            <p>Description: {pollData.Description}</p>
+        <div className="poll-results">
+            <PageHeader heading={pollData.Title} />
+            <p className="description">{pollData.Description}</p>
             {pollData.PollType === 'wedding' && <PollResultsWedding data={pollData} />}
             {pollData.PollType === 'party' && <PollResultsParty data={pollData} />}
             {pollData.PollType === 'planning' && <PollResultsPlanning data={pollData} />}
-            {/* Add more conditions here for other poll types */}
         </div>
     );
 };

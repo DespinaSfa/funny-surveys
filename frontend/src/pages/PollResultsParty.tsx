@@ -1,9 +1,9 @@
 import HorizontalBarChart from "../Components/BarChart";
 import c from './Page_styles.module.scss';
+import './PollResultsPage.scss'
 import { calculateCounts, PollData } from './PollHelpers';
 
 const PollResultsParty = ({ data }: { data: PollData }) => {
-    console.log(data.PollParties)
     const alcoholLevelCounts = calculateCounts(data.PollParties, 'CurrentAlcoholLevel');
     const goalAlcoholLevelCounts = calculateCounts(data.PollParties, 'PreferredAlcoholLevel');
     const favPartyActivityCounts = calculateCounts(data.PollParties, 'FavoriteActivity');
@@ -13,7 +13,7 @@ const PollResultsParty = ({ data }: { data: PollData }) => {
             <div className={c.pollResCard}>
                 <h3>Which songs should definitely be played tonight? 📻</h3>
                 {data.PollParties.map((item, index) => (
-                    <div key={index}>{item.SongToBePlayed}</div>
+                    <div className="text-result" key={index}>{ `● ${item.SongToBePlayed}`}</div>
                 ))}
             </div>
             <div className={c.pollResCard}>
@@ -31,7 +31,7 @@ const PollResultsParty = ({ data }: { data: PollData }) => {
             <div className={c.pollResCard}>
                 <h3>Which snacks or drinks would you like for the next party? 🍔</h3>
                 {data.PollParties.map((party, index) => (
-                    <div key={index}>{party.WishSnack}</div>
+                    <div className="text-result" key={index}>{`● ${party.WishSnack}`}</div>
                 ))}
             </div>
         </div>

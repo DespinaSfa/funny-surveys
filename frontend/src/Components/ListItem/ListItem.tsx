@@ -4,6 +4,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./ListItem.scss";
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import { Tooltip } from '@mui/material';
 
 const ListItem = ({ title, description, id } : { title: string,  description: string, id: String}) => {
     const token = localStorage.getItem("token")
@@ -12,7 +13,7 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
 
     const deletePoll = async () => {
         try {
-            const response = await fetch('http://localhost:3001/polls/'+id, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -24,28 +25,45 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
         window.location.reload()
     };
 
-    const copyUrl = () => {
-        navigator.clipboard.writeText(`http://localhost:3000/polls/${id}`);
-    }
+    const copyLink = () => {
+        const url = `${process.env.REACT_APP_FRONTEND_URL}/polls/${id}`
 
-    const generateQrCode = async () => {
+        navigator.clipboard.writeText(url).then(() => {
+            alert('URL copied to clipboard!');
+          }).catch((error) => {
+            console.error('Error copying URL: ', error);
+          });
+    };
+
+    const generateQR = async () => {
         try {
-            const response = await fetch('http://localhost:3001/qr'+'?qrUrl='+'http://localhost:3000/polls/'+id, {
+            const url = `${process.env.REACT_APP_FRONTEND_URL}/polls/${id}`;
+
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/qr?qrUrl=${encodeURIComponent(url)}`, {
                 method: 'GET',
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
-                },
+                }
             });
+
+            if (!response.ok) {
+                console.error(`Server responded with status ${response.status}: ${response.statusText}`);
+                throw new Error('Failed to generate QR code');
+            }
+
             const qrBlob = await response.blob();
             const qrCodeUrl = URL.createObjectURL(qrBlob);
+
             const downloadLink = document.createElement('a');
             downloadLink.href = qrCodeUrl;
             downloadLink.download = 'qr_code.png';
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
+
         } catch (error) {
-            console.error('Error occurred during generate poll:', error);
+            console.error('Error in handleGenerateQR:', error);
         }
     };
 
@@ -61,21 +79,27 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
                 <p className="poll-description">{description}</p> */}
             </div>
             <div className="pollOptions">
-                <IconButton aria-label="delete" size="large" onClick={deletePoll}  sx={{color: color, '&:hover': {
-                        color: '#ff1744',
-                    },}}>
-                    <DeleteIcon/>
-                </IconButton>
-                <IconButton aria-label="copy" size="large" onClick={copyUrl} sx={{ color: color, '&:hover': {
-                        color: onHoverColor,
-                    }, }}>
-                    <FileCopyIcon />
-                </IconButton>
-                <IconButton aria-label="qr" size="large" onClick={generateQrCode} sx={{ color: color, '&:hover': {
-                        color: onHoverColor,
-                    }, }}>
-                    <QrCodeScannerIcon/>
-                </IconButton>
+                <Tooltip title="Delete Poll">
+                    <IconButton aria-label="delete" size="large" onClick={deletePoll}  sx={{color: color, '&:hover': {
+                            color: '#ff1744',
+                        },}}>
+                        <DeleteIcon/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Copy Link to Poll">
+                    <IconButton aria-label="copy" size="large" onClick={copyLink} sx={{ color: color, '&:hover': {
+                            color: onHoverColor,
+                        }, }}>
+                        <FileCopyIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Download QR Code">
+                    <IconButton aria-label="qr" size="large" onClick={generateQR} sx={{ color: color, '&:hover': {
+                            color: onHoverColor,
+                        }, }}>
+                        <QrCodeScannerIcon/>
+                    </IconButton>
+                </Tooltip>
                 <IconButton aria-label="seeResults" size="large" onClick={navigateToResults} sx={{ color: color, '&:hover': {
                         color: onHoverColor,
                     }, }}>

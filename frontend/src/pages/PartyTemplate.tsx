@@ -32,7 +32,7 @@ const PartyTemplate = () => {
 
     const handleGeneratePoll = async () => {
         try {
-            const response = await fetch('http://localhost:3001/polls', {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -52,19 +52,17 @@ const PartyTemplate = () => {
     };
 
     const handleGenerateQR = async () => {
-        console.log('Starting handleGenerateQR');
         setLoading(true);
         try {
             const uuid = await handleGeneratePoll();
             if (!uuid) {
-                console.log('Poll generation failed, exiting handleGenerateQR');
                 setLoading(false);
                 return; // If poll generation failed, exit
             }
 
-            const url = `http://localhost:3000/polls/${uuid}`;
+            const url = `${process.env.REACT_APP_FRONTEND_URL}/polls/${uuid}`;
 
-            const response = await fetch(`http://localhost:3001/qr?qrUrl=${encodeURIComponent(url)}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/qr?qrUrl=${encodeURIComponent(url)}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,6 +86,7 @@ const PartyTemplate = () => {
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
+
         } catch (error) {
             console.error('Error in handleGenerateQR:', error);
         } finally {

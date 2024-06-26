@@ -18,7 +18,11 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, s
         <Box
             component="form"
             sx={{
-                '& > :not(style)': { m: 1, width: '100%', height: '80px' },
+                display: 'flex',
+                flexDirection: 'column',
+                '& > :not(style)': { m: 0 },
+                width: '100%',
+                ...sx,
             }}
             noValidate
             autoComplete="off"

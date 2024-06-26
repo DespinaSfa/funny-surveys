@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InputField from "../InputField";
 import MainButton from "../MainButton/MainButton";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
@@ -19,6 +19,7 @@ interface PlanningProps {
 const Planning: React.FC<PlanningProps> = (poll_id) => {
 
     const poll_type = 'planning';
+    const navigate = useNavigate()
     const { id } = useParams<{ id: string }>();
     const [essentialDrink, setEssentialDrink] = useState('');
     const [essentialFood, setEssentialFood] = useState('');
@@ -48,12 +49,21 @@ const Planning: React.FC<PlanningProps> = (poll_id) => {
         data = {EssentialDrink: essentialDrink, EssentialFood: essentialFood, MusicToBePlayed: musicToBePlayed, Activities: activities, EventWish: eventWish};
 
         try {
-        const response = await fetch(`http://localhost:3001/polls/${id}`, {
-            method: 'POST',
-            body: JSON.stringify({ id, poll_type, data })
-        });
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({ id, poll_type, data }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (response.ok) {
+                navigate(`/results/${id}`);
+            } else {
+                console.error('Failed to generate poll:', response.statusText);
+            }
         } catch (error) {
-        console.error('Error occurred during generate poll:', error);
+            console.error('Error occurred during generate poll:', error);
         }
     };
 
@@ -70,7 +80,7 @@ const Planning: React.FC<PlanningProps> = (poll_id) => {
             <p className='question'>What do you wish for the event?</p>
             <InputField label={"wish"} placeholder={"For this event I need..."} onChange={handleEventWish} />
             <div className="button">
-                <MainButton text={"Send!"} link={`/results/${id}`} onClick={handleSendAnswers} />
+                <MainButton text={"Send!"} onClick={handleSendAnswers} />
             </div>
         </>
     );

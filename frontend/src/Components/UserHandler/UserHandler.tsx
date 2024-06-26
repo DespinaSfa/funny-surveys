@@ -51,7 +51,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, open
 
     async function changeUsername() {
         try {
-            const response = await fetch('http://localhost:3001/update-username', {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/update-username`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, open
 
 
     return (
-        <div>
+        <div className={c.updateUsername}>
             <Button
                 className={c.Button}
                 variant="contained"
@@ -116,24 +116,23 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, open
                         backgroundColor: '#333333',
                         color: 'white',
                         borderRadius: '0.5rem',
-                        padding: '1rem'
+                        padding: '1rem',
+                        width: '90%'
                     }
                 }}
             >
                 <DialogTitle sx={{ fontFamily: 'Raleway', fontWeight: 700, color: 'white', padding: '1rem'}}>
-                    Benutzernamen aktualisieren
+                    Update Username
                 </DialogTitle>
+                <div className={c.inputField}>
                 <DialogContent>
-                    <div className={c.DialogInputField}>
-                        <InputField
-                            label="Neuer Benutzername"
-                            placeholder="Geben Sie Ihren neuen Benutzernamen ein"
-                            onChange={setNewUsername}
-                            sx={{width: '100%'}}
-                        />
-                    </div>
-
+                    <InputField
+                        label="New Username"
+                        placeholder="Enter your new username"
+                        onChange={setNewUsername}
+                    />
                 </DialogContent>
+                </div>
                 <DialogActions>
                     <MainButton
                         onClick={handleDialogClose}
