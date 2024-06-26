@@ -5,11 +5,12 @@ import c from './GenerateButton.module.scss';
 interface GenerateButtonProps {
     label: string;
     onClick: () => void;
+    disabled?: boolean;
 }
 
-const GenerateButton: React.FC<GenerateButtonProps> = ({ label, onClick }) => {
+const GenerateButton: React.FC<GenerateButtonProps> = ({ label, onClick, disabled }) => {
     return (
-        <Button className={c.generateButton} variant="contained" onClick={onClick}>
+        <Button className={c.generateButton} variant="contained" onClick={onClick} disabled={disabled}>
             {label}
         </Button>
     );

@@ -49,7 +49,7 @@ const Login = () => {
 
   return (
     <>
-      <PageHeader heading=" " link="/" />
+      <PageHeader heading=" " />
       <div className={c.container}>
         <h1 className={c.title}>Party Poll</h1>
         <div className={c.separator}></div>
