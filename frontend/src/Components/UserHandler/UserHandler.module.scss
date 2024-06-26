@@ -10,6 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  text-transform: none !important;
 
   .endIcon {
     font-size: 2rem !important;
@@ -25,6 +26,7 @@
   background-color: #DBF881 !important;
   color: #000000 !important;
   font-family: "Raleway" !important;
+  font-weight: 400 !important;
   padding: 1rem 1rem 0.5rem 1rem !important;
   text-align: right;
   border: none !important;
