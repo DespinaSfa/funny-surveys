@@ -63,7 +63,6 @@ const PartyTemplate = () => {
             }
 
             const url = `http://localhost:3000/polls/${uuid}`;
-            console.log('Poll URL:', url); // Debugging line
 
             const response = await fetch(`http://localhost:3001/qr?qrUrl=${encodeURIComponent(url)}`, {
                 method: 'GET',
@@ -89,7 +88,6 @@ const PartyTemplate = () => {
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
-
         } catch (error) {
             console.error('Error in handleGenerateQR:', error);
         } finally {

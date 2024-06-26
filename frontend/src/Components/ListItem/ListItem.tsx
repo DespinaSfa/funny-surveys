@@ -24,6 +24,31 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
         window.location.reload()
     };
 
+    const copyUrl = () => {
+        navigator.clipboard.writeText(`http://localhost:3000/polls/${id}`);
+    }
+
+    const generateQrCode = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/qr'+'?qrUrl='+'http://localhost:3000/polls/'+id, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            });
+            const qrBlob = await response.blob();
+            const qrCodeUrl = URL.createObjectURL(qrBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = qrCodeUrl;
+            downloadLink.download = 'qr_code.png';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        } catch (error) {
+            console.error('Error occurred during generate poll:', error);
+        }
+    };
+
     const navigateToResults = () => {
         window.location.href = `/results/${id}`;
     };
@@ -41,12 +66,12 @@ const ListItem = ({ title, description, id } : { title: string,  description: st
                     },}}>
                     <DeleteIcon/>
                 </IconButton>
-                <IconButton aria-label="copy" size="large" sx={{ color: color, '&:hover': {
+                <IconButton aria-label="copy" size="large" onClick={copyUrl} sx={{ color: color, '&:hover': {
                         color: onHoverColor,
                     }, }}>
                     <FileCopyIcon />
                 </IconButton>
-                <IconButton aria-label="qr" size="large" sx={{ color: color, '&:hover': {
+                <IconButton aria-label="qr" size="large" onClick={generateQrCode} sx={{ color: color, '&:hover': {
                         color: onHoverColor,
                     }, }}>
                     <QrCodeScannerIcon/>
