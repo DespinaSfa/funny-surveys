@@ -20,9 +20,9 @@ const Header = () => {
     };
 
     const menuItems = [
-        { label: 'Dashboard', action: () => navigate("/dashboard")},
-        { label: 'Change Username', action: () => setOpenDialog(true) },
-        { label: 'Logout', action: handleLogout },
+        { label: 'Dashboard', action: () => navigate("/dashboard"), disabled: window.location.pathname == '/dashboard'},
+        { label: 'Change Username', action: () => setOpenDialog(true), disabled: false },
+        { label: 'Logout', action: handleLogout, disabled: false },
     ];
 
     useEffect(() => {
