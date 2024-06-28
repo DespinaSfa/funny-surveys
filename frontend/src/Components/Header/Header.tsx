@@ -20,7 +20,8 @@ const Header = () => {
     };
 
     const menuItems = [
-        { label: 'Change Username', action: () => setOpenDialog(true) }, // Aktion zum Öffnen des Dialogs
+        { label: 'Dashboard', action: () => navigate("/dashboard")},
+        { label: 'Change Username', action: () => setOpenDialog(true) },
         { label: 'Logout', action: handleLogout },
     ];
 

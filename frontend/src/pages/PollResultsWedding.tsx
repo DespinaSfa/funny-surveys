@@ -1,5 +1,6 @@
 import HorizontalBarChart from "../Components/BarChart";
 import c from './Page_styles.module.scss';
+import './PollResultsPage.scss'
 import { calculateAverageKnownCoupleSince, calculateWeddingCounts, PollData } from './PollHelpers';
 
 const PollResultsWedding = ({ data }: { data: PollData }) => {
@@ -20,7 +21,7 @@ const PollResultsWedding = ({ data }: { data: PollData }) => {
             <div className={c.pollResCard}>
                 <h3>How do you know the bride and groom?</h3>
                 {data.PollWeddings.map((wedding, index) => (
-                    <div key={index}>{wedding.KnowCoupleFromWhere}</div>
+                    <div className="text-result" key={index}>{`● ${wedding.KnowCoupleFromWhere}`}</div>
                 ))}
             </div>
             <div className={c.pollResCard}>
@@ -30,7 +31,7 @@ const PollResultsWedding = ({ data }: { data: PollData }) => {
             <div className={c.pollResCard}>
                 <h3>What do you wish the bride and groom?</h3>
                 {data.PollWeddings.map((wedding, index) => (
-                    <div key={index}>{wedding.CoupleWish}</div>
+                    <div className="text-result" key={index}>{`● ${wedding.CoupleWish}`}</div>
                 ))}
             </div>
         </div>

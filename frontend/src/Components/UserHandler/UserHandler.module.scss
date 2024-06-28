@@ -48,8 +48,8 @@
   .MuiPaper-root {
     background-color: #333333 !important;
     border-radius: 0.5rem !important;
-    margin: 0 !important;  // Ensure no margin is added
-    padding: 0!important; // Ensure no padding is added
+    margin: 0 !important; // Ensure no margin is added
+    padding: 0 !important; // Ensure no padding is added
   }
 
   .MuiMenu-list {
@@ -76,6 +76,10 @@
   color: white !important;
 }
 
+.DialogInputField{
+  width: 100% !important;
+}
+
 .DialogActions {
   .MuiButton-root {
     background-color: #333333 !important;
@@ -87,5 +91,11 @@
       background-color: #887EF1 !important;
       color: #ffffff !important;
     }
+  }
+}
+
+.updateUsername {
+  .inputField {
+    padding: 1rem 0;
   }
 }

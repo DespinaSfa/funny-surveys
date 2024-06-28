@@ -9,11 +9,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// InitServer
-// @title           PartyPoll API
-// @version         1.0
-// @description     This is the API for the PartyPoll web application
-// @host            localhost:3001
 func InitServer() {
 	dbConfig := config.LoadConfig()
 

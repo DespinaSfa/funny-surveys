@@ -8,7 +8,7 @@ const SelectTemplate = () => {
 
     return(
         <div className="content">
-            <PageHeader heading="Select poll type" link="/dashboard"/>
+            <PageHeader heading="Select poll type" />
             <div className="selectContainer">
                 <Button className="selectButton party" variant="contained" component={Link} to='party'>
                     <div className="buttonText">Party</div>
