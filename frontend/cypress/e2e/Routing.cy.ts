@@ -1,5 +1,8 @@
 describe('Routing and create a poll', () => {
   it('passes', () => {
+
+    cy.viewport('iphone-x')
+
     cy.visit('/')
 
     //go to Login page
@@ -27,6 +30,7 @@ describe('Routing and create a poll', () => {
     //create a poll
     cy.get('a').contains('Add Poll').click()
     cy.get('a').contains('Party').click()
+    cy.contains('Create Party Poll')
 
     //ennter heading and description
     cy.contains('label', 'Heading').type('Geburtstagsparty Jane')
@@ -34,6 +38,7 @@ describe('Routing and create a poll', () => {
 
     //generate poll
     cy.get('.generateButton').click()
+    cy.get('a').contains('Back to Dashboard').click()
 
     //logout
     cy.get('button').contains('User2').click()
