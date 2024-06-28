@@ -14,7 +14,7 @@ import MainButton from "../MainButton/MainButton";
 
 interface DropdownMenuProps {
     icon: React.ReactElement; // Icon als React-Element (Pflicht)
-    menuItems: { label: string, link?: string, action?: () => void }[]; // Menüeinträge mit Text und Link oder Aktion
+    menuItems: { label: string, link?: string, action?: () => void, disabled?: boolean }[]; // Menüeinträge mit Text und Link oder Aktion
     text?: string; // Optionaler Text
     openDialog: boolean;
     setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -103,6 +103,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, open
                             handleClose();
                             if (item.action) item.action();
                         }}
+                        disabled={item.disabled}
                     >
                         {item.label}
                     </MenuItem>
