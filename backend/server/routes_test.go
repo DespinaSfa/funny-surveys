@@ -158,6 +158,60 @@ func TestGetAllPolls(t *testing.T) {
 	log.Printf("Received polls: %v", polls)
 }
 
+func PostNewPollAndGetID(token string, newPoll map[string]interface{}) (string, error) {
+	// Convert poll object to JSON
+	jsonPoll, err := json.Marshal(newPoll)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal poll object: %v", err)
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", "http://localhost:3001/polls", bytes.NewBuffer(jsonPoll))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %v", err)
+	}
+
+	// Set the Content-Type header
+	req.Header.Set("Content-Type", "application/json")
+	// Set the Authorization header
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check status code
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("expected status OK; got %v", resp.Status)
+	}
+
+	// Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body: %v", err)
+	}
+
+	// Parse the response JSON to get the poll ID
+	var response map[string]string
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse response JSON: %v", err)
+	}
+
+	// Check if pollID is present in the response
+	pollID, ok := response["pollID"]
+	if !ok {
+		return "", fmt.Errorf("pollID not found in response")
+	}
+	if pollID == "" {
+		return "", fmt.Errorf("pollID is empty")
+	}
+
+	return pollID, nil
+}
+
 // Post request end-to-end test
 func TestPostNewPoll(t *testing.T) {
 
@@ -168,39 +222,18 @@ func TestPostNewPoll(t *testing.T) {
 		t.Fatalf("Authentication failed: %v", err)
 	}
 
-	// Create a new poll object
-	newPoll := models.Poll{
-		ID:          "2",
-		Title:       "Sample Poll",
-		Description: "This is a sample poll for testing purposes.",
-		PollType:    "party",
+	// Create a new poll object (you can adjust the payload as needed)
+	newPoll := map[string]interface{}{
+		"title":       "Sample Poll",
+		"description": "This is a sample poll for testing purposes.",
+		"pollType":    "multiple_choice",
 	}
 
-	// Convert poll object to JSON
-	jsonPoll, err := json.Marshal(newPoll)
+	// Send the POST request and get the poll ID
+	pollID, err := PostNewPollAndGetID(token, newPoll)
 	if err != nil {
-		t.Fatalf("Failed to marshal poll object: %v", err)
+		t.Fatalf("Failed to post new poll: %v", err)
 	}
 
-	client := &http.Client{}
-	req, err := http.NewRequest("POST", "http://localhost:3001/polls", bytes.NewBuffer(jsonPoll))
-	if err != nil {
-		t.Fatalf("Failed to create request: %v", err)
-	}
-
-	// Set the Content-Type header
-	req.Header.Set("Content-Type", "application/json")
-	// Set the Authorization header
-	req.Header.Set("Authorization", "Bearer "+token)
-
-	resp, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("Failed to send request: %v", err)
-	}
-	defer resp.Body.Close()
-
-	// Check status code
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("Expected status OK; got %v", resp.Status)
-	}
+	log.Printf("Created poll with ID: %s", pollID)
 }
