@@ -217,18 +217,18 @@ func TestPostNewPoll(t *testing.T) {
 
 	log.Println("Test post new poll")
 
-	token, err := AuthenticateUser("User1", "User1")
+	token, err := AuthenticateUser("User2", "User2")
 	if err != nil {
 		t.Fatalf("Authentication failed: %v", err)
 	}
 
 	// Create a new poll object (you can adjust the payload as needed)
 	newPoll := map[string]interface{}{
-		"title":       "Sample Poll",
+		"userID":      2,
+		"title":       "Sample Delete Poll",
 		"description": "This is a sample poll for testing purposes.",
-		"pollType":    "multiple_choice",
+		"pollType":    "party",
 	}
-
 	// Send the POST request and get the poll ID
 	pollID, err := PostNewPollAndGetID(token, newPoll)
 	if err != nil {
@@ -236,4 +236,43 @@ func TestPostNewPoll(t *testing.T) {
 	}
 
 	log.Printf("Created poll with ID: %s", pollID)
+}
+
+func TestDeletePoll(t *testing.T) {
+	token, err := AuthenticateUser("User2", "User2")
+	if err != nil {
+		t.Fatalf("Authentication failed: %v", err)
+	}
+
+	newPoll := map[string]interface{}{
+		"userID":      2,
+		"title":       "Sample Delete Poll",
+		"description": "This is a sample poll for testing purposes.",
+		"pollType":    "party",
+	}
+
+	pollID, err := PostNewPollAndGetID(token, newPoll)
+	if err != nil {
+		t.Fatalf("Failed to post new poll: %v", err)
+	}
+	client := &http.Client{}
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("http://localhost:3001/polls/%s", pollID), nil)
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+
+	// Set the Authorization header
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check status code
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("Expected status OK; got %v", resp.Status)
+	}
+
 }

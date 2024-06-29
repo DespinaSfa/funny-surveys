@@ -147,7 +147,7 @@ func (s *Server) PostPollsHandler(w http.ResponseWriter, r *http.Request) {
 //		@Accept			json
 //		@Produce		json
 //		@Param			id	path		string	true	"Poll ID"
-//		@Success		204	string Poll successfully deleted
+//		@Success		200	string Poll successfully deleted
 //		@Router			/polls/{id} [delete]
 //
 // DeletePollByIDHandler handles the deletion of a poll by ID
@@ -184,7 +184,7 @@ func (s *Server) DeletePollByIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusOK)
 }
 
 // GetPollByIDHandler godoc
