@@ -19,7 +19,7 @@ func CreateToken(userID float64) (string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["authorized"] = true
 	claims["user_id"] = userID
-	claims["exp"] = time.Now().Add(time.Minute * 24).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 20).Unix()
 	claims["iat"] = time.Now().Unix()
 
 	tokenString, err := token.SignedString(jwtKey)
@@ -30,6 +30,29 @@ func CreateToken(userID float64) (string, error) {
 	return tokenString, nil
 }
 
+func getUserIdFromRefreshToken(tokenStr string) (*int, error) {
+	claims := &jwt.MapClaims{}
+
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
+		return refreshKey, nil
+	})
+
+	if err != nil {
+		fmt.Println("Error")
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(*jwt.MapClaims); ok && token.Valid {
+		if userID, ok := (*claims)["user_id"].(float64); ok {
+			userIDInt := int(userID)
+			return &userIDInt, nil
+		}
+		return nil, errors.New("user_id not found in token")
+	}
+
+	return nil, errors.New("invalid token")
+}
+
 func getUserIdFromToken(tokenStr string) (*int, error) {
 	claims := &jwt.MapClaims{}
 
@@ -38,6 +61,7 @@ func getUserIdFromToken(tokenStr string) (*int, error) {
 	})
 
 	if err != nil {
+		fmt.Println("Error")
 		return nil, err
 	}
 
@@ -100,7 +124,7 @@ func CreateRefreshToken(userID float64) (string, error) {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["authorized"] = true
 	claims["user_id"] = userID
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 60).Unix()
 	claims["iat"] = time.Now().Unix()
 
 	tokenString, err := token.SignedString(refreshKey)
