@@ -91,6 +91,7 @@ func TestAuthenticationMiddleware(t *testing.T) {
 	log.Printf("Received token: %s", token)
 }
 
+// Get request end-to-end test
 func TestGetAllPolls(t *testing.T) {
 
 	log.Println("Test get all polls")
@@ -155,4 +156,51 @@ func TestGetAllPolls(t *testing.T) {
 	}
 
 	log.Printf("Received polls: %v", polls)
+}
+
+// Post request end-to-end test
+func TestPostNewPoll(t *testing.T) {
+
+	log.Println("Test post new poll")
+
+	token, err := AuthenticateUser("User1", "User1")
+	if err != nil {
+		t.Fatalf("Authentication failed: %v", err)
+	}
+
+	// Create a new poll object
+	newPoll := models.Poll{
+		ID:          "2",
+		Title:       "Sample Poll",
+		Description: "This is a sample poll for testing purposes.",
+		PollType:    "party",
+	}
+
+	// Convert poll object to JSON
+	jsonPoll, err := json.Marshal(newPoll)
+	if err != nil {
+		t.Fatalf("Failed to marshal poll object: %v", err)
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", "http://localhost:3001/polls", bytes.NewBuffer(jsonPoll))
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+
+	// Set the Content-Type header
+	req.Header.Set("Content-Type", "application/json")
+	// Set the Authorization header
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check status code
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status OK; got %v", resp.Status)
+	}
 }
