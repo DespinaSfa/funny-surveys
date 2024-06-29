@@ -30,7 +30,8 @@ func TestExampleRoute(t *testing.T) {
 	log.Println("Test example route")
 }
 
-func AuthenticateUser(username, password string) (string, error) {
+// Authentication middleware helpoer function
+func AuthenticateUser(username, password string) (string, string, error) {
 	// Create the login credentials
 	credentials := map[string]string{
 		"username": username,
@@ -40,50 +41,57 @@ func AuthenticateUser(username, password string) (string, error) {
 	// Convert credentials to JSON
 	jsonCredentials, err := json.Marshal(credentials)
 	if err != nil {
-		return "", fmt.Errorf("failed to marshal credentials: %v", err)
+		return "", "", fmt.Errorf("failed to marshal credentials: %v", err)
 	}
 
 	// Send POST request to /login
 	resp, err := http.Post("http://localhost:3001/login", "application/json", bytes.NewBuffer(jsonCredentials))
 	if err != nil {
-		return "", fmt.Errorf("failed to send request: %v", err)
+		return "", "", fmt.Errorf("failed to send request: %v", err)
 	}
 	defer resp.Body.Close()
 
 	// Check status code
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("expected status OK; got %v", resp.Status)
+		return "", "", fmt.Errorf("expected status OK; got %v", resp.Status)
 	}
 
 	// Read the response body
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read response body: %v", err)
+		return "", "", fmt.Errorf("failed to read response body: %v", err)
 	}
 
 	// Parse the response JSON
 	var response map[string]string
 	err = json.Unmarshal(body, &response)
 	if err != nil {
-		return "", fmt.Errorf("failed to parse response JSON: %v", err)
+		return "", "", fmt.Errorf("failed to parse response JSON: %v", err)
 	}
 
 	// Check if token is present in the response
 	token, ok := response["token"]
+	refreshToken, ok2 := response["refreshToken"]
 	if !ok {
-		return "", fmt.Errorf("token not found in response")
+		return "", "", fmt.Errorf("token not found in response")
 	}
 	if token == "" {
-		return "", fmt.Errorf("token is empty")
+		return "", "", fmt.Errorf("token is empty")
+	}
+	if refreshToken == "" {
+		return "", "", fmt.Errorf("refreshToken is empty")
+	}
+	if !ok2 {
+		return "", "", fmt.Errorf("refreshToken not found in response")
 	}
 
-	return token, nil
+	return token, refreshToken, nil
 }
 
 func TestAuthenticationMiddleware(t *testing.T) {
 	log.Println("Test authentication middleware")
 
-	token, err := AuthenticateUser("User2", "User2")
+	token, _, err := AuthenticateUser("User2", "User2")
 	if err != nil {
 		t.Fatalf("Authentication failed: %v", err)
 	}
@@ -91,12 +99,70 @@ func TestAuthenticationMiddleware(t *testing.T) {
 	log.Printf("Received token: %s", token)
 }
 
+func TestRefreshToken(t *testing.T) {
+	log.Println("Test refresh token")
+
+	// Simulate obtaining a refresh token from authentication
+	_, refreshToken, err := AuthenticateUser("User2", "User2")
+	if err != nil {
+		t.Fatalf("Authentication failed: %v", err)
+	}
+
+	// Prepare request body
+	requestBody := map[string]string{
+		"refreshToken": refreshToken,
+	}
+	jsonData, err := json.Marshal(requestBody)
+	if err != nil {
+		t.Fatalf("Failed to marshal JSON data: %v", err)
+	}
+
+	// Create a new HTTP client
+	client := &http.Client{}
+
+	// Create a POST request to the refresh-token endpoint
+	req, err := http.NewRequest("POST", "http://localhost:3001/refresh-token", bytes.NewBuffer(jsonData))
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	// Send the request
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check the response status code
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status OK; got %v", resp.Status)
+	}
+
+	// Read the response body
+	var response map[string]string
+	err = json.NewDecoder(resp.Body).Decode(&response)
+	if err != nil {
+		t.Fatalf("Failed to parse response JSON: %v", err)
+	}
+
+	// Verify the response contains token and refreshToken keys
+	if _, ok := response["token"]; !ok {
+		t.Error("Expected 'token' in response")
+	}
+	if _, ok := response["refreshToken"]; !ok {
+		t.Error("Expected 'refreshToken' in response")
+	}
+
+	log.Println("Refresh token test successful")
+}
+
 // Get request end-to-end test
 func TestGetAllPolls(t *testing.T) {
 
 	log.Println("Test get all polls")
 
-	token, err := AuthenticateUser("User2", "User2")
+	token, _, err := AuthenticateUser("User2", "User2")
 	if err != nil {
 		t.Fatalf("Authentication failed: %v", err)
 	}
@@ -217,7 +283,7 @@ func TestPostNewPoll(t *testing.T) {
 
 	log.Println("Test post new poll")
 
-	token, err := AuthenticateUser("User2", "User2")
+	token, _, err := AuthenticateUser("User2", "User2")
 	if err != nil {
 		t.Fatalf("Authentication failed: %v", err)
 	}
@@ -238,8 +304,9 @@ func TestPostNewPoll(t *testing.T) {
 	log.Printf("Created poll with ID: %s", pollID)
 }
 
+// Delete request end-to-end test
 func TestDeletePoll(t *testing.T) {
-	token, err := AuthenticateUser("User2", "User2")
+	token, _, err := AuthenticateUser("User2", "User2")
 	if err != nil {
 		t.Fatalf("Authentication failed: %v", err)
 	}
@@ -274,5 +341,52 @@ func TestDeletePoll(t *testing.T) {
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("Expected status OK; got %v", resp.Status)
 	}
+}
 
+// Put request end-to-end test
+func TestUpdateUsername(t *testing.T) {
+
+	log.Println("Test update username")
+
+	token, _, err := AuthenticateUser("User1", "User1")
+	if err != nil {
+		t.Fatalf("Authentication failed: %v", err)
+	}
+
+	// Define the new username to update
+	newUsername := "CoolName"
+
+	// Prepare JSON payload
+	updateData := map[string]string{
+		"newUsername": newUsername,
+	}
+	jsonData, err := json.Marshal(updateData)
+	if err != nil {
+		t.Fatalf("Failed to marshal JSON data: %v", err)
+	}
+
+	// Create PUT request
+	client := &http.Client{}
+	req, err := http.NewRequest("PUT", "http://localhost:3001/update-username", bytes.NewBuffer(jsonData))
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+
+	// Set headers
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	// Send request
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check status code
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("Expected status OK; got %v", resp.Status)
+	}
+
+	log.Printf("Username updated successfully to %s", newUsername)
 }

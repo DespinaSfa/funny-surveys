@@ -519,13 +519,13 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 		r.Post("/login", server.LoginHandler)
 		r.Get("/polls/{pollId}", server.GetPollByIDHandler)
 		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+		r.Post("/refresh-token", server.RefreshToken)
 	})
 
 	// Routes with auth middleware
 	r.Group(func(r chi.Router) {
 		r.Use(AuthenticationMiddleware)
 		r.Put("/update-username", server.UpdateUsername)
-		r.Post("/refresh-token", server.RefreshToken)
 		r.Get("/check-token-valid", server.CheckTokenValid)
 		r.Get("/qr", server.GenerateQRHandler)
 		r.Get("/stats", server.StatsHandler)
