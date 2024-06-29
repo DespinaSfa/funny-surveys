@@ -1,6 +1,7 @@
 package server
 
 import (
+	"backend/models"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -21,7 +22,7 @@ func init() {
 		defer wg.Done()
 	}()
 	// Give some time for the server to start
-	time.Sleep(2 * time.Second)
+	time.Sleep(3 * time.Second)
 }
 
 func TestExampleRoute(t *testing.T) {
@@ -82,10 +83,76 @@ func AuthenticateUser(username, password string) (string, error) {
 func TestAuthenticationMiddleware(t *testing.T) {
 	log.Println("Test authentication middleware")
 
-	token, err := AuthenticateUser("User1", "User1")
+	token, err := AuthenticateUser("User2", "User2")
 	if err != nil {
 		t.Fatalf("Authentication failed: %v", err)
 	}
 
 	log.Printf("Received token: %s", token)
+}
+
+func TestGetAllPolls(t *testing.T) {
+
+	log.Println("Test get all polls")
+
+	token, err := AuthenticateUser("User2", "User2")
+	if err != nil {
+		t.Fatalf("Authentication failed: %v", err)
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", "http://localhost:3001/polls", nil)
+	if err != nil {
+		t.Fatalf("Failed to create request: %v", err)
+	}
+
+	// Set the Authorization header
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check status code
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status OK; got %v", resp.Status)
+	}
+
+	// Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("Failed to read response body: %v", err)
+	}
+
+	// Parse the response JSON into a slice of models.Poll
+	var polls []models.Poll
+	err = json.Unmarshal(body, &polls)
+	if err != nil {
+		t.Fatalf("Failed to parse response JSON: %v", err)
+	}
+
+	// Example check: Ensure there is at least one poll in the response
+	if len(polls) == 0 {
+		t.Error("Expected at least one poll in response")
+	}
+
+	// Example check: Ensure each poll has the required fields
+	for _, poll := range polls {
+		if poll.ID == "" {
+			t.Error("Poll missing 'id' field")
+		}
+		if poll.Title == "" {
+			t.Error("Poll missing 'title' field")
+		}
+		if poll.Description == "" {
+			t.Error("Poll missing 'description' field")
+		}
+		if poll.PollType == "" {
+			t.Error("Poll missing 'pollType' field")
+		}
+	}
+
+	log.Printf("Received polls: %v", polls)
 }
