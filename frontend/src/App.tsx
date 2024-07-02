@@ -12,6 +12,7 @@ import { AuthProvider } from './context/AuthProvider';
 import ProtectedRoute from './context/ProtectedRoute';
 import PollResultsPage from "./pages/PollResultsPage";
 import Polls from './pages/Polls';
+import PageNotFound from './pages/PageNotFound';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
               <Route path="login" element={<Login />} />
               <Route path="polls/:id" element={<Polls />} />
               <Route path="results/:id" element={<PollResultsPage />} />
+              <Route path="*" element={<PageNotFound />} />
 
               <Route
                   path="dashboard"
