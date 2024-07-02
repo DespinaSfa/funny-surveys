@@ -1,35 +1,44 @@
 import GenerateButton from "../Components/GenerateButton/GenerateButton";
 import InputField from "../Components/InputField";
-import MultipleChoiceSelector from "../Components/MultipleChoiceSelector";
 import PageHeader from "../Components/PageHeader/PageHeader";
 import PollHeader from "../Components/PollHeader/PollHeader";
-import './template.scss';
-import { useEffect, useState } from "react";
-import {CircularProgress} from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import QrToast from "../Components/QrToast/QrToast";
 import MainButton from "../Components/MainButton/MainButton";
+import { useState } from "react";
+import c from '../Components/PollHeader/PollHeader.module.scss';
+import EditIcon from '@mui/icons-material/Edit';
 
 const PlanningTemplate = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
     const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-    const [backButton , setBackButton] = useState<boolean>(false);
+    const [backButton, setBackButton] = useState<boolean>(false);
+    const [titleError, setTitleError] = useState(false);
+    const [descriptionError, setDescriptionError] = useState(false);
     const pollType = "party";
     const token = localStorage.getItem('token');
     const optionsActivities = ['Theme', 'Photobooth', 'Beer Pong Table', 'Karaoke'];
     const optionsMusic = ['Pop', 'Rock', 'Rap', 'EDM', 'Indie'];
 
-
     const handleHeadingChange = (value: string) => {
         setTitle(value);
+        setTitleError(value === '');
     };
 
     const handleDescriptionChange = (value: string) => {
         setDescription(value);
+        setDescriptionError(value === '');
     };
 
     const handleGeneratePoll = async () => {
+        if (!title || !description) {
+            setTitleError(!title);
+            setDescriptionError(!description);
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls`, {
                 method: 'POST',
@@ -92,12 +101,25 @@ const PlanningTemplate = () => {
             setLoading(false);
         }
     };
-    
+
     return (
         <>
             <PageHeader heading="Create Event Planning Poll" />
-            <div className='template'>
-                <PollHeader onChangeHeading={handleHeadingChange} onChangeDescription={handleDescriptionChange}/>
+            <div className="template">
+            <p className={c.heading}>
+                1. Select A Fancy Name For Your Poll
+            </p>
+            <InputField startIcon={<EditIcon className={c.personSVG}/>} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange} error={titleError} sx={{ marginBottom: '20px' }}/>
+            <p className={c.heading}>
+                2. Write A Nice Description
+            </p>
+            <InputField startIcon={<EditIcon className={c.personSVG}/>} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}
+                    error={descriptionError} 
+                    sx={{ marginBottom: '20px' }}/>
+            <hr/>
+            <p className={c.heading}>
+                3. Check The Poll
+            </p>
                 <p className='question'>Which drinks are absolutely essential?</p>
                 <p className="explanation">Your guests will be able to enter any text answer!</p>
                 <p className='question'>Which food are absolutely essential?</p>
@@ -118,12 +140,14 @@ const PlanningTemplate = () => {
                 </ul>
                 <p className='question'>What do you wish for the event?</p>
                 <p className="explanation">Your guests will be able to enter any text answer!</p>
-                <hr/>
+                <hr />
                 <p className='heading'>
                     4. Everything Correct? Then Generate Your Poll!
                 </p>
+                {titleError && <p className="error">Title is required</p>}
+                {descriptionError && <p className="error">Description is required</p>}
                 <div className="generateButton">
-                    {!qrCodeUrl && <GenerateButton label={""} onClick={handleGenerateQR} />}
+                    {!qrCodeUrl && <GenerateButton onClick={handleGenerateQR} />}
                     {loading && <CircularProgress />}
                     {qrCodeUrl && (
                         <div className="qr-code">
@@ -141,7 +165,7 @@ const PlanningTemplate = () => {
                 }
             </div>
         </>
-     );
-  };
-  
-  export default PlanningTemplate;
+    );
+};
+
+export default PlanningTemplate;
