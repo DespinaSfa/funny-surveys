@@ -324,7 +324,7 @@ func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generiere die QR-Code-Bytes aus der URL
-	qrBytes, err := generateQR(qrUrl)
+	qrBytes, err := GenerateQR(qrUrl)
 	if err != nil {
 		http.Error(w, "Failed to generate QR code", http.StatusInternalServerError)
 		fmt.Println("Error generating QR code:", err)
@@ -397,8 +397,8 @@ func (s *Server) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	fmt.Println(getUserIdFromRefreshToken(requestBody.RefreshToken))
-	userID, _ := getUserIdFromRefreshToken(requestBody.RefreshToken)
+	fmt.Println(GetUserIdFromRefreshToken(requestBody.RefreshToken))
+	userID, _ := GetUserIdFromRefreshToken(requestBody.RefreshToken)
 	ParsedUserID := float64(*userID)
 	// Verify the refresh token and get a new access token
 	_, err = RefreshToken(requestBody.RefreshToken, ParsedUserID)
@@ -515,7 +515,7 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	r.Use(corsMiddleware)
+	r.Use(CorsMiddleware)
 
 	// Public routes (no auth middleware)
 	r.Group(func(r chi.Router) {

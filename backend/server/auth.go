@@ -30,7 +30,7 @@ func CreateToken(userID float64) (string, error) {
 	return tokenString, nil
 }
 
-func getUserIdFromRefreshToken(tokenStr string) (*int, error) {
+func GetUserIdFromRefreshToken(tokenStr string) (*int, error) {
 	claims := &jwt.MapClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
@@ -53,7 +53,7 @@ func getUserIdFromRefreshToken(tokenStr string) (*int, error) {
 	return nil, errors.New("invalid token")
 }
 
-func getUserIdFromToken(tokenStr string) (*int, error) {
+func GetUserIdFromToken(tokenStr string) (*int, error) {
 	claims := &jwt.MapClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
@@ -87,7 +87,7 @@ func GetUserId(r *http.Request) (*int, error) {
 		return nil, errors.New("invalid authorization header format")
 	}
 
-	return getUserIdFromToken(parts[1])
+	return GetUserIdFromToken(parts[1])
 }
 
 func RefreshToken(refreshTokenStr string, userID float64) (string, error) {
