@@ -24,18 +24,21 @@ const PlanningTemplate = () => {
 
     const handleHeadingChange = (value: string) => {
         setTitle(value);
-        setTitleError(value === '');
+        setTitleError(value.trim() === '');
     };
 
     const handleDescriptionChange = (value: string) => {
         setDescription(value);
-        setDescriptionError(value === '');
+        setDescriptionError(value.trim() === '');
     };
 
     const handleGeneratePoll = async () => {
-        if (!title || !description) {
-            setTitleError(!title);
-            setDescriptionError(!description);
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+
+        if (!trimmedTitle || !trimmedDescription) {
+            setTitleError(!trimmedTitle);
+            setDescriptionError(!trimmedDescription);
             return;
         }
 

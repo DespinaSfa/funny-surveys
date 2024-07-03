@@ -33,7 +33,7 @@ const Party: React.FC<PartyProps> = ({ poll_id }) => {
 
     const handleSongToBePlayedChange = (value: string) => {
         setSongToBePlayed(value);
-        setSongError(value === '');
+        setSongError(value.trim() === '');
     };
 
     const handleCurrentAlcoholLevelChange = (value: number) => {
@@ -58,7 +58,7 @@ const Party: React.FC<PartyProps> = ({ poll_id }) => {
 
     const handleWishSnack = (value: string) => {
         setWishSnack(value);
-        setWishError(value === '');
+        setWishError(value.trim() === '');
     };
 
     const handleSendAnswers = async () => {

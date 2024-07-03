@@ -42,7 +42,7 @@ const Wedding: React.FC<WeddingProps> = ({ poll_id }) => {
 
     const handleKnowCoupleFromWhereChange = (value: string) => {
         setKnowCoupleFromWhere(value);
-        setFromWhereError(value === '');
+        setFromWhereError(value.trim() === '');
     };
 
     const handleWeddingHighlightChange = (value: string) => {
@@ -51,7 +51,7 @@ const Wedding: React.FC<WeddingProps> = ({ poll_id }) => {
 
     const handleCoupleWishChange = (value: string) => {
         setCoupleWish(value);
-        setWishError(value === '');
+        setWishError(value.trim() === '');
     };
 
     const handleSendAnswers = async () => {

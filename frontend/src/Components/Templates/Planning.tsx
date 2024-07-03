@@ -33,12 +33,12 @@ const Planning: React.FC<PlanningProps> = ({ poll_id }) => {
 
     const handleEssentialDrinkChange = (value: string) => {
         setEssentialDrink(value);
-        setDrinkError(value === '');
+        setDrinkError(value.trim() === '');
     };
 
     const handleEssentialFoodChange = (value: string) => {
         setEssentialFood(value);
-        setFoodError(value === '');
+        setFoodError(value.trim() === '');
     };
 
     const handleMusicToBePlayed = (value: string) => {
@@ -51,7 +51,7 @@ const Planning: React.FC<PlanningProps> = ({ poll_id }) => {
 
     const handleEventWish = (value: string) => {
         setEventWish(value);
-        setWishError(value === '');
+        setWishError(value.trim() === '');
     };
 
     const handleSendAnswers = async () => {

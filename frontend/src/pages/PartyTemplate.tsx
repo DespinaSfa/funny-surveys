@@ -6,7 +6,7 @@ import PageHeader from "../Components/PageHeader/PageHeader";
 import QrToast from "../Components/QrToast/QrToast";
 import RangeSelector from "../Components/RangeSelector";
 import EditIcon from '@mui/icons-material/Edit';
-import './template.scss'; 
+import './template.scss';
 import { useState } from "react";
 import MainButton from "../Components/MainButton/MainButton";
 import c from '../Components/PollHeader/PollHeader.module.scss';
@@ -26,18 +26,21 @@ const PartyTemplate = () => {
 
     const handleHeadingChange = (value: string) => {
         setTitle(value);
-        setTitleError(value === '');
+        setTitleError(value.trim() === '');
     };
 
     const handleDescriptionChange = (value: string) => {
         setDescription(value);
-        setDescriptionError(value === '');
+        setDescriptionError(value.trim() === '');
     };
 
     const handleGeneratePoll = async () => {
-        if (!title || !description) {
-            setTitleError(!title);
-            setDescriptionError(!description);
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+
+        if (!trimmedTitle || !trimmedDescription) {
+            setTitleError(!trimmedTitle);
+            setDescriptionError(!trimmedDescription);
             return;
         }
 
@@ -67,7 +70,7 @@ const PartyTemplate = () => {
             const uuid = await handleGeneratePoll();
             if (!uuid) {
                 setLoading(false);
-                return; 
+                return;
             }
 
             const url = `${process.env.REACT_APP_FRONTEND_URL}/polls/${uuid}`;
@@ -108,20 +111,20 @@ const PartyTemplate = () => {
         <>
             <PageHeader heading="Create Party Poll" />
             <div className="template">
-            <p className={c.heading}>
-                1. Select A Fancy Name For Your Poll
-            </p>
-            <InputField startIcon={<EditIcon className={c.personSVG}/>} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange} error={titleError} sx={{ marginBottom: '20px' }}/>
-            <p className={c.heading}>
-                2. Write A Nice Description
-            </p>
-            <InputField startIcon={<EditIcon className={c.personSVG}/>} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}
-                    error={descriptionError} 
-                    sx={{ marginBottom: '20px' }}/>
-            <hr/>
-            <p className={c.heading}>
-                3. Check The Poll
-            </p>
+                <p className={c.heading}>
+                    1. Select A Fancy Name For Your Poll
+                </p>
+                <InputField startIcon={<EditIcon className={c.personSVG} />} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange} error={titleError} sx={{ marginBottom: '20px' }} />
+                <p className={c.heading}>
+                    2. Write A Nice Description
+                </p>
+                <InputField startIcon={<EditIcon className={c.personSVG} />} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}
+                    error={descriptionError}
+                    sx={{ marginBottom: '20px' }} />
+                <hr />
+                <p className={c.heading}>
+                    3. Check The Poll
+                </p>
                 <p className="question">Which songs should definitely be played tonight? 📻</p>
                 <p className="explanation">Your guests will be able to enter any text answer!</p>
                 <p className="question">What is your current alcohol level? 📈</p>

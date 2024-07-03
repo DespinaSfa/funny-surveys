@@ -31,14 +31,17 @@ const WeddingTemplate = () => {
 
     const handleDescriptionChange = (value: string) => {
         setDescription(value);
-        setDescriptionError(value.trim() === ''); 
+        setDescriptionError(value.trim() === '');
     };
 
     const handleGeneratePoll = async () => {
-        if (title.trim() === '' || description.trim() === '') {
-            setTitleError(title.trim() === '');
-            setDescriptionError(description.trim() === '');
-            return null;
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+
+        if (!trimmedTitle || !trimmedDescription) {
+            setTitleError(!trimmedTitle);
+            setDescriptionError(!trimmedDescription);
+            return;
         }
 
         try {
