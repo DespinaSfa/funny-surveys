@@ -23,10 +23,10 @@ const Wedding: React.FC<WeddingProps> = ({ poll_id }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
 
-    const [weddingInvite, setWeddingInvite] = useState('');
+    const [weddingInvite, setWeddingInvite] = useState('bride');
     const [knowCoupleSince, setKnowCoupleSince] = useState(0);
     const [knowCoupleFromWhere, setKnowCoupleFromWhere] = useState('');
-    const [weddingHighlight, setWeddingHighlight] = useState('');
+    const [weddingHighlight, setWeddingHighlight] = useState('wedding');
     const [coupleWish, setCoupleWish] = useState('');
     
     const [fromWhereError, setFromWhereError] = useState(false);

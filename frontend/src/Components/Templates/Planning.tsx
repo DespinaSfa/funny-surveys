@@ -24,8 +24,8 @@ const Planning: React.FC<PlanningProps> = ({ poll_id }) => {
 
     const [essentialDrink, setEssentialDrink] = useState('');
     const [essentialFood, setEssentialFood] = useState('');
-    const [musicToBePlayed, setMusicToBePlayed] = useState('');
-    const [activities, setActivities] = useState('');
+    const [musicToBePlayed, setMusicToBePlayed] = useState('pop');
+    const [activities, setActivities] = useState('theme');
     const [eventWish, setEventWish] = useState('');
     const [drinkError, setDrinkError] = useState(false);
     const [foodError, setFoodError] = useState(false);
