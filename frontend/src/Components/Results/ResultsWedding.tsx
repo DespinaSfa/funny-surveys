@@ -3,7 +3,13 @@ import c from '../../pages/page_styles.module.scss';
 import '../../pages/results.scss';
 import { calculateAverageKnownCoupleSince, calculateWeddingCounts, PollData } from '../../pages/models/PollHelpers';
 
-const PollResultsWedding = ({ data }: { data: PollData }) => {
+interface ResultsWeddingProps {
+    data: PollData;
+}
+
+//displays results for planning polls
+const ResultsWedding: React.FC<ResultsWeddingProps> = ({ data }) => {
+
     const inviteCounts = calculateWeddingCounts(data.PollWeddings, 'WeddingInvite');
     const highlightCounts = calculateWeddingCounts(data.PollWeddings, 'WeddingHighlight');
     const averageKnownCoupleSince = calculateAverageKnownCoupleSince(data.PollWeddings);
@@ -38,4 +44,4 @@ const PollResultsWedding = ({ data }: { data: PollData }) => {
     );
 };
 
-export default PollResultsWedding;
+export default ResultsWedding;

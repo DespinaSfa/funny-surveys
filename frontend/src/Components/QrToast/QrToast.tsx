@@ -4,21 +4,14 @@ import { Snackbar, Box, Button } from '@mui/material';
 import c from "./qrToast.module.scss";
 import MainButton from '../../Components/MainButton/MainButton';
 
+//Qr-Code popup
+//contains button which navigates back to dashboard
 const QrToast = () => {
-    const [open, setOpen] = useState(false);
-    const [qrValue, setQrValue] = useState('');
-    const [generateButtonDisabled, setGenerateButtonDisabled] = useState(false); 
 
-    const handleOpen = () => {
-        const randomValue = Math.random().toString(36).substring(2, 15); 
-        setQrValue(randomValue);  
-        setOpen(true);
-        setGenerateButtonDisabled(true); 
-    };
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
-        setGenerateButtonDisabled(false);
     };
 
     function handleBack() {

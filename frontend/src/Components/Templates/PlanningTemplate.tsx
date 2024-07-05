@@ -1,6 +1,8 @@
 import './template.scss';
 
+//template for planning poll
 const PlanningTemplate = () => {
+
     const optionsActivities = ['Theme', 'Photobooth', 'Beer Pong Table', 'Karaoke'];
     const optionsMusic = ['Pop', 'Rock', 'Rap', 'EDM', 'Indie'];
 

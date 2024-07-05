@@ -21,7 +21,9 @@ interface HorizontalBarChartProps {
     counts: { [key: string]: number };
 }
 
+//bar charts for result page
 const HorizontalBarChart: React.FC<HorizontalBarChartProps> = ({ counts }) => {
+
     const labels = Object.keys(counts);
     const dataValues = Object.values(counts);
 

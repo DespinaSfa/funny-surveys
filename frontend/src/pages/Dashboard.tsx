@@ -6,7 +6,11 @@ import StatisticCard from "../Components/StatisticCard/StatisticCard";
 import MainButton from "../Components/MainButton/MainButton";
 import Stats from "./models/Stats";
 
+//Dashboard page
+//displays statstics for the poll from the user
+//displays list of all polls which are created by the user
 const Dashboard = () => {
+
     const [polls, setPolls] = useState<Poll[]>([]);
     const [stats, setStats] = useState<Stats>();
     const token = localStorage.getItem('token');

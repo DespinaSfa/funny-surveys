@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputField from "../InputField";
 import MainButton from "../MainButton/MainButton";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
@@ -17,10 +17,12 @@ interface PlanningProps {
     poll_id: string;
 }
 
+//Planning poll
+//template to fill out
 const Planning: React.FC<PlanningProps> = ({ poll_id }) => {
+
     const poll_type = 'planning';
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
 
     const [essentialDrink, setEssentialDrink] = useState('');
     const [essentialFood, setEssentialFood] = useState('');
@@ -71,16 +73,16 @@ const Planning: React.FC<PlanningProps> = ({ poll_id }) => {
         };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${poll_id}`, {
                 method: 'POST',
-                body: JSON.stringify({ id, poll_type, data }),
+                body: JSON.stringify({ poll_id, poll_type, data }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
             if (response.ok) {
-                navigate(`/results/${id}`);
+                navigate(`/results/${poll_id}`);
             } else {
                 console.error('Failed to generate poll:', response.statusText);
             }

@@ -2,7 +2,9 @@ import { Outlet } from "react-router-dom";
 import './landingPage.scss';
 import MainButton from "../Components/MainButton/MainButton";
 
+//Landing page -> Onboarding
 const LandingPage = () => {
+
     return(
         <div className="landingPage">
             <div className="content">

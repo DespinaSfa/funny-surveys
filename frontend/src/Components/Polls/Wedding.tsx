@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputField from "../InputField";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
 import RangeSelector from "../RangeSelector";
@@ -18,10 +18,12 @@ interface WeddingProps {
     poll_id: string;
 }
 
+//Wedding poll
+//template to fill out
 const Wedding: React.FC<WeddingProps> = ({ poll_id }) => {
+
     const poll_type = 'wedding';
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
 
     const [weddingInvite, setWeddingInvite] = useState('bride');
     const [knowCoupleSince, setKnowCoupleSince] = useState(0);
@@ -70,16 +72,16 @@ const Wedding: React.FC<WeddingProps> = ({ poll_id }) => {
         };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${poll_id}`, {
                 method: 'POST',
-                body: JSON.stringify({ id, poll_type, data }),
+                body: JSON.stringify({ poll_id, poll_type, data }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
             if (response.ok) {
-                navigate(`/results/${id}`);
+                navigate(`/results/${poll_id}`);
             } else {
                 console.error('Failed to generate poll:', response.statusText);
             }

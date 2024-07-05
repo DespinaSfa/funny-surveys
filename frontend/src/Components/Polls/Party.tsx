@@ -4,7 +4,7 @@ import MultipleChoiceSelector from "../MultipleChoiceSelector";
 import RangeSelector from "../RangeSelector";
 import './template.scss';
 import MainButton from "../MainButton/MainButton";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Data {
     SongToBePlayed: string;
@@ -18,9 +18,11 @@ interface PartyProps {
     poll_id: string;
 }
 
+//Party poll
+//template to fill out
 const Party: React.FC<PartyProps> = ({ poll_id }) => {
+    
     const poll_type = 'party';
-    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const [songToBePlayed, setSongToBePlayed] = useState('');
@@ -77,16 +79,16 @@ const Party: React.FC<PartyProps> = ({ poll_id }) => {
         };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/polls/${poll_id}`, {
                 method: 'POST',
-                body: JSON.stringify({ id, poll_type, data }),
+                body: JSON.stringify({ poll_id, poll_type, data }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
 
             if (response.ok) {
-                navigate(`/results/${id}`);
+                navigate(`/results/${poll_id}`);
             } else {
                 console.error('Failed to generate poll:', response.statusText);
             }

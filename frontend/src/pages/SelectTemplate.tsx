@@ -3,6 +3,8 @@ import './selectTemplate.scss';
 import Button from "@mui/material/Button";
 import PageHeader from "../Components/PageHeader/PageHeader";
 
+//select poll type page
+//contains 3 buttons one for each poll type
 const SelectTemplate = () => {
 
     return(

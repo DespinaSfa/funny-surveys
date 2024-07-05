@@ -7,7 +7,11 @@ interface PageHeaderProps {
   heading: string;
 }
 
+//Header for pages
+//displays header of page
+//contains a back button
 const PageHeader: React.FC<PageHeaderProps> = ({ heading }) => {
+  
   return (
     <div className={c.container}>
         <IconButton onClick={() => {window.history.back()}}>

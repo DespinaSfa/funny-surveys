@@ -1,7 +1,9 @@
 import RangeSelector from "../RangeSelector";
 import './template.scss';
 
+//template for wedding poll
 const WeddingTemplate = () => {
+
     const optionsInvited = ['Bride', 'Groom', 'Both'];
     const highlightOptions = ['Wedding Ceremony', 'Food', 'Wedding dance', 'Program', 'After Party'];
 
@@ -16,7 +18,8 @@ const WeddingTemplate = () => {
             </ul>
             <p className='question'>How long have you known the bride and groom?</p>
             <p className="explanation">Your guests will be able to select a value between 0 and 5!</p>
-            <RangeSelector min={0} max={5} step={1} disabled={true} onChange={(value: number) => {}}/><br/>
+            <RangeSelector min={0} max={5} step={1} disabled={true} onChange={(value: number) => {}} />
+            <br/>
             <p className='question'>How do you know the bride and groom?</p>
             <p className="explanation">Your guests will be able to enter any text answer!</p>
             <p className='question'>What was your highlight of the wedding?</p>

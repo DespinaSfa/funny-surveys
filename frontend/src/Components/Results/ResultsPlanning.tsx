@@ -1,10 +1,15 @@
 import HorizontalBarChart from "../BarChart";
 import c from '../../pages/page_styles.module.scss';
 import '../../pages/results.scss';
-
 import { calculateCountsPlanning, PollData } from '../../pages/models/PollHelpers';
 
-const PollResultsPlanning = ({ data }: { data: PollData }) => {
+interface ResultsPlanningProps {
+    data: PollData;
+}
+
+//displays results for planning polls
+const ResultsPlanning: React.FC<ResultsPlanningProps> = ({ data }) => {
+
     const musicPreferencesCounts = calculateCountsPlanning(data.PollPlannings, 'MusicToBePlayed');
     const eventActivitiesCounts = calculateCountsPlanning(data.PollPlannings, 'Activities');
 
@@ -50,4 +55,4 @@ const PollResultsPlanning = ({ data }: { data: PollData }) => {
     );
 };
 
-export default PollResultsPlanning;
+export default ResultsPlanning;

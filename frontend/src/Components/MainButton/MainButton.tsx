@@ -9,7 +9,9 @@ interface MainButtonProps {
   onClick?: () => void; 
 }
 
+//normal button
 const MainButton: React.FC<MainButtonProps> = ({ text, link, onClick }) => {
+  
   const handleClick = () => {
     if (onClick) {
       onClick();

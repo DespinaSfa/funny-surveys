@@ -6,7 +6,9 @@ import c from "./login.module.scss";
 import MainButton from '../Components/MainButton/MainButton';
 import PageHeader from '../Components/PageHeader/PageHeader';
 
+//Login page
 const Login = () => {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -55,25 +57,24 @@ const Login = () => {
         <div className={c.separator}></div>
         <p className={c.loginDescription}>Log in to see your polls!</p>
         <div className={c.inputwidth}>
-        <InputField
-          startIcon={<PersonSharpIcon className={c.personSVG} />}
-          label={"Username"}
-          placeholder={"Username"}
-          onChange={handleUsernameChange}
-          sx={{ marginBottom: '1.5rem' }}
-        />
+          <InputField
+            startIcon={<PersonSharpIcon className={c.personSVG} />}
+            label={"Username"}
+            placeholder={"Username"}
+            onChange={handleUsernameChange}
+            sx={{ marginBottom: '1.5rem' }}
+          />
         </div>
         <div className={c.inputwidth}>
-        <InputField
-          startIcon={<VpnKeySharpIcon className={c.personSVG} />}
-          label={"Password"}
-          placeholder={"Password"}
-          type={'password'}
-          onChange={handlePasswordChange}
-          sx={{ marginBottom: '3rem' }}
-        />
+          <InputField
+            startIcon={<VpnKeySharpIcon className={c.personSVG} />}
+            label={"Password"}
+            placeholder={"Password"}
+            type={'password'}
+            onChange={handlePasswordChange}
+            sx={{ marginBottom: '3rem' }}
+          />
         </div>
-
         {error && <p className={c.error}>{error}</p>}
         <MainButton text={"Submit"} onClick={handleSubmit} />
       </div>

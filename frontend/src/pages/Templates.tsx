@@ -12,10 +12,13 @@ import WeddingTemplate from "../Components/Templates/WeddingTemplate";
 import PlanningTemplate from "../Components/Templates/PlanningTemplate";
 import { useParams } from "react-router-dom";
 
+//Template container for creating a poll
+//handle poll title and description input
+//generates qr code and poll
+//loads poll template depending on polltype
 const Templates = () => {
 
     const { pollType } = useParams<{ pollType: string }>();
-
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);

@@ -7,7 +7,9 @@ interface GenerateButtonProps {
     disabled?: boolean;
 }
 
+//fancy Button used to generate poll
 const GenerateButton: React.FC<GenerateButtonProps> = ({ onClick, disabled }) => {
+
     return (
         <Button className='generateButton' variant="contained" onClick={onClick} disabled={disabled} />
     );

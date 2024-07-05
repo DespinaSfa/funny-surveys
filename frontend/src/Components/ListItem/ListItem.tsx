@@ -6,7 +6,17 @@ import "./listItem.scss";
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { Tooltip } from '@mui/material';
 
-const ListItem = ({ title, description, id } : { title: string,  description: string, id: String}) => {
+interface ListItemProps {
+    title: string;
+    description: string;
+    id: string;
+}
+
+//list item for overview of all polls at the dashboard
+//displays poll title on click navigates to results
+//via icon button user can delete poll, generate qr-code again and copy link to poll
+const ListItem: React.FC<ListItemProps> = ({ title, description, id }) => {
+
     const token = localStorage.getItem("token")
     const color = '#ffffff'
     const onHoverColor = '#887EF1'
