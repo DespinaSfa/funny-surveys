@@ -1,4 +1,4 @@
-import "./StatisticCard.scss"
+import "./statisticCard.scss"
 
 const StatisticCard = ({ title, value } : { title: string,  value: string | undefined}) => {
     if (value === undefined || value === "0" || value === "") {

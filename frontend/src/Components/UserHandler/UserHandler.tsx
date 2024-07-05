@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Link } from "react-router-dom";
-import c from './UserHandler.module.scss';
+import c from './userHandler.module.scss';
 import InputField from "../InputField";
 import MainButton from "../MainButton/MainButton";
 

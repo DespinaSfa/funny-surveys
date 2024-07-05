@@ -1,7 +1,7 @@
 import React from 'react';
 import InputField from '../InputField';
 import EditIcon from '@mui/icons-material/Edit';
-import './PollHeader.scss';
+import './pollHeader.scss';
 
 interface PollHeaderProps {
    onChangeHeading?: (value: string) => void;

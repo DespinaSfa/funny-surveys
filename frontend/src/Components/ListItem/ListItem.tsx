@@ -2,7 +2,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import DeleteIcon from '@mui/icons-material/Delete';
-import "./ListItem.scss";
+import "./listItem.scss";
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { Tooltip } from '@mui/material';
 

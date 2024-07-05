@@ -5,7 +5,7 @@ import PollResultsWedding from '../Components/Results/ResultsWedding';
 import PollResultsParty from '../Components/Results/ResultsParty';
 import PollResultsPlanning from '../Components/Results/ResultsPlanning';
 import { PollData } from './models/PollHelpers';
-import './Results.scss'
+import './results.scss'
 
 const Results = () => {
     const [pollData, setPollData] = useState<PollData | null>(null);

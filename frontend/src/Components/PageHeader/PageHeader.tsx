@@ -1,7 +1,7 @@
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React from 'react';
-import c from './PageHeader.module.scss';
+import c from './pageHeader.module.scss';
 
 interface PageHeaderProps {
   heading: string;

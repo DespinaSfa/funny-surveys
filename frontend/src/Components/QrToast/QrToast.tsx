@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Snackbar, Box, Button } from '@mui/material';
 // import QRCode from 'qrcode.react';  
-import c from "../QrToast/QrToast.module.scss";
+import c from "./qrToast.module.scss";
 import MainButton from '../../Components/MainButton/MainButton';
 
 const QrToast = () => {
