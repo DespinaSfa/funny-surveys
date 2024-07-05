@@ -1,13 +1,24 @@
 .question {
     font-family: "Raleway";
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    margin: 2rem 0 1rem 0;
+    margin-top: 16px;
 }
 
-.button {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
+.explanation {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #c6c6c6;
+    font-size: 17px;
+}
+
+ul.explanation {
+    padding-left: 1rem;
+}
+
+
+@media (max-width: 750px) {
+    .question {
+        font-size: 16px;
+    }
 }

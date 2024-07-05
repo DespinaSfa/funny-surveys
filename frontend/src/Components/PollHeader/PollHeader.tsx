@@ -1,7 +1,7 @@
 import React from 'react';
 import InputField from '../InputField';
 import EditIcon from '@mui/icons-material/Edit';
-import c from './PollHeader.module.scss';
+import './PollHeader.scss';
 
 interface PollHeaderProps {
    onChangeHeading?: (value: string) => void;
@@ -24,16 +24,16 @@ const PollHeader: React.FC<PollHeaderProps> = ({ onChangeHeading, onChangeDescri
 
     return (
         <div>
-            <p className={c.heading}>
+            <p className='heading'>
                 1. Select A Fancy Name For Your Poll
             </p>
-            <InputField startIcon={<EditIcon className={c.personSVG}/>} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange}/>
-            <p className={c.heading}>
+            <InputField startIcon={<EditIcon className='editSVG'/>} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange}/>
+            <p className='heading'>
                 2. Write A Nice Description
             </p>
-            <InputField startIcon={<EditIcon className={c.personSVG}/>} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}/>
+            <InputField startIcon={<EditIcon className='editSVG'/>} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}/>
             <hr/>
-            <p className={c.heading}>
+            <p className='heading'>
                 3. Check The Poll
             </p>
         </div>

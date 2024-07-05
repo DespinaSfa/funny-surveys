@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import c from './Header.module.scss';
+import './Header.scss';
 import MainButton from '../MainButton/MainButton';
 import DropdownMenu from "../UserHandler/UserHandler";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -20,7 +20,7 @@ const Header = () => {
     };
 
     const menuItems = [
-        { label: 'Dashboard', action: () => navigate("/dashboard"), disabled: window.location.pathname == '/dashboard'},
+        { label: 'Dashboard', action: () => navigate("/dashboard"), disabled: window.location.pathname === '/dashboard'},
         { label: 'Change Username', action: () => setOpenDialog(true), disabled: false },
         { label: 'Logout', action: handleLogout, disabled: false },
     ];
@@ -35,12 +35,12 @@ const Header = () => {
     }, []);
 
     return (
-        <div className={c.header}>
-            <Link to="/" className={c.icon}>
+        <div className='header'>
+            <Link to="/" className='icon'>
                 Party Poll
             </Link>
             {isLoggedIn ? (
-                <div className={c.user_handling}>
+                <div className='user_handling'>
                     <DropdownMenu
                         text={username}
                         icon={<KeyboardArrowDownIcon />}

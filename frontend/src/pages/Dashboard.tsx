@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Poll from "./models/Poll";
 import StatisticCard from "../Components/StatisticCard/StatisticCard";
 import MainButton from "../Components/MainButton/MainButton";
-import { Link } from 'react-router-dom';
 import Stats from "./models/Stats";
 
 const Dashboard = () => {

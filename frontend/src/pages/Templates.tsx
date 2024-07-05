@@ -1,18 +1,21 @@
 import { CircularProgress } from "@mui/material";
 import GenerateButton from "../Components/GenerateButton/GenerateButton";
 import InputField from "../Components/InputField";
-import MultipleChoiceSelector from "../Components/MultipleChoiceSelector";
 import PageHeader from "../Components/PageHeader/PageHeader";
 import QrToast from "../Components/QrToast/QrToast";
-import RangeSelector from "../Components/RangeSelector";
 import EditIcon from '@mui/icons-material/Edit';
-import './template.scss';
+import c from './templates.module.scss';
 import { useState } from "react";
 import MainButton from "../Components/MainButton/MainButton";
-import c from '../Components/PollHeader/PollHeader.module.scss';
+import PartyTemplate from "../Components/Templates/PartyTemplate";
+import WeddingTemplate from "../Components/Templates/WeddingTemplate";
+import PlanningTemplate from "../Components/Templates/PlanningTemplate";
+import { useParams } from "react-router-dom";
 
+const Templates = () => {
 
-const PartyTemplate = () => {
+    const { pollType } = useParams<{ pollType: string }>();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,9 +23,7 @@ const PartyTemplate = () => {
     const [button, setBackButton] = useState<boolean>(false);
     const [titleError, setTitleError] = useState(false);
     const [descriptionError, setDescriptionError] = useState(false);
-    const pollType = "party";
     const token = localStorage.getItem('token');
-    const options = ['Dancing 💃', 'Shout along to party hits or karaoke 🎤', 'PartyGames (Bierpong, Rage-Cage, etc.) 🍻 ', 'Chilling and chatting a bit outside with friends 🗨️'];
 
     const handleHeadingChange = (value: string) => {
         setTitle(value);
@@ -109,46 +110,32 @@ const PartyTemplate = () => {
 
     return (
         <>
-            <PageHeader heading="Create Party Poll" />
-            <div className="template">
+            <PageHeader heading={"Create a " + pollType + " poll"} />
+            <div className={c.template}>
                 <p className={c.heading}>
                     1. Select A Fancy Name For Your Poll
                 </p>
-                <InputField startIcon={<EditIcon className={c.personSVG} />} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange} error={titleError} sx={{ marginBottom: '20px' }} />
-                <p className={c.heading}>
+                <InputField startIcon={<EditIcon className={c.editSVG} />} label={'Heading'} placeholder={'Name of your poll'} onChange={handleHeadingChange} error={titleError} sx={{ marginBottom: '20px' }} />
+                <p className='heading'>
                     2. Write A Nice Description
                 </p>
-                <InputField startIcon={<EditIcon className={c.personSVG} />} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}
+                <InputField startIcon={<EditIcon className={c.editSVG} />} label={'Description'} placeholder={'This poll is about...'} onChange={handleDescriptionChange}
                     error={descriptionError}
                     sx={{ marginBottom: '20px' }} />
                 <hr />
                 <p className={c.heading}>
                     3. Check The Poll
                 </p>
-                <p className="question">Which songs should definitely be played tonight? 📻</p>
-                <p className="explanation">Your guests will be able to enter any text answer!</p>
-                <p className="question">What is your current alcohol level? 📈</p>
-                <p className="explanation">Your guests will be able to select a value between 0 and 5!</p>
-                <RangeSelector min={0} max={5} step={1} disabled={true} onChange={function (value: number): void { }} /> <br />
-                <p className="question">What alcohol level have you set as your goal for today? 🍺</p>
-                <p className="explanation">Your guests will be able to select a value between 0 and 5!</p>
-                <RangeSelector min={0} max={5} step={1} disabled={true} onChange={function (value: number): void { }} /><br />
-                <p className="question">What is your favorite party activity?</p>
-                <p className="explanation">Your guests will be able to select from these options:</p>
-                <ul className="explanation">
-                    {options.map((option, index) => (
-                        <li key={index}>{option}</li>
-                    ))}
-                </ul>
-                <p className="question">Which snacks or drinks would you like for the next party? 🍔</p>
-                <p className="explanation">Your guests will be able to enter any text answer!</p>
+                {pollType === 'party' && <PartyTemplate/>}
+                {pollType === 'wedding' && <WeddingTemplate/>}
+                {pollType === 'planning' && <PlanningTemplate/>}
                 <hr />
-                <p className="heading">
+                <p className={c.heading}>
                     4. Everything Correct? Then Generate Your Poll!
                 </p>
-                {titleError && <p className="error">Title is required</p>}
-                {descriptionError && <p className="error">Description is required</p>}
-                <div className="generateButton">
+                {titleError && <p className={c.error}>Title is required</p>}
+                {descriptionError && <p className={c.error}>Description is required</p>}
+                <div className={c.generateButton}>
                     {!qrCodeUrl && <GenerateButton onClick={handleGenerateQR} />}
                     {loading && <CircularProgress />}
                     {qrCodeUrl && (
@@ -159,7 +146,7 @@ const PartyTemplate = () => {
                     <QrToast />
                 </div>
                 {button &&
-                    <div className={"button"}>
+                    <div className={c.button}>
                         <center>
                             <MainButton text={"Back to Dashboard"} link={"/dashboard"} />
                         </center>
@@ -170,4 +157,4 @@ const PartyTemplate = () => {
     );
 };
 
-export default PartyTemplate;
+export default Templates;

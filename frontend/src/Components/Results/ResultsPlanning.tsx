@@ -1,9 +1,8 @@
-import React from 'react';
-import HorizontalBarChart from "../Components/BarChart";
-import c from './Page_styles.module.scss';
-import './PollResultsPage.scss'
+import HorizontalBarChart from "../BarChart";
+import c from '../../pages/Page_styles.module.scss';
+import '../../pages/Results.scss';
 
-import { calculateCountsPlanning, PollData } from './PollHelpers';
+import { calculateCountsPlanning, PollData } from '../../pages/models/PollHelpers';
 
 const PollResultsPlanning = ({ data }: { data: PollData }) => {
     const musicPreferencesCounts = calculateCountsPlanning(data.PollPlannings, 'MusicToBePlayed');

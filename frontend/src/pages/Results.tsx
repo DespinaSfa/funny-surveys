@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageHeader from "../Components/PageHeader/PageHeader";
-import PollResultsWedding from './PollResultsWedding';
-import PollResultsParty from './PollResultsParty';
-import PollResultsPlanning from './PollResultsPlanning';
-import { PollData } from './PollHelpers';
-import './PollResultsPage.scss'
+import PollResultsWedding from '../Components/Results/ResultsWedding';
+import PollResultsParty from '../Components/Results/ResultsParty';
+import PollResultsPlanning from '../Components/Results/ResultsPlanning';
+import { PollData } from './models/PollHelpers';
+import './Results.scss'
 
-const ResultsPage = () => {
+const Results = () => {
     const [pollData, setPollData] = useState<PollData | null>(null);
     const { id } = useParams<{ id: string }>();
 
@@ -41,4 +41,4 @@ const ResultsPage = () => {
     );
 };
 
-export default ResultsPage;
+export default Results;

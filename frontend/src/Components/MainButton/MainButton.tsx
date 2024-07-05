@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import c from './MainButton.module.scss';
+import './MainButton.scss';
 import { Link } from "react-router-dom";
 
 interface MainButtonProps {
@@ -19,11 +19,11 @@ const MainButton: React.FC<MainButtonProps> = ({ text, link, onClick }) => {
   return (
     <div>
       {link ? (
-        <Button className={c.Button} component={Link} to={link} variant="contained" onClick={handleClick}>
+        <Button className='mainButton' component={Link} to={link} variant="contained" onClick={handleClick}>
           {text}
         </Button>
       ) : (
-        <Button className={c.Button} variant="contained" onClick={handleClick}>
+        <Button className='mainButton' variant="contained" onClick={handleClick}>
           {text}
         </Button>
       )}
