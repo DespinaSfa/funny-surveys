@@ -59,6 +59,8 @@ test_backend_component:
   image: golang:${GOLANG_VERSION}
   script:
     - cd backend
+    - pwd
+    - ls
     - go test ./...
   only:
     - merge_requests
