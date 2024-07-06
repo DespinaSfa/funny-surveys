@@ -40,7 +40,7 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
     - Unter cycpress -> component
 
 ### Backend
-- Run `go test server` and `go run db` to start the tests
+- Run `go test ./...' to run all tests and add the -v flag to get more details
 - e2e test: Für alle CRUD Operationen 
     - server/routes_test.go
 - unit test: Für Datenbank
