@@ -15,7 +15,7 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
 - Maik Bucher | mb389 | 42687
 - Johanna Rauscher | jr132 | 42959
 - Luca v. Kannen | lv042 | 43394
-- Despina Sfantou | ds215 | matnr
+- Despina Sfantou | ds215 | 43368
 
 ## Getting started
 1. Clone das Projekt und stell sicher, dass du auf dem "main" branch bist. 
