@@ -1,8 +1,7 @@
-package tests
+package db
 
 import (
 	"backend/config"
-	"backend/db"
 	"backend/models"
 	"fmt"
 	"gorm.io/gorm"
@@ -25,7 +24,7 @@ func init() {
 	dbConfig := config.LoadConfig(configPath)
 
 	var err error
-	dbInstance, err = db.SetupDatabase(dbConfig)
+	dbInstance, err = SetupDatabase(dbConfig)
 	if err != nil {
 		panic("error setting up database: " + err.Error())
 	}
@@ -39,14 +38,14 @@ func TestCreatePoll(t *testing.T) {
 		Description: "This is a test poll",
 		PollType:    "party",
 	}
-	pollsBefore, _ := db.ReadUserPolls(2)
+	pollsBefore, _ := ReadUserPolls(2)
 
-	_, err := db.CreatePoll(dbInstance, poll)
+	_, err := CreatePoll(dbInstance, poll)
 	if err != nil {
 		t.Errorf("Failed to create poll: %v", err)
 	}
 
-	pollsAfter, _ := db.ReadUserPolls(2)
+	pollsAfter, _ := ReadUserPolls(2)
 	if err != nil {
 		t.Errorf("Failed to create poll: %v", err)
 	} else if len(pollsBefore) >= len(pollsAfter) {
@@ -63,9 +62,9 @@ func TestReadPollByID(t *testing.T) {
 		PollType:    "party",
 	}
 
-	createdPoll, err := db.CreatePoll(dbInstance, poll)
+	createdPoll, err := CreatePoll(dbInstance, poll)
 
-	retrievedPoll, err := db.ReadPollByID(dbInstance, createdPoll.ID)
+	retrievedPoll, err := ReadPollByID(dbInstance, createdPoll.ID)
 	if err != nil {
 		t.Errorf("Failed to read poll by ID: %v", err)
 	}
@@ -83,19 +82,19 @@ func TestDeletePollByID(t *testing.T) {
 		Description: "This is a test poll",
 		PollType:    "party",
 	}
-	pollCreated, err := db.CreatePoll(dbInstance, poll)
-	pollsBefore, _ := db.ReadUserPolls(2)
-	err = db.DeletePollByID(dbInstance, pollCreated.ID)
+	pollCreated, err := CreatePoll(dbInstance, poll)
+	pollsBefore, _ := ReadUserPolls(2)
+	err = DeletePollByID(dbInstance, pollCreated.ID)
 	if err != nil {
 		t.Errorf("Failed to delete poll by ID: %v", err)
 	}
-	pollsAfter, _ := db.ReadUserPolls(2)
+	pollsAfter, _ := ReadUserPolls(2)
 
 	if len(pollsBefore) != len(pollsAfter)+1 {
 		t.Errorf("Expected number of polls to be %d, got %d", len(pollsAfter)+1, len(pollsBefore))
 	}
 
-	_, errGetPoll := db.ReadPollByID(dbInstance, pollCreated.ID)
+	_, errGetPoll := ReadPollByID(dbInstance, pollCreated.ID)
 	if errGetPoll == nil {
 		t.Errorf("Expected error when fetching deleted poll, got none")
 	}
@@ -109,7 +108,7 @@ func TestCreatePollResponse(t *testing.T) {
 		Description: "This is a test poll",
 		PollType:    "party",
 	}
-	pollCreated, _ := db.CreatePoll(dbInstance, poll)
+	pollCreated, _ := CreatePoll(dbInstance, poll)
 
 	partyJson := `{
 		"poll_id": "` + fmt.Sprint(pollCreated.ID) + `",
@@ -122,13 +121,13 @@ func TestCreatePollResponse(t *testing.T) {
 			"wishSnack": "Chips"
 		}
 	}`
-	statsBefore, _ := db.ReadUserStats(dbInstance, 2)
-	err := db.CreatePollResponse(dbInstance, []byte(partyJson))
+	statsBefore, _ := ReadUserStats(dbInstance, 2)
+	err := CreatePollResponse(dbInstance, []byte(partyJson))
 	if err != nil {
 		t.Errorf("Failed to create poll response: %v", err)
 	}
 
-	statsAfter, _ := db.ReadUserStats(dbInstance, 2)
+	statsAfter, _ := ReadUserStats(dbInstance, 2)
 
 	if statsBefore.TotalPolls < statsAfter.TotalPolls {
 		t.Errorf("Expected total polls to be %d, got %d", statsAfter.TotalPolls, statsBefore.TotalPolls)
@@ -137,7 +136,7 @@ func TestCreatePollResponse(t *testing.T) {
 
 func TestReadUserStats(t *testing.T) {
 
-	stats, err := db.ReadUserStats(dbInstance, int(2))
+	stats, err := ReadUserStats(dbInstance, int(2))
 	if err != nil {
 		t.Errorf("Failed to read user stats: %v", err)
 	}
@@ -149,7 +148,7 @@ func TestReadUserStats(t *testing.T) {
 
 func TestReadUserPolls(t *testing.T) {
 
-	polls, err := db.ReadUserPolls(int(2))
+	polls, err := ReadUserPolls(int(2))
 	if len(polls) != 3 {
 		t.Errorf("Expected 3 polls, got %d", len(polls))
 	}
@@ -162,21 +161,21 @@ func TestReadUserPolls(t *testing.T) {
 }
 
 func TestGetUsernameByID(t *testing.T) {
-	username, _ := db.GetUserByUsername("User2")
+	username, _ := GetUserByUsername("User2")
 	if username.Username != "User2" {
 		t.Errorf("Expected username to be User2, got %s", username.Username)
 	}
 }
 
 func TestChangeUsername(t *testing.T) {
-	usernameBefore, _ := db.GetUserByUsername("User2")
+	usernameBefore, _ := GetUserByUsername("User2")
 
-	_, err := db.UpdateUsername(2, "TestUpdateUsername")
+	_, err := UpdateUsername(2, "TestUpdateUsername")
 	if err != nil {
 		t.Errorf("Failed to change username: %v", err)
 	}
 
-	usernameAfter, _ := db.GetUserByUsername("TestUpdateUsername")
+	usernameAfter, _ := GetUserByUsername("TestUpdateUsername")
 
 	if usernameBefore == usernameAfter {
 		t.Errorf("Expected username to be %s, got %s", usernameAfter.Username, usernameBefore.Username)
