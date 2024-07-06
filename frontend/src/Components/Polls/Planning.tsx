@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import InputField from "../InputField";
 import MainButton from "../MainButton/MainButton";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
-import './template.scss';
+import './Template.scss';
 
 interface Data {
     EssentialDrink: string;

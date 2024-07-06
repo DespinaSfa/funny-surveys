@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputField from "../InputField";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
 import RangeSelector from "../RangeSelector";
-import './template.scss';
+import './Template.scss';
 import MainButton from "../MainButton/MainButton";
 import { useNavigate } from "react-router-dom";
 

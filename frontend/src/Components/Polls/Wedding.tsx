@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import InputField from "../InputField";
 import MultipleChoiceSelector from "../MultipleChoiceSelector";
 import RangeSelector from "../RangeSelector";
-import './template.scss';
+import './Template.scss';
 import MainButton from "../MainButton/MainButton";
 
 interface Data {

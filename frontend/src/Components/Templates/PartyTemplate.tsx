@@ -1,5 +1,5 @@
 import RangeSelector from "../RangeSelector";
-import './template.scss';
+import './Template.scss';
 
 //template for party poll
 const PartyTemplate = () => {

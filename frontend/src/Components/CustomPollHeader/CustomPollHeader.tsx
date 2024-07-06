@@ -1,5 +1,5 @@
 import React from 'react';
-import './customPollHeader.scss';
+import './CustomPollHeader.scss';
 
 interface CustomPollHeaderProps {
    heading: string;

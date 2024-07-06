@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "../Components/Header/Header";
-import styles from "./page_styles.module.scss";
+import styles from "./Page_styles.module.scss";
 
 //page container
 //loads Header

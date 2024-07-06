@@ -5,7 +5,7 @@ import ResultsWedding from '../Components/Results/ResultsWedding';
 import ResultsParty from '../Components/Results/ResultsParty';
 import ResultsPlanning from '../Components/Results/ResultsPlanning';
 import { PollData } from './models/PollHelpers';
-import './results.scss'
+import './Results.scss'
 
 //results page
 //displays depending on pollType the right result page from Components/Results

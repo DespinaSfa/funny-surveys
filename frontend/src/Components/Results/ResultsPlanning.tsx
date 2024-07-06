@@ -1,6 +1,6 @@
 import HorizontalBarChart from "../BarChart";
-import c from '../../pages/page_styles.module.scss';
-import '../../pages/results.scss';
+import c from '../../pages/Page_styles.module.scss';
+import '../../pages/Results.scss';
 import { calculateCountsPlanning, PollData } from '../../pages/models/PollHelpers';
 
 interface ResultsPlanningProps {

@@ -1,4 +1,4 @@
-import "./statisticCard.scss"
+import "./StatisticCard.scss"
 
 //Statistic cards displayed on the dashboard
 const StatisticCard = ({ title, value } : { title: string,  value: string | undefined}) => {

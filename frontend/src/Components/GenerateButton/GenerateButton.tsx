@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import './generateButton.scss';
+import './GenerateButton.scss';
 
 interface GenerateButtonProps {
     onClick: () => void;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './header.scss';
+import './Header.scss';
 import MainButton from '../MainButton/MainButton';
 import DropdownMenu from "../UserHandler/UserHandler";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

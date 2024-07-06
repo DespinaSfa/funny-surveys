@@ -1,4 +1,4 @@
-import './template.scss';
+import './Template.scss';
 
 //template for planning poll
 const PlanningTemplate = () => {

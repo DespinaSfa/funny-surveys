@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InputField from "../Components/InputField";
 import PersonSharpIcon from '@mui/icons-material/PersonSharp';
 import VpnKeySharpIcon from '@mui/icons-material/VpnKeySharp';
-import c from "./login.module.scss";
+import c from "./Login.module.scss";
 import MainButton from '../Components/MainButton/MainButton';
 import PageHeader from '../Components/PageHeader/PageHeader';
 
