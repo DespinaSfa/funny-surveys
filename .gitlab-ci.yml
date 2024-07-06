@@ -25,7 +25,7 @@ build_frontend:
     paths:
       - build/
   only:
-    - develop
+    - merge_requests
 
 build_backend:
   stage: build
@@ -39,12 +39,13 @@ build_backend:
     paths:
       - app
   only:
-    - develop
+    - merge_requests
 
 test_frontend_e2e:
   stage: test
   image: node:latest
   script:
+    - apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
     - cd frontend
     - npm ci
     - npm install
@@ -58,6 +59,7 @@ test_frontend_component:
   stage: test
   image: node:latest
   script:
+    - apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
     - cd frontend
     - npm ci
     - npm install
@@ -75,6 +77,7 @@ test_backend_e2e:
     - echo "Test backend e2e"
   only:
     - merge_requests
+    - develop
 
 test_backend_component:
   stage: test
@@ -84,6 +87,7 @@ test_backend_component:
     - echo "Test backend component"
   only:
     - merge_requests
+    - develop
 
 # Job to deploy using Docker Compose
 deploy:
