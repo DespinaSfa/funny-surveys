@@ -7,5 +7,7 @@ import "backend/server"
 // @description     This is the API for the PartyPoll web application
 // @host            localhost:3001
 func main() {
-	server.InitServer()
+	// Initialize the server
+	server.InitServer(false)
+
 }

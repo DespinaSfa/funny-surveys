@@ -147,7 +147,7 @@ func (s *Server) PostPollsHandler(w http.ResponseWriter, r *http.Request) {
 //		@Accept			json
 //		@Produce		json
 //		@Param			id	path		string	true	"Poll ID"
-//		@Success		204	string Poll successfully deleted
+//		@Success		200	string Poll successfully deleted
 //		@Router			/polls/{id} [delete]
 //
 // DeletePollByIDHandler handles the deletion of a poll by ID
@@ -184,7 +184,7 @@ func (s *Server) DeletePollByIDHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	w.WriteHeader(http.StatusOK)
 }
 
 // GetPollByIDHandler godoc
@@ -324,7 +324,7 @@ func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generiere die QR-Code-Bytes aus der URL
-	qrBytes, err := generateQR(qrUrl)
+	qrBytes, err := GenerateQR(qrUrl)
 	if err != nil {
 		http.Error(w, "Failed to generate QR code", http.StatusInternalServerError)
 		fmt.Println("Error generating QR code:", err)
@@ -397,22 +397,23 @@ func (s *Server) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-
-	userID := r.Context().Value("userID").(float64)
+	fmt.Println(GetUserIdFromRefreshToken(requestBody.RefreshToken))
+	userID, _ := GetUserIdFromRefreshToken(requestBody.RefreshToken)
+	ParsedUserID := float64(*userID)
 	// Verify the refresh token and get a new access token
-	_, err = RefreshToken(requestBody.RefreshToken, userID)
+	_, err = RefreshToken(requestBody.RefreshToken, ParsedUserID)
 	if err != nil {
 		http.Error(w, "Failed to verify refresh token: "+err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	newToken, err := CreateToken(userID)
+	newToken, err := CreateToken(ParsedUserID)
 	if err != nil {
 		http.Error(w, "Failed to create token: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	newRefreshToken, err := CreateRefreshToken(userID)
+	newRefreshToken, err := CreateRefreshToken(ParsedUserID)
 	if err != nil {
 		http.Error(w, "Failed to create refresh token: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -420,7 +421,10 @@ func (s *Server) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	// Return the new access token
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"token": newToken, "refreshToken": newRefreshToken})
+	err = json.NewEncoder(w).Encode(map[string]string{"token": newToken, "refreshToken": newRefreshToken})
+	if err != nil {
+		http.Error(w, "da hat was nciht funktioniert", http.StatusBadRequest)
+	}
 }
 
 // LoginHandler godoc
@@ -511,7 +515,7 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
-	r.Use(corsMiddleware)
+	r.Use(CorsMiddleware)
 
 	// Public routes (no auth middleware)
 	r.Group(func(r chi.Router) {
@@ -519,13 +523,13 @@ func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 		r.Post("/login", server.LoginHandler)
 		r.Get("/polls/{pollId}", server.GetPollByIDHandler)
 		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+		r.Post("/refresh-token", server.RefreshToken)
 	})
 
 	// Routes with auth middleware
 	r.Group(func(r chi.Router) {
 		r.Use(AuthenticationMiddleware)
 		r.Put("/update-username", server.UpdateUsername)
-		r.Post("/refresh-token", server.RefreshToken)
 		r.Get("/check-token-valid", server.CheckTokenValid)
 		r.Get("/qr", server.GenerateQRHandler)
 		r.Get("/stats", server.StatsHandler)

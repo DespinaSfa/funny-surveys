@@ -13,8 +13,8 @@ type Config struct {
 	DBName     string
 }
 
-func LoadConfig() *Config {
-	err := godotenv.Load()
+func LoadConfig(envPath string) *Config {
+	err := godotenv.Load(envPath)
 	if err != nil {
 		panic("error loading .env file: " + err.Error())
 	}

@@ -49,6 +49,6 @@ func SetupDatabase(config *config.Config) (*gorm.DB, error) {
 
 		return db, nil
 	} else {
-		return nil, fmt.Errorf("Database already createddatabase")
+		return nil, fmt.Errorf("database already createddatabase")
 	}
 }

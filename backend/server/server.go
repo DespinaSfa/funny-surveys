@@ -3,14 +3,25 @@ package server
 import (
 	"backend/config"
 	"backend/db"
+
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 )
 
-func InitServer() {
-	dbConfig := config.LoadConfig()
+func InitServer(testingMode bool) {
+
+	configPath := "./.env"
+	if testingMode {
+		fmt.Println("Running in testing mode")
+		configPath = "./../.env"
+
+	} else {
+		fmt.Println("Running in production mode")
+	}
+
+	dbConfig := config.LoadConfig(configPath)
 
 	dbInstance, err := db.SetupDatabase(dbConfig)
 	if err != nil {

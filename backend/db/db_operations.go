@@ -313,13 +313,13 @@ func populateDatabase(db *gorm.DB) {
 	}
 
 	/*
-		// Check if the database is empty by checking for existing users
-		var countUsers int64
-		db.Model(&models.User{}).Count(&countUsers)
-		if countUsers > 0 {
-			fmt.Println("Database is not empty, skipping population.")
-			return
-		}
+	   // Check if the database is empty by checking for existing users
+	   var countUsers int64
+	   db.Model(&models.User{}).Count(&countUsers)
+	   if countUsers > 0 {
+	       fmt.Println("Database is not empty, skipping population.")
+	       return
+	   }
 	*/
 
 	// Automatically migrate your schema
@@ -348,7 +348,9 @@ func populateDatabase(db *gorm.DB) {
 	polls := []models.Poll{
 		{UserID: users[1].ID, Title: "Unsere Hochzeit", Description: "Hallo. Wir hoffen euch gefällt unsere Hochzeit. Für ein Spiel später füllt bitte diese kleine Umfrage aus. Vielen Dank! Euer Simon und eure Anna", PollType: "wedding"},
 		{UserID: users[1].ID, Title: "Freds Fette Fete", Description: "Moin, moin! Diese Umfrage habe ich erstellt, damit ihr meine Party bewerten könnt. Die nächste wird dadurch noch geiler, versprochen!", PollType: "party"},
-		{UserID: users[1].ID, Title: "Beste Wg Party", Description: "Hi! Zum Planen unserer nächsten WG Party brauchen wir eure Unterstützung.", PollType: "planning"}}
+		{UserID: users[1].ID, Title: "Beste Wg Party", Description: "Hi! Zum Planen unserer nächsten WG Party brauchen wir eure Unterstützung.", PollType: "planning"},
+	}
+
 	for i := range polls {
 		if err := db.Create(&polls[i]).Error; err != nil {
 			fmt.Printf("Failed to create poll %s: %v\n", polls[i].Title, err)
@@ -367,18 +369,19 @@ func populateDatabase(db *gorm.DB) {
 	}
 	for _, result := range partyResults {
 		if err := db.Create(&result).Error; err != nil {
-			fmt.Printf("Failed to create poll party details for poll ID %d: %v\n", result.PollID, err)
+			fmt.Printf("Failed to create poll party details for poll ID %s: %v\n", result.PollID, err)
 			return
 		}
 	}
 
 	weddingResults := []models.PollWedding{
-		{PollID: polls[0].ID, WeddingInvite: "groom", KnowCoupleSince: 20, KnowCoupleFromWhere: "In einem Café", WeddingHighlight: "food", CoupleWish: "Super Flitterwochen "},
+		{PollID: polls[0].ID, WeddingInvite: "groom", KnowCoupleSince: 20, KnowCoupleFromWhere: "In einem Café", WeddingHighlight: "food", CoupleWish: "Super Flitterwochen"},
 		{PollID: polls[0].ID, WeddingInvite: "bride", KnowCoupleSince: 10, KnowCoupleFromWhere: "Universität", WeddingHighlight: "afterParty", CoupleWish: "Glück und Gesundheit"},
+		{PollID: polls[0].ID, WeddingInvite: "bride", KnowCoupleSince: 0, KnowCoupleFromWhere: "Verein", WeddingHighlight: "afterParty", CoupleWish: "Glück und Gesundheit"},
 	}
 	for _, result := range weddingResults {
 		if err := db.Create(&result).Error; err != nil {
-			fmt.Printf("Failed to create poll wedding details for poll ID %d: %v\n", result.PollID, err)
+			fmt.Printf("Failed to create poll wedding details for poll ID %s: %v\n", result.PollID, err)
 			return
 		}
 	}
@@ -389,7 +392,7 @@ func populateDatabase(db *gorm.DB) {
 	}
 	for _, result := range planningResults {
 		if err := db.Create(&result).Error; err != nil {
-			fmt.Printf("Failed to create poll wedding details for poll ID %d: %v\n", result.PollID, err)
+			fmt.Printf("Failed to create poll planning details for poll ID %s: %v\n", result.PollID, err)
 			return
 		}
 	}

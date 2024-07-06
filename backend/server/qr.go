@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func writeToFile(fileName string, data []byte) error {
+func WriteToFile(fileName string, data []byte) error {
 	err := os.WriteFile(fileName, data, 0644)
 	if err != nil {
 		return fmt.Errorf("failed to write QR code to file: %w", err)
@@ -14,7 +14,7 @@ func writeToFile(fileName string, data []byte) error {
 	return nil
 }
 
-func generateQR(url string) ([]byte, error) {
+func GenerateQR(url string) ([]byte, error) {
 	qrCode, err := qrcode.New(url, qrcode.Highest)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create QR code: %w", err)

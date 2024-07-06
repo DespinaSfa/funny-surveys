@@ -75,8 +75,8 @@ paths:
       produces:
       - application/json
       responses:
-        "204":
-          description: No Content
+        "200":
+          description: OK
           schema:
             type: string
       summary: Delete a poll
