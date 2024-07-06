@@ -5,20 +5,13 @@ import (
 	"backend/models"
 	"fmt"
 	"gorm.io/gorm"
-	"sync"
 	"testing"
 )
 
-var wg sync.WaitGroup
 var dbInstance *gorm.DB
 
 func init() {
-	/*	wg.Add(1)
-		go func() {
-			server.InitServer(true)
-			defer wg.Done()
-		}()
-		time.Sleep(3 * time.Second)*/
+
 	configPath := "./../.env"
 
 	dbConfig := config.LoadConfig(configPath)
