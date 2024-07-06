@@ -5,9 +5,16 @@ definitions:
     properties:
       description:
         type: string
+      id:
+        type: string
       pollType:
         type: string
       title:
+        type: string
+    type: object
+  server.QRRequest:
+    properties:
+      url:
         type: string
     type: object
 host: localhost:3001
@@ -61,11 +68,10 @@ paths:
       - application/json
       parameters:
       - description: Poll ID
-        format: int64
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -79,11 +85,10 @@ paths:
     get:
       parameters:
       - description: Poll ID
-        format: int64
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -97,11 +102,10 @@ paths:
     post:
       parameters:
       - description: Poll ID
-        format: int64
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Add poll response
         in: body
         name: poll
@@ -118,10 +122,65 @@ paths:
       summary: Post a poll result
       tags:
       - Polls
+  /qr:
+    post:
+      consumes:
+      - application/json
+      description: Generate a QR code from the provided URL
+      parameters:
+      - description: QR request
+        in: body
+        name: qrRequest
+        required: true
+        schema:
+          $ref: '#/definitions/server.QRRequest'
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: QR code image
+          schema:
+            type: file
+        "400":
+          description: Invalid request format
+          schema:
+            type: string
+        "500":
+          description: Failed to generate QR code
+          schema:
+            type: string
+      summary: Generate QR code
+      tags:
+      - QR
   /refresh-token:
     post:
       responses: {}
       summary: Create a refresh token
       tags:
       - Auth
+  /stats:
+    get:
+      responses: {}
+      summary: get user stats
+      tags:
+      - Statistics
+  /update-username:
+    put:
+      description: Updates the current username with a new chosen username
+      responses:
+        "200":
+          description: Username update successfully
+          schema:
+            type: string
+        "400":
+          description: Invalid request format
+          schema:
+            type: string
+        "500":
+          description: Failed to update username
+          schema:
+            type: string
+      summary: Updates the username
+      tags:
+      - User
 swagger: "2.0"

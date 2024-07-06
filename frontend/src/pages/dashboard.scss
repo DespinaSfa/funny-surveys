@@ -17,12 +17,17 @@
 
 .poll-list {
     background-color: #333333;
-    padding: 1rem 2rem;
+    padding: .5rem .75rem;
     border-radius: 16px;
 }
 
 .empty-message {
     text-align: center;
+}
+
+.list-item-div {
+    text-decoration: none;
+    color: inherit;
 }
 
 @media (max-width: 750px) {

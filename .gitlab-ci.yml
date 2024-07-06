@@ -1,0 +1,78 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  GOLANG_VERSION: '1.22.2'
+
+cache:
+  paths:
+    - node_modules/
+    - go/pkg/mod/
+
+build_frontend:
+  stage: build
+  image: node:latest
+  script:
+    - cd frontend
+    - npm install
+    - npm run build || true
+    - cd ..
+    - cp -r frontend/build ./build
+  artifacts:
+    paths:
+      - build/
+  only:
+    - develop
+
+build_backend:
+  stage: build
+  image: golang:${GOLANG_VERSION}
+  script:
+    - cd backend
+    - go build -o app
+    - cd ..
+    - cp backend/app ./app
+  artifacts:
+    paths:
+      - app
+  only:
+     - develop
+
+test_frontend_component:
+  stage: test
+  image: node:latest
+  script:
+    - apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+    - cd frontend
+    - npm ci
+    - npm install
+    - npm start &
+    - npm run test-component
+  only:
+    - merge_requests
+    - develop
+
+test_backend_component:
+  stage: test
+  image: golang:${GOLANG_VERSION}
+  script:
+    - cd backend
+    - echo "Test backend component"
+  only:
+    - merge_requests
+    - develop
+
+# Job to deploy app to docker registry
+deploy:
+  stage: deploy
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo "Deploy App to Docker Registry"
+  only:
+    - main
+  environment:
+    name: production

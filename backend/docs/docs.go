@@ -85,8 +85,7 @@ const docTemplate = `{
                 "summary": "Get a poll and it's results",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
                         "description": "Poll ID",
                         "name": "id",
                         "in": "path",
@@ -112,8 +111,7 @@ const docTemplate = `{
                 "summary": "Post a poll result",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
                         "description": "Poll ID",
                         "name": "id",
                         "in": "path",
@@ -151,8 +149,7 @@ const docTemplate = `{
                 "summary": "Delete a poll",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "format": "int64",
+                        "type": "string",
                         "description": "Poll ID",
                         "name": "id",
                         "in": "path",
@@ -169,6 +166,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/qr": {
+            "post": {
+                "description": "Generate a QR code from the provided URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "QR"
+                ],
+                "summary": "Generate QR code",
+                "parameters": [
+                    {
+                        "description": "QR request",
+                        "name": "qrRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.QRRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "QR code image",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to generate QR code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/refresh-token": {
             "post": {
                 "tags": [
@@ -176,6 +219,44 @@ const docTemplate = `{
                 ],
                 "summary": "Create a refresh token",
                 "responses": {}
+            }
+        },
+        "/stats": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "get user stats",
+                "responses": {}
+            }
+        },
+        "/update-username": {
+            "put": {
+                "description": "Updates the current username with a new chosen username",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Updates the username",
+                "responses": {
+                    "200": {
+                        "description": "Username update successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update username",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         }
     },
@@ -189,10 +270,21 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "pollType": {
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.QRRequest": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }

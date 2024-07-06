@@ -7,13 +7,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-chi/chi/v5/middleware"
+	"io"
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"io"
-	"net/http"
 )
 
 type Server struct {
@@ -292,6 +294,11 @@ func (s *Server) PostPollByIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// QRRequest This struct is needed to generate the correct Swagger documentation example.
+type QRRequest struct {
+	URL string `json:"url"`
+}
+
 // GenerateQRHandler handles requests to generate QR codes from URLs
 // @Summary Generate QR code
 // @Description Generate a QR code from the provided URL
@@ -299,46 +306,84 @@ func (s *Server) PostPollByIDHandler(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  png
 // @Param   qrRequest body QRRequest true "QR request"
+// @Example {json} QR request example:
+//
+//	{
+//	  "url": "https://example.com"
+//	}
+//
 // @Success 200 {file} file "QR code image"
 // @Failure 400 {object} string "Invalid request format"
 // @Failure 500 {object} string "Failed to generate QR code"
 // @Router /qr [post]
-// GenerateQRHandler handles requests to generate QR codes from URLs
 func (s *Server) GenerateQRHandler(w http.ResponseWriter, r *http.Request) {
-	type QRRequest struct {
-		URL string `json:"url"`
-	}
-
-	var qrRequest QRRequest
-
-	// Read and decode the request body
-	if err := json.NewDecoder(r.Body).Decode(&qrRequest); err != nil {
-		fmt.Println("Error parsing request body:", err)
-		http.Error(w, "Invalid request format", http.StatusBadRequest)
+	qrUrl := r.URL.Query().Get("qrUrl")
+	if qrUrl == "" {
+		http.Error(w, "URL not provided", http.StatusBadRequest)
 		return
 	}
 
-	// Generate the QR code bytes from the URL
-	qrBytes, err := generateQR(qrRequest.URL)
+	// Generiere die QR-Code-Bytes aus der URL
+	qrBytes, err := generateQR(qrUrl)
 	if err != nil {
-		fmt.Println("Error generating QR code:", err)
 		http.Error(w, "Failed to generate QR code", http.StatusInternalServerError)
+		fmt.Println("Error generating QR code:", err)
 		return
 	}
 
-	// Set header for content type to 'image/png'
+	// Setze den Header für den Inhaltstyp auf 'image/png'
 	w.Header().Set("Content-Type", "image/png")
-	w.WriteHeader(http.StatusOK)
 
-	// Write the QR code byte slice to the response
+	// Schreibe die QR-Code-Byte-Slice in die Antwort
 	if _, err := w.Write(qrBytes); err != nil {
-		fmt.Println("Error writing response:", err)
 		http.Error(w, "Failed to send QR code", http.StatusInternalServerError)
-		return
+		fmt.Println("Error writing response:", err)
 	}
 }
 
-// RefreshToken godoc TODO
+// UpdateUsername updates the username
+// @Summary Updates the username
+// @Description Updates the current username with a new chosen username
+// @Tags User
+// @Example {json} Username request example:
+//
+//	{
+//	  "newUsername": "CoolName"
+//	}
+//
+// @Success 200 {object} string "Username update successfully"
+// @Failure 400 {object} string "Invalid request format"
+// @Failure 500 {object} string "Failed to update username"
+// @Router /update-username [put]
+func (s *Server) UpdateUsername(w http.ResponseWriter, r *http.Request) {
+	// Get the user ID from the context
+	userID, err := GetUserId(r)
+	if err != nil {
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	// Parse the request body
+	var requestBody struct {
+		NewUsername string `json:"newUsername"`
+	}
+	err = json.NewDecoder(r.Body).Decode(&requestBody)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+	fmt.Println("Received request to update username to:", requestBody.NewUsername)
+
+	// Update the username in the database
+	_, err = db.UpdateUsername(*userID, requestBody.NewUsername)
+	if err != nil {
+		http.Error(w, "Failed to update username", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+// RefreshToken godoc
 // @Summary Create a refresh token
 // @Tags Auth
 // @Router	/refresh-token [post]
@@ -378,7 +423,7 @@ func (s *Server) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": newToken, "refreshToken": newRefreshToken})
 }
 
-// LoginHandler godoc TODO
+// LoginHandler godoc
 // @Summary  Login an existing user
 // @Tags Auth
 // @Router       /login [post]
@@ -424,17 +469,68 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token, "refreshToken": refreshToken})
 }
 
-func setupRoutes(r *chi.Mux, dbInstance *gorm.DB) {
+// StatsHandler godoc
+// @Summary  get user stats
+// @Tags Statistics
+// @Router       /stats [get]
+func (s *Server) StatsHandler(w http.ResponseWriter, r *http.Request) {
+	// Get User ID from the auth-header
+	userID, err := GetUserId(r)
+	if err != nil {
+		fmt.Println("Error getting user ID from token:", err)
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	// Read user polls
+	polls, err := db.ReadUserStats(s.DBInst, *userID)
+	if err != nil {
+		fmt.Println("Error reading user stats:", err)
+		http.Error(w, "Failed to read user stats", http.StatusInternalServerError)
+		return
+	}
+
+	statsJSON, err := json.Marshal(polls)
+	if err != nil {
+		fmt.Println("Error marshaling JSON response:", err)
+		http.Error(w, "Failed to marshal JSON response", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(statsJSON)
+	if err != nil {
+		fmt.Println("Error writing response:", err)
+		http.Error(w, "Failed to write response", http.StatusInternalServerError)
+		return
+	}
+}
+
+func setupRoutes(r chi.Router, dbInstance *gorm.DB) {
 	server := &Server{DBInst: dbInstance}
-	r.Mount("/swagger", httpSwagger.WrapHandler)
 
-	r.Post("/login", server.LoginHandler)
-	r.Post("/refresh-token", server.RefreshToken)
-	r.Get("/qr", server.GenerateQRHandler)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(corsMiddleware)
 
-	r.Get("/polls", server.GetPollsHandler)
-	r.Post("/polls", server.PostPollsHandler)
-	r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
-	r.Get("/polls/{pollId}", server.GetPollByIDHandler)
-	r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+	// Public routes (no auth middleware)
+	r.Group(func(r chi.Router) {
+		r.Mount("/swagger", httpSwagger.WrapHandler)
+		r.Post("/login", server.LoginHandler)
+		r.Get("/polls/{pollId}", server.GetPollByIDHandler)
+		r.Post("/polls/{pollId}", server.PostPollByIDHandler)
+	})
+
+	// Routes with auth middleware
+	r.Group(func(r chi.Router) {
+		r.Use(AuthenticationMiddleware)
+		r.Put("/update-username", server.UpdateUsername)
+		r.Post("/refresh-token", server.RefreshToken)
+		r.Get("/check-token-valid", server.CheckTokenValid)
+		r.Get("/qr", server.GenerateQRHandler)
+		r.Get("/stats", server.StatsHandler)
+		r.Get("/polls", server.GetPollsHandler)
+		r.Post("/polls", server.PostPollsHandler)
+		r.Delete("/polls/{pollId}", server.DeletePollByIDHandler)
+	})
 }

@@ -3,27 +3,13 @@ package server
 import (
 	"context"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"net/http"
 	"strings"
 )
 
-func setupMiddleware(r *chi.Mux) {
-	r.Use(middleware.Logger)    //log every request
-	r.Use(middleware.Recoverer) //recover from panics without crashing the server return 500
-	r.Use(corsMiddleware)
-	r.Use(AuthenticationMiddleware)
-}
-
 func AuthenticationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		if (r.URL.Path == "/login") || (strings.HasPrefix(r.URL.Path, "/swagger")) {
-			next.ServeHTTP(w, r)
-			return
-		}
 		// Get the token from the 'Authorization' header
 		tokenString := r.Header.Get("Authorization")
 		if tokenString == "" {

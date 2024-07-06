@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import InputField from "../Components/InputField";
 import PersonSharpIcon from '@mui/icons-material/PersonSharp';
 import VpnKeySharpIcon from '@mui/icons-material/VpnKeySharp';
@@ -6,7 +6,9 @@ import c from "./Login.module.scss";
 import MainButton from '../Components/MainButton/MainButton';
 import PageHeader from '../Components/PageHeader/PageHeader';
 
+//Login page
 const Login = () => {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,7 +23,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3001/login', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -49,25 +51,30 @@ const Login = () => {
 
   return (
     <>
-      <PageHeader heading=" " link="/" />
+      <PageHeader heading="Login" />
       <div className={c.container}>
         <h1 className={c.title}>Party Poll</h1>
-        <hr className={c.separator} />
+        <div className={c.separator}></div>
         <p className={c.loginDescription}>Log in to see your polls!</p>
-        <InputField
-          startIcon={<PersonSharpIcon className={c.personSVG} />}
-          label={"Username"}
-          placeholder={"Username"}
-          onChange={handleUsernameChange}
-        />
-        <InputField
-          startIcon={<VpnKeySharpIcon className={c.personSVG} />}
-          label={"Password"}
-          placeholder={"Password"}
-          type={'password'}
-          onChange={handlePasswordChange}
-        />
-
+        <div className={c.inputwidth}>
+          <InputField
+            startIcon={<PersonSharpIcon className={c.personSVG} />}
+            label={"Username"}
+            placeholder={"Username"}
+            onChange={handleUsernameChange}
+            sx={{ marginBottom: '1.5rem' }}
+          />
+        </div>
+        <div className={c.inputwidth}>
+          <InputField
+            startIcon={<VpnKeySharpIcon className={c.personSVG} />}
+            label={"Password"}
+            placeholder={"Password"}
+            type={'password'}
+            onChange={handlePasswordChange}
+            sx={{ marginBottom: '3rem' }}
+          />
+        </div>
         {error && <p className={c.error}>{error}</p>}
         <MainButton text={"Submit"} onClick={handleSubmit} />
       </div>
