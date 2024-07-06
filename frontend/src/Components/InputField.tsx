@@ -12,7 +12,9 @@ interface InputFieldProps {
     sx?: any;
 }
 
+//Input fields
 const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type, error, sx }) => {
+
     const [internalValue, setInternalValue] = React.useState('');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

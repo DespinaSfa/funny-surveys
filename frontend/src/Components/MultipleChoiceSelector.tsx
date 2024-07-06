@@ -8,7 +8,9 @@ interface ChoiceSelectorProps {
     onChange: (option: string) => void;
 }
 
+//multiple choice selector
 const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({ options, onChange }) => {
+
     const [localSelectedOption, setLocalSelectedOption] = useState(options[0]);
 
     const handleOptionChange = (option: string) => {

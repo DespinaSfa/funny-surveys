@@ -9,7 +9,9 @@ interface SliderProps {
   disabled?: boolean;
 }
 
+//range selector
 const SliderComponent: React.FC<SliderProps> = ({ min, max, step, onChange, disabled  }) => {
+
   const defaultValue = Math.ceil((max - min) / 2 + min);
 
   const handleSliderChange = (event: Event, value: number | number[]) => {

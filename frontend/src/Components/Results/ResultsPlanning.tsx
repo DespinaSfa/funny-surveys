@@ -1,11 +1,15 @@
-import React from 'react';
-import HorizontalBarChart from "../Components/BarChart";
-import c from './Page_styles.module.scss';
-import './PollResultsPage.scss'
+import HorizontalBarChart from "../BarChart";
+import c from '../../pages/Page_styles.module.scss';
+import '../../pages/Results.scss';
+import { calculateCountsPlanning, PollData } from '../../pages/models/PollHelpers';
 
-import { calculateCountsPlanning, PollData } from './PollHelpers';
+interface ResultsPlanningProps {
+    data: PollData;
+}
 
-const PollResultsPlanning = ({ data }: { data: PollData }) => {
+//displays results for planning polls
+const ResultsPlanning: React.FC<ResultsPlanningProps> = ({ data }) => {
+
     const musicPreferencesCounts = calculateCountsPlanning(data.PollPlannings, 'MusicToBePlayed');
     const eventActivitiesCounts = calculateCountsPlanning(data.PollPlannings, 'Activities');
 
@@ -51,4 +55,4 @@ const PollResultsPlanning = ({ data }: { data: PollData }) => {
     );
 };
 
-export default PollResultsPlanning;
+export default ResultsPlanning;

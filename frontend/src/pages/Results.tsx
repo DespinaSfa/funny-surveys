@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageHeader from "../Components/PageHeader/PageHeader";
-import PollResultsWedding from './PollResultsWedding';
-import PollResultsParty from './PollResultsParty';
-import PollResultsPlanning from './PollResultsPlanning';
-import { PollData } from './PollHelpers';
-import './PollResultsPage.scss'
+import ResultsWedding from '../Components/Results/ResultsWedding';
+import ResultsParty from '../Components/Results/ResultsParty';
+import ResultsPlanning from '../Components/Results/ResultsPlanning';
+import { PollData } from './models/PollHelpers';
+import './Results.scss'
 
-const ResultsPage = () => {
+//results page
+//displays depending on pollType the right result page from Components/Results
+const Results = () => {
+
     const [pollData, setPollData] = useState<PollData | null>(null);
     const { id } = useParams<{ id: string }>();
 
@@ -34,11 +37,11 @@ const ResultsPage = () => {
         <div className="poll-results">
             <PageHeader heading={pollData.Title} />
             <p className="description">{pollData.Description}</p>
-            {pollData.PollType === 'wedding' && <PollResultsWedding data={pollData} />}
-            {pollData.PollType === 'party' && <PollResultsParty data={pollData} />}
-            {pollData.PollType === 'planning' && <PollResultsPlanning data={pollData} />}
+            {pollData.PollType === 'wedding' && <ResultsWedding data={pollData} />}
+            {pollData.PollType === 'party' && <ResultsParty data={pollData} />}
+            {pollData.PollType === 'planning' && <ResultsPlanning data={pollData} />}
         </div>
     );
 };
 
-export default ResultsPage;
+export default Results;

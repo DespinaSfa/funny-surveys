@@ -30,7 +30,7 @@ describe('Routing and create a poll', () => {
     //create a poll
     cy.get('a').contains('Add Poll').click()
     cy.get('a').contains('Party').click()
-    cy.contains('Create Party Poll')
+    cy.contains('Create a party poll')
 
     //ennter heading and description
     cy.contains('label', 'Heading').type('Geburtstagsparty Jane')

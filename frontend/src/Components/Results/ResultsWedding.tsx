@@ -1,9 +1,15 @@
-import HorizontalBarChart from "../Components/BarChart";
-import c from './Page_styles.module.scss';
-import './PollResultsPage.scss'
-import { calculateAverageKnownCoupleSince, calculateWeddingCounts, PollData } from './PollHelpers';
+import HorizontalBarChart from "../BarChart";
+import c from '../../pages/Page_styles.module.scss';
+import '../../pages/Results.scss';
+import { calculateAverageKnownCoupleSince, calculateWeddingCounts, PollData } from '../../pages/models/PollHelpers';
 
-const PollResultsWedding = ({ data }: { data: PollData }) => {
+interface ResultsWeddingProps {
+    data: PollData;
+}
+
+//displays results for planning polls
+const ResultsWedding: React.FC<ResultsWeddingProps> = ({ data }) => {
+
     const inviteCounts = calculateWeddingCounts(data.PollWeddings, 'WeddingInvite');
     const highlightCounts = calculateWeddingCounts(data.PollWeddings, 'WeddingHighlight');
     const averageKnownCoupleSince = calculateAverageKnownCoupleSince(data.PollWeddings);
@@ -38,4 +44,4 @@ const PollResultsWedding = ({ data }: { data: PollData }) => {
     );
 };
 
-export default PollResultsWedding;
+export default ResultsWedding;

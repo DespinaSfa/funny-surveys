@@ -1,9 +1,15 @@
-import HorizontalBarChart from "../Components/BarChart";
-import c from './Page_styles.module.scss';
-import './PollResultsPage.scss'
-import { calculateCounts, PollData } from './PollHelpers';
+import HorizontalBarChart from "../BarChart";
+import c from '../../pages/Page_styles.module.scss';
+import '../../pages/Results.scss';
+import { calculateCounts, PollData } from '../../pages/models/PollHelpers';
 
-const PollResultsParty = ({ data }: { data: PollData }) => {
+interface ResultsPartyProps {
+    data: PollData;
+}
+
+//displays results for party polls
+const ResultsParty: React.FC<ResultsPartyProps> = ({ data }) => {
+
     const alcoholLevelCounts = calculateCounts(data.PollParties, 'CurrentAlcoholLevel');
     const goalAlcoholLevelCounts = calculateCounts(data.PollParties, 'PreferredAlcoholLevel');
     const favPartyActivityCounts = calculateCounts(data.PollParties, 'FavoriteActivity');
@@ -38,4 +44,4 @@ const PollResultsParty = ({ data }: { data: PollData }) => {
     );
 };
 
-export default PollResultsParty;
+export default ResultsParty;

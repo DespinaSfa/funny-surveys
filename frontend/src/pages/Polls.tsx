@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import CustomPollHeader from "../Components/CustomPollHeader/CustomPollHeader"
-import Party from "../Components/Templates/Party";
+import Party from "../Components/Polls/Party";
 import { useParams } from "react-router-dom"
-import { PollData } from "./PollHelpers";
-import Wedding from "../Components/Templates/Wedding";
-import Planning from "../Components/Templates/Planning";
+import { PollData } from "./models/PollHelpers";
+import Wedding from "../Components/Polls/Wedding";
+import Planning from "../Components/Polls/Planning";
 
-
+//container for poll pages
+//loads poll header with custom poll title and description
+//loads poll component depending on pollType
 const Polls = () => {
 
     const [pollData, setPollData] = useState<PollData | null>(null);
@@ -31,12 +33,12 @@ const Polls = () => {
     if (!pollData) return <div>Loading...</div>;
     
     return (
-            <>
-                <CustomPollHeader heading={pollData.Title} description={pollData.Description} />
-                {pollData.PollType == 'party' && <Party poll_id={pollData.ID} />}
-                {pollData.PollType == 'wedding' && <Wedding poll_id={pollData.ID} />}
-                {pollData.PollType == 'planning' && <Planning poll_id={pollData.ID}/>}
-            </>
+        <>
+            <CustomPollHeader heading={pollData.Title} description={pollData.Description} />
+            {pollData.PollType === 'party' && <Party poll_id={pollData.ID} />}
+            {pollData.PollType === 'wedding' && <Wedding poll_id={pollData.ID} />}
+            {pollData.PollType === 'planning' && <Planning poll_id={pollData.ID}/>}
+        </>
      );
   };
   

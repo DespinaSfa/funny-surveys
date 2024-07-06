@@ -1,18 +1,15 @@
-import './App.css';
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
 import SelectTemplate from "./pages/SelectTemplate";
-import PartyTemplate from "./pages/PartyTemplate";
-import PlanningTemplate from "./pages/PlanningTemplate";
-import WeddingTemplate from "./pages/WeddingTemplate";
 import { AuthProvider } from './context/AuthProvider';
 import ProtectedRoute from './context/ProtectedRoute';
-import PollResultsPage from "./pages/PollResultsPage";
+import Results from "./pages/Results";
 import Polls from './pages/Polls';
 import PageNotFound from './pages/PageNotFound';
+import Templates from './pages/Templates';
 
 export default function App() {
   return (
@@ -23,7 +20,7 @@ export default function App() {
               <Route index element={<LandingPage />} />
               <Route path="login" element={<Login />} />
               <Route path="polls/:id" element={<Polls />} />
-              <Route path="results/:id" element={<PollResultsPage />} />
+              <Route path="results/:id" element={<Results />} />
               <Route path="*" element={<PageNotFound />} />
 
               <Route
@@ -43,26 +40,10 @@ export default function App() {
                   }
               />
               <Route
-                  path="select-template/party"
+                  path="template/:pollType"
                   element={
                     <ProtectedRoute>
-                      <PartyTemplate />
-                    </ProtectedRoute>
-                  }
-              />
-              <Route
-                  path="select-template/planning"
-                  element={
-                    <ProtectedRoute>
-                      <PlanningTemplate />
-                    </ProtectedRoute>
-                  }
-              />
-              <Route
-                  path="select-template/wedding"
-                  element={
-                    <ProtectedRoute>
-                      <WeddingTemplate />
+                      <Templates />
                     </ProtectedRoute>
                   }
               />

@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Snackbar, Box, Button } from '@mui/material';
 // import QRCode from 'qrcode.react';  
-import c from "../QrToast/QrToast.module.scss";
+import c from "./QrToast.module.scss";
 import MainButton from '../../Components/MainButton/MainButton';
 
+//Qr-Code popup
+//contains button which navigates back to dashboard
 const QrToast = () => {
-    const [open, setOpen] = useState(false);
-    const [qrValue, setQrValue] = useState('');
-    const [generateButtonDisabled, setGenerateButtonDisabled] = useState(false); 
 
-    const handleOpen = () => {
-        const randomValue = Math.random().toString(36).substring(2, 15); 
-        setQrValue(randomValue);  
-        setOpen(true);
-        setGenerateButtonDisabled(true); 
-    };
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
-        setGenerateButtonDisabled(false);
     };
 
     function handleBack() {

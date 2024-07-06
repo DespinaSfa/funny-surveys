@@ -6,6 +6,7 @@ interface CustomPollHeaderProps {
    description: string;
  }
 
+ //Header for Polls
 const CustomPollHeader: React.FC<CustomPollHeaderProps> = ({ heading, description }) => {
 
     return (

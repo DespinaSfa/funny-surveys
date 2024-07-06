@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Link } from "react-router-dom";
 import c from './UserHandler.module.scss';
@@ -20,7 +19,12 @@ interface DropdownMenuProps {
     setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+//Dropdown button in Header
+//User can change username
+//User can logout
+//User can navigate to dashboard
 const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, openDialog, setOpenDialog }) => {
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [newUsername, setNewUsername] = useState('');
     const token = localStorage.getItem('token');
@@ -126,13 +130,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ icon, menuItems, text, open
                     Update Username
                 </DialogTitle>
                 <div className={c.inputField}>
-                <DialogContent>
-                    <InputField
-                        label="New Username"
-                        placeholder="Enter your new username"
-                        onChange={setNewUsername}
-                    />
-                </DialogContent>
+                    <DialogContent>
+                        <InputField
+                            label="New Username"
+                            placeholder="Enter your new username"
+                            onChange={setNewUsername}
+                        />
+                    </DialogContent>
                 </div>
                 <DialogActions>
                     <MainButton
