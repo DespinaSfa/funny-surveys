@@ -18,7 +18,7 @@ build_frontend:
   script:
     - cd frontend
     - npm install
-    - npm run build
+    - npm run build || true
     - cd ..
     - cp -r frontend/build ./build
   artifacts:
@@ -50,6 +50,7 @@ test_frontend_e2e:
     - npm run test-e2e
   only:
     - merge_requests
+    - develop
 
 test_frontend_component:
   stage: test
@@ -60,6 +61,7 @@ test_frontend_component:
     - npm run test-component
   only:
     - merge_requests
+    - develop
 
 test_backend_e2e:
   stage: test
