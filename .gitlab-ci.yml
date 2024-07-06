@@ -59,9 +59,6 @@ test_backend_component:
   image: golang:${GOLANG_VERSION}
   script:
     - cd backend
-    - pwd
-    - ls
-    - go test ./...
     - go test ./server
     - go test ./db
   only:
