@@ -9,8 +9,13 @@ Party Poll ist eine Umfrage App für Partys. Es kann zwischen 3 verschiedenen Um
  </br>
 Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgreichen login siehst du dein Dashboard mit all deinen Polls und einer allgemeinen Statistik über deine bisherigen Umfragen. Außerdem kannst du deine bisherigen Polls verwalten (löschen, link kopieren, QR - Code erneut herunterladen). Um eine Umfrage zu erstellen, klicke auf den "Add Poll" Button. Wähle zwischen einem der drei Poll-Typen aus. Wenn du dir ein Poll ausgesucht hast, gib dem Poll einen Titel und eine Beschreibung. Schau dir dann die Fragen in dem Poll an. Passt alles? Dann klicke auf den "Generate Poll" Button. Dein Poll wird erstellt und du kannst einen praktischen QR Code herunterladen. Diesen QR Code können deine Gäste dann scannen und den Poll ausfüllen, natürlich ohne sich anzumelden. Nachdem deine Gäste den Poll ausgefüllt haben, können Sie auch die Antworten der anderen nutzer sehen, natürlich anonym. 
 
-## TODO: Team Members 
-Tom Bestvater | tb173 | 43097
+## Team Members 
+- Tom Bestvater | tb173 | 43097
+- Emma Zimmermann | ez019 | 42762
+- Maik Bucher | mb389 | 42687
+- Johanna Rauscher | jr132 | 42959
+- Luca v. Kannen | lv042 | 43394
+- Despina Sfantou | ds215 | matnr
 
 ## Getting started
 1. Clone das Projekt und stell sicher, dass du auf dem "main" branch bist. 
@@ -19,10 +24,27 @@ Tom Bestvater | tb173 | 43097
 4. Verwende diese Nutzerdaten, um auf ein Profil mit Beispieldaten zuzugreifen: 
     - Username: User2
     - Passwort: User2
-5. Fertig!
+5. Verwende diese Nutzerdaten, um auf ein leeres Profil zuzugreifen: 
+    - Username: User1
+    - Passwort: User1
+6. Fertig!
+7. Hinweis: Nach jedem Neustart wird die Datenbank zurückgesetzt. Damit das nicht mehr der Fall ist, muss im Backend `db/db_operations.go` in der Funktion `populateDatabase()` "Drop all tables" gelöscht und "Check if the database is empty by checking for existing users" wieder auskommentiert werden.
 
-## TODO: Testing
-Which components you wrote tests for (frontend and backend) and where to find them
+## Testing
+### Frontend
+- Cypress e2e and component test
+- Run `npm run test-e2e` and `npm run test-component` to start the tests
+- e2e test: Einloggen -> Erstellen eines Polls -> Ausloggen 
+    - Unter: cypress -> e2e
+- component test : MultipleChoiceSelector + UserHandlerComponent (Dropdown Button im Header) 
+    - Unter cycpress -> component
+
+### Backend
+- Run `go test server` and `go run db` to start the tests
+- e2e test: Für alle CRUD Operationen 
+    - server/routes_test.go
+- unit test: Für Datenbank
+    - db/db_operations_test.go
 
 ## Tech - Stack
 ### Fronend
