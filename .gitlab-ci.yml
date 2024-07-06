@@ -43,7 +43,7 @@ build_backend:
 
 test_frontend_e2e:
   stage: test
-  image: node:latest
+  image: cypress/browsers:node18.16.0-chrome113-ff113
   script:
     - cd frontend
     - npm install
