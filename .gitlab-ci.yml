@@ -3,7 +3,6 @@ stages:
   - test
   - deploy
 
-# Variables to cache dependencies and build artifacts
 variables:
   GOLANG_VERSION: '1.22.2'
 
@@ -65,7 +64,7 @@ test_backend_component:
     - merge_requests
     - develop
 
-# Job to deploy using Docker Compose
+# Job to deploy app to docker registry
 deploy:
   stage: deploy
   image: docker:20.10.16
