@@ -377,6 +377,7 @@ func populateDatabase(db *gorm.DB) {
 	weddingResults := []models.PollWedding{
 		{PollID: polls[0].ID, WeddingInvite: "groom", KnowCoupleSince: 20, KnowCoupleFromWhere: "In einem Café", WeddingHighlight: "food", CoupleWish: "Super Flitterwochen"},
 		{PollID: polls[0].ID, WeddingInvite: "bride", KnowCoupleSince: 10, KnowCoupleFromWhere: "Universität", WeddingHighlight: "afterParty", CoupleWish: "Glück und Gesundheit"},
+		{PollID: polls[0].ID, WeddingInvite: "bride", KnowCoupleSince: 0, KnowCoupleFromWhere: "Verein", WeddingHighlight: "afterParty", CoupleWish: "Glück und Gesundheit"},
 	}
 	for _, result := range weddingResults {
 		if err := db.Create(&result).Error; err != nil {

@@ -24,6 +24,32 @@ func init() {
 
 }
 
+func TestReadUserStats(t *testing.T) {
+
+	stats, err := ReadUserStats(dbInstance, int(2))
+	if err != nil {
+		t.Errorf("Failed to read user stats: %v", err)
+	}
+
+	if stats.TotalPolls != 3 || stats.TotalAnswers != 11 || stats.MostPopularPoll != "Freds Fette Fete" || stats.LeastPopularPoll != "Beste Wg Party" {
+		t.Errorf("Expected other data, got %v", stats)
+	}
+}
+
+func TestReadUserPolls(t *testing.T) {
+
+	polls, err := ReadUserPolls(int(2))
+	if len(polls) != 3 {
+		t.Errorf("Expected 3 polls, got %d", len(polls))
+	}
+	if err != nil {
+		t.Errorf("Failed to read user polls: %v", err)
+	} else if len(polls) == 0 {
+		t.Errorf("Expected at least one poll, got none")
+	}
+
+}
+
 func TestCreatePoll(t *testing.T) {
 	poll := &models.Poll{
 		UserID:      uint(2),
@@ -125,32 +151,6 @@ func TestCreatePollResponse(t *testing.T) {
 	if statsBefore.TotalPolls < statsAfter.TotalPolls {
 		t.Errorf("Expected total polls to be %d, got %d", statsAfter.TotalPolls, statsBefore.TotalPolls)
 	}
-}
-
-func TestReadUserStats(t *testing.T) {
-
-	stats, err := ReadUserStats(dbInstance, int(2))
-	if err != nil {
-		t.Errorf("Failed to read user stats: %v", err)
-	}
-
-	if stats.TotalPolls != 3 || stats.TotalAnswers != 10 || stats.MostPopularPoll != "Freds Fette Fete" || stats.LeastPopularPoll != "Unsere Hochzeit" {
-		t.Errorf("Expected other data, got %v", stats)
-	}
-}
-
-func TestReadUserPolls(t *testing.T) {
-
-	polls, err := ReadUserPolls(int(2))
-	if len(polls) != 3 {
-		t.Errorf("Expected 3 polls, got %d", len(polls))
-	}
-	if err != nil {
-		t.Errorf("Failed to read user polls: %v", err)
-	} else if len(polls) == 0 {
-		t.Errorf("Expected at least one poll, got none")
-	}
-
 }
 
 func TestGetUsernameByID(t *testing.T) {
