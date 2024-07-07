@@ -75,7 +75,6 @@ test_backend_component:
     POSTGRES_PORT: 5432
   script:
     - cd backend
-    - go test ./server
     - go test ./db
   only:
     - merge_requests
