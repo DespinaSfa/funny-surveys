@@ -1,4 +1,18 @@
+version: '3'
+
 services:
+  create-env:
+    image: bash
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      bash -c "echo 'DB_HOST=localhost
+      DB_PORT=5432
+      DB_USER=daddy
+      DB_PASSWORD=bestvater
+      DB_NAME=partyPollDB' > .env"
+
   frontend:
     container_name: partypoll_frontend
     build:
@@ -9,6 +23,8 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
+    depends_on:
+      - create-env
 
   db:
     image: postgres:latest
@@ -22,6 +38,8 @@ services:
       POSTGRES_PASSWORD: bestvater
     volumes:
       - ./data:/var/lib/postgresql/data
+    depends_on:
+      - create-env
 
   backend:
     container_name: partypoll_backend
@@ -34,6 +52,7 @@ services:
       - "3001:3001"
     depends_on:
       - db
+      - create-env
     environment:
       - DB_HOST=db
       - DB_USER=daddy
