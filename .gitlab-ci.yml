@@ -19,7 +19,7 @@ services:
 
 build_frontend:
   stage: build
-  image: node:${NODE_VERSION}
+  image: node:latest
   script:
     - cd frontend
     - npm ci
