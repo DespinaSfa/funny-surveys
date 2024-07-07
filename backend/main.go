@@ -1,6 +1,9 @@
 package main
 
-import "backend/server"
+import (
+	"backend/server"
+	"time"
+)
 
 // @title           PartyPoll API
 // @version         1.0
@@ -8,6 +11,7 @@ import "backend/server"
 // @host            localhost:3001
 func main() {
 	// Initialize the server
+	time.Sleep(10 * time.Second)
 	server.InitServer(false)
 
 }
