@@ -62,7 +62,7 @@ test_frontend_component:
     - merge_requests
     - develop
 
-  test_frontend_e2e:
+test_frontend_e2e:
   stage: test
   image: node:${NODE_VERSION}
   script:
