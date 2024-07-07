@@ -59,10 +59,16 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
 ## Tech - Stack
 ### Fronend
 - React
+- MUI
+- Cypress
+- Docker
 
 ### Backend
 - Go
 - Postgres Database
+- GORM
+- Swagger (erreichbar über http://localhost:3001/swagger/index.html)
+- Docker
 
 ## License
 This is a project developed in an HdM course
