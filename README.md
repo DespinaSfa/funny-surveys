@@ -30,7 +30,8 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
 6. Fertig!
 </br>
 </br>
-Hinweise:
+
+### Hinweise:
 - Nach jedem Neustart wird die Datenbank zurückgesetzt. Damit das nicht mehr der Fall ist, muss im Backend `db/db_operations.go` in der Funktion `populateDatabase()` "Drop all tables" gelöscht und "Check if the database is empty by checking for existing users" wieder auskommentiert werden.
 - Wenn das Projekt nicht mit `docker compose up` gestartet wird, wird eine `.env` datei im Backend mit folgenden Credentials benötigt:
     - DB_HOST=localhost
