@@ -25,6 +25,7 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
     - DB_USER=daddy
     - DB_PASSWORD=bestvater
     - DB_NAME=partyPollDB </br>
+    
     oder erstelle die `.env` Datei durch das Ausführen vom `.env.sh` Skript.
 3. Starte das Projekt mit `docker compose up` (Hinweis: Stell sicher, dass Docker Desktop bzw Docker Deamon läuft)
 4. Öffne die App unter http://localhost:3000
