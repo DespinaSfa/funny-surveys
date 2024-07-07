@@ -1,17 +1,17 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import c from './GenerateButton.module.scss';
+import './GenerateButton.scss';
 
 interface GenerateButtonProps {
-    label: string;
     onClick: () => void;
+    disabled?: boolean;
 }
 
-const GenerateButton: React.FC<GenerateButtonProps> = ({ label, onClick }) => {
+//fancy Button used to generate poll
+const GenerateButton: React.FC<GenerateButtonProps> = ({ onClick, disabled }) => {
+
     return (
-        <Button className={c.generateButton} variant="contained" onClick={onClick}>
-            {label}
-        </Button>
+        <Button className='generateButton' variant="contained" onClick={onClick} disabled={disabled} />
     );
 };
 

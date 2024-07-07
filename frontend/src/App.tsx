@@ -1,30 +1,55 @@
-import './App.css';
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Layout from "./pages/Layout";
 import SelectTemplate from "./pages/SelectTemplate";
-import PartyTemplate from "./pages/PartyTemplate";
-import RoomTemplate from "./pages/RoomTemplate";
-import WeddingTemplate from "./pages/WeddingTemplate";
-
+import { AuthProvider } from './context/AuthProvider';
+import ProtectedRoute from './context/ProtectedRoute';
+import Results from "./pages/Results";
+import Polls from './pages/Polls';
+import PageNotFound from './pages/PageNotFound';
+import Templates from './pages/Templates';
 
 export default function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="selectTemplate" element={<SelectTemplate />} />
-          <Route path="selectTemplate/partyTemplate" element={<PartyTemplate />} />
-          <Route path="selectTemplate/roomTemplate" element={<RoomTemplate />} />
-          <Route path="selectTemplate/weddingTemplate" element={<WeddingTemplate />} />
-        </Route>
-      </Routes>
-    </div>
+      <AuthProvider>
+        <div>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<LandingPage />} />
+              <Route path="login" element={<Login />} />
+              <Route path="polls/:id" element={<Polls />} />
+              <Route path="results/:id" element={<Results />} />
+              <Route path="*" element={<PageNotFound />} />
+
+              <Route
+                  path="dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="select-template"
+                  element={
+                    <ProtectedRoute>
+                      <SelectTemplate />
+                    </ProtectedRoute>
+                  }
+              />
+              <Route
+                  path="template/:pollType"
+                  element={
+                    <ProtectedRoute>
+                      <Templates />
+                    </ProtectedRoute>
+                  }
+              />
+            </Route>
+          </Routes>
+        </div>
+      </AuthProvider>
   );
 }
-

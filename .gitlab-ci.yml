@@ -1,0 +1,101 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  GOLANG_VERSION: '1.22.2'
+  NODE_VERSION: 'latest'
+  POSTGRES_USER: 'daddy'
+  POSTGRES_PASSWORD: 'bestvater'
+  POSTGRES_DB: 'partyPollDB'
+
+cache:
+  paths:
+    - node_modules/
+    - go/pkg/mod/
+
+services:
+  - postgres:13
+
+before_script:
+  - apt-get update && apt-get install -y postgresql-client
+
+build_frontend:
+  stage: build
+  image: node:${NODE_VERSION}
+  script:
+    - cd frontend
+    - npm install
+    - npm run build || true
+    - cd ..
+    - cp -r frontend/build ./build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
+  only:
+    - develop
+
+build_backend:
+  stage: build
+  image: golang:${GOLANG_VERSION}
+  script:
+    - cd backend
+    - go build -o app
+    - cd ..
+    - cp backend/app ./app
+  artifacts:
+    paths:
+      - app
+    expire_in: 1 week
+  only:
+    - develop
+
+test_frontend:
+  stage: test
+  image: node:${NODE_VERSION}
+  script:
+    - apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+    - cd frontend
+    - npm ci
+    - npm start &
+    - npm run test-component
+  only:
+    - merge_requests
+    - develop
+
+test_backend:
+  stage: test
+  image: golang:${GOLANG_VERSION}
+  services:
+    - postgres:13
+  script:
+    - cd backend
+    - echo "Creating .env file with database configuration"
+    - echo "DB_USER=daddy" > .env
+    - echo "DB_PASSWORD=bestvater" >> .env
+    - echo "DB_NAME=partyPollDB" >> .env
+    - echo "DB_HOST=postgres" >> .env
+    - echo "DB_PORT=5432" >> .env
+    - cat .env
+    - echo "Running backend tests"
+    - go test ./server
+    - go test ./db
+  only:
+    - merge_requests
+    - develop
+
+
+deploy:
+  stage: deploy
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - echo "Deploy App to Docker Registry"
+  only:
+    - main
+  dependencies:
+    - build_frontend
+    - build_backend

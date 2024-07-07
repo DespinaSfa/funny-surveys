@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
@@ -6,30 +6,48 @@ interface InputFieldProps {
     label: string;
     placeholder: string;
     onChange: (value: string) => void;
+    startIcon?: JSX.Element;
+    type?: string;
+    error?: boolean;
+    sx?: any;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange }) => {
+//Input fields
+const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange, startIcon, type, error, sx }) => {
+
     const [internalValue, setInternalValue] = React.useState('');
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setInternalValue(value);
+        onChange(value);
+    };
 
     return (
         <Box
             component="form"
             sx={{
-                '& > :not(style)': { m: 1, width: '800px', height: '80px' }, // change width here
+                display: 'flex',
+                flexDirection: 'column',
+                '& > :not(style)': { m: 0 },
+                width: '100%',
+                ...sx,
             }}
             noValidate
             autoComplete="off"
         >
             <TextField 
-                id="outlined-basic" 
                 label={label}
                 placeholder={placeholder}
                 variant="outlined" 
                 value={internalValue}
-                onChange={(event) => {
-                    setInternalValue(event.target.value);
-                    onChange(event.target.value);
-                }} 
+                onChange={handleChange}
+                InputProps={{
+                    startAdornment: startIcon, 
+                }}
+                type={type}
+                error={error} 
+                helperText={error ? 'This field is required' : ''}
                 sx={{
                     '& .MuiInputLabel-root': { 
                         color: 'white',
@@ -38,11 +56,12 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder, onChange })
                         },
                     },
                     '& .MuiOutlinedInput-root': {
-                        '& fieldset': { borderColor: 'white' },
+                        '& fieldset': { borderColor: error ? 'red' : 'white' },
                         '&:hover fieldset': { borderColor: 'white' },
-                        '&.Mui-focused fieldset': { borderColor: '#DBF881' },
+                        '&.Mui-focused fieldset': { borderColor: error ? 'red' : '#DBF881' },
                     },
                     '& .MuiInputBase-input': { color: 'white' },
+                    ...sx
                 }}
             />
         </Box>

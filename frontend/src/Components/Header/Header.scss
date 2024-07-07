@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 96px;
+    border-bottom: solid 2px #887EF1;
+    ;
+}
+
+.icon {
+    font-family: "Gochi Hand";
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+
+
+.user_handling {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+
+    &__username {
+        color: #ffffff;
+        font-weight: bold;
+    }
+}

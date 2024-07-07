@@ -3,13 +3,25 @@ package server
 import (
 	"backend/config"
 	"backend/db"
+
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
-func InitServer() {
-	dbConfig := config.LoadConfig()
+func InitServer(testingMode bool) {
+
+	configPath := "./.env"
+	if testingMode {
+		fmt.Println("Running in testing mode")
+		configPath = "./../.env"
+
+	} else {
+		fmt.Println("Running in production mode")
+	}
+
+	dbConfig := config.LoadConfig(configPath)
 
 	dbInstance, err := db.SetupDatabase(dbConfig)
 	if err != nil {
@@ -18,13 +30,12 @@ func InitServer() {
 
 	r := chi.NewRouter()
 
-	setupMiddleware(r)
 	setupRoutes(r, dbInstance) // Pass the dbInstance to the setupRoutes function
 
 	const port int = 3001
 
-	fmt.Printf("Server running on http://localhost:%d\n", port)
-	err := http.ListenAndServe(":3001", r)
+	fmt.Printf("\nServer running on http://localhost:%d", port)
+	err = http.ListenAndServe(":3001", r)
 	if err != nil {
 		panic(err)
 	}

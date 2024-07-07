@@ -1,0 +1,70 @@
+.template {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    padding: 20px 80px 80px 80px;
+}
+
+.heading {
+    font-family: "Raleway";
+    font-size: 24px;
+    margin-bottom: 8px;
+    margin-top: 20px;
+}
+
+.editSVG {
+    color: white;
+    margin-right: 1rem;
+}
+
+hr {
+    background: #000;
+    height: 1px;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.generateButton {
+    align-self: center;
+    margin-top: 20px;
+}
+
+
+.heading {
+    font-family: "Raleway";
+    font-size: 24px;
+}
+
+.button {
+    padding: 3rem;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.MuiOutlinedInput-root.error .MuiOutlinedInput-notchedOutline {
+    border-color: red;
+}
+
+.MuiInputLabel-root.error {
+    color: red !important;
+}
+
+.MuiInputLabel-root.error.Mui-focused {
+    color: red !important;
+}
+
+
+@media (max-width: 750px) {
+    .template {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .heading {
+        font-size: 20px;
+    }
+}

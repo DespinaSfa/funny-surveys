@@ -15,9 +15,147 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/health": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login an existing user",
+                "responses": {}
+            }
+        },
+        "/polls": {
             "get": {
-                "description": "This is an example of a GET endpoint",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Polls"
+                ],
+                "summary": "Get all polls w/o results",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PollInfo"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Polls"
+                ],
+                "summary": "Post a poll",
+                "parameters": [
+                    {
+                        "description": "Add Poll",
+                        "name": "poll",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PollInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PollInfo"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/polls/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Polls"
+                ],
+                "summary": "Get a poll and it's results",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Poll ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Polls"
+                ],
+                "summary": "Post a poll result",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Poll ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Add poll response",
+                        "name": "poll",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenericPollResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Polls"
+                ],
+                "summary": "Delete a poll",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Poll ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -27,18 +165,141 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/qr": {
+            "post": {
+                "description": "Generate a QR code from the provided URL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/png"
+                ],
+                "tags": [
+                    "QR"
+                ],
+                "summary": "Generate QR code",
+                "parameters": [
+                    {
+                        "description": "QR request",
+                        "name": "qrRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.QRRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "QR code image",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to generate QR code",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/refresh-token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Create a refresh token",
+                "responses": {}
+            }
+        },
+        "/stats": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "get user stats",
+                "responses": {}
+            }
+        },
+        "/update-username": {
+            "put": {
+                "description": "Updates the current username with a new chosen username",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Updates the username",
+                "responses": {
+                    "200": {
+                        "description": "Username update successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update username",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.GenericPollResponse": {
+            "type": "object"
+        },
+        "models.PollInfo": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "pollType": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.QRRequest": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
+	Version:          "1.0",
+	Host:             "localhost:3001",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "PartyPoll API",
+	Description:      "This is the API for the PartyPoll web application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

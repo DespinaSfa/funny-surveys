@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "cypress/component/RangeSelectorSliderComponent.cy.tsx", "cypress/component/PollHeader.cy.tsx"  ]
 }

@@ -1,0 +1,42 @@
+.snackbarContent {
+    background-color: transparent !important; 
+    box-shadow: none !important; 
+}
+
+.toastContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px; 
+}
+
+.toastButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.backToDashboardButton {
+    color: #ffffff !important;
+    font-family: "Raleway" !important;
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+    padding: 0.6rem 1rem !important;
+    border: 2px solid #DBF881 !important;
+    border-radius: 0.5rem !important;
+    cursor: pointer !important;
+
+    &:hover {
+        color: #000000 !important;
+        background-color: #DBF881 !important;
+    }
+}
+
+.qrCodeWrapper {
+    border: 6px solid #DBF881; 
+    padding: 4px;
+    border-radius: 8px;
+}

@@ -1,19 +1,60 @@
 # PartyPoll
 
+## Description of the project
+Party Poll ist eine Umfrage App für Partys. Es kann zwischen 3 verschiedenen Umfragen gewählt werden: Wedding, Party, Planning:
+- "Wedding" ist für deine Hochzeit. Woher kennen deine Gäste dich? Was war dein Highlight der Hochzeit? 
+- "Party" ist für ein Stimmungsbild während deiner Party. Welche Songs müssen unbedingt noch gespielt werden? Wie ist dein aktueller Alkoholpegel? Was ist deine Lieblingsaktivität auf der Party?
+- "Planning" ist dafür da, um deine nächstes Event zu planen. Bekomme ein allgemeines Stimmungsbild deiner Gäste, um dir die Planung zu erleichtern
+ </br>
+ </br>
+Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgreichen login siehst du dein Dashboard mit all deinen Polls und einer allgemeinen Statistik über deine bisherigen Umfragen. Außerdem kannst du deine bisherigen Polls verwalten (löschen, link kopieren, QR - Code erneut herunterladen). Um eine Umfrage zu erstellen, klicke auf den "Add Poll" Button. Wähle zwischen einem der drei Poll-Typen aus. Wenn du dir ein Poll ausgesucht hast, gib dem Poll einen Titel und eine Beschreibung. Schau dir dann die Fragen in dem Poll an. Passt alles? Dann klicke auf den "Generate Poll" Button. Dein Poll wird erstellt und du kannst einen praktischen QR Code herunterladen. Diesen QR Code können deine Gäste dann scannen und den Poll ausfüllen, natürlich ohne sich anzumelden. Nachdem deine Gäste den Poll ausgefüllt haben, können Sie auch die Antworten der anderen nutzer sehen, natürlich anonym. 
 
-## About this project
-TODO: Description of the project
-TODO: Team Members (full name, student short, matriculation number)
+## Team Members 
+- Tom Bestvater | tb173 | 43097
+- Emma Zimmermann | ez019 | 42762
+- Maik Bucher | mb389 | 42687
+- Johanna Rauscher | jr132 | 42959
+- Luca v. Kannen | lv042 | 43394
+- Despina Sfantou | ds215 | 43368
 
 ## Getting started
-TODO: Setup startupguide (how to run this application)
-explains how to start (should be docker compose up)
-where to open (e.g. http://localhost:3000)
-how to login (credentials)
-and additional requirements if necessary (e.g. how to generate demo data / populate the database)
+1. Clone das Projekt und stell sicher, dass du auf dem "main" branch bist. 
+2. Starte das Projekt mit `docker compose up` (Hinweis: Stell sicher, dass Docker Desktop bzw Docker Deamon läuft)
+3. Öffne die App unter http://localhost:3000
+4. Verwende diese Nutzerdaten, um auf ein Profil mit Beispieldaten zuzugreifen: 
+    - Username: User2
+    - Passwort: User2
+5. Verwende diese Nutzerdaten, um auf ein leeres Profil zuzugreifen: 
+    - Username: User1
+    - Passwort: User1
+6. Fertig!
+</br>
+</br>
+
+### Hinweise:
+- Nach jedem Neustart wird die Datenbank zurückgesetzt. Damit das nicht mehr der Fall ist, muss im Backend `db/db_operations.go` in der Funktion `populateDatabase()` "Drop all tables" gelöscht und "Check if the database is empty by checking for existing users" wieder auskommentiert werden.
+- Wenn das Projekt nicht mit `docker compose up` gestartet wird, wird eine `.env` datei im Backend mit folgenden Credentials benötigt:
+    - DB_HOST=localhost
+    - DB_PORT=5432
+    - DB_USER=daddy
+    - DB_PASSWORD=bestvater
+    - DB_NAME=partyPollDB
 
 ## Testing
-TODO: which components you wrote tests for (frontend and backend)
+### Frontend
+- Cypress e2e and component test
+- Run `npm run test-e2e` and `npm run test-component` to start the tests
+- e2e test: Einloggen -> Erstellen eines Polls -> Ausloggen 
+    - Unter: cypress -> e2e
+- component test : MultipleChoiceSelector + UserHandlerComponent (Dropdown Button im Header) 
+    - Unter cycpress -> component
+
+### Backend
+- Run `go test ./...' to run all tests and add the -v flag to get more details
+- e2e test: Für alle CRUD Operationen 
+    - server/routes_test.go
+- unit test: Für Datenbank
+    - db/db_operations_test.go
 
 ## Tech - Stack
 ### Fronend
@@ -21,32 +62,7 @@ TODO: which components you wrote tests for (frontend and backend)
 
 ### Backend
 - Go
-## Recommended Development Prerequisites
-- Golang programming language
-- Docker Desktop or WSL or standard Docker if you are on macos or linux
-- Jetbrains Goland (Is included in the student license, would recommend for beginners) or VSCode
-- ...
-
+- Postgres Database
 
 ## License
 This is a project developed in an HdM course
-
-
-# Gitlab Tutorials
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-

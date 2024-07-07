@@ -1,0 +1,27 @@
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    margin: .5rem;
+
+    .text {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        .list-title {
+            font-size: 24px;
+
+            @media (max-width: 750px) {
+                font-size: 18px;
+            }
+        }
+
+        .poll-description {
+            color: #D2D2D2;
+        }
+    }
+
+    .pollOptions {
+        display: flex;
+    }
+}
