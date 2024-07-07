@@ -52,7 +52,7 @@ build_backend:
   only:
     - develop
 
-test_frontend_component:
+test_frontend:
   stage: test
   image: node:${NODE_VERSION}
   script:
