@@ -5,24 +5,31 @@ stages:
 
 variables:
   GOLANG_VERSION: '1.22.2'
+  POSTGRES_USER: 'postgres'
+  POSTGRES_PASSWORD: 'password'
+  POSTGRES_DB: 'mydb'
 
 cache:
   paths:
     - node_modules/
     - go/pkg/mod/
 
+services:
+  - postgres:13
+
 build_frontend:
   stage: build
-  image: node:latest
+  image: node:${NODE_VERSION}
   script:
     - cd frontend
-    - npm install
+    - npm ci
     - npm run build || true
     - cd ..
     - cp -r frontend/build ./build
   artifacts:
     paths:
       - build/
+    expire_in: 1 week
   only:
     - develop
 
@@ -37,17 +44,17 @@ build_backend:
   artifacts:
     paths:
       - app
+    expire_in: 1 week
   only:
-     - develop
+    - develop
 
 test_frontend_component:
   stage: test
-  image: node:latest
+  image: node:${NODE_VERSION}
   script:
     - apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
     - cd frontend
     - npm ci
-    - npm install
     - npm start &
     - npm run test-component
   only:
@@ -57,6 +64,14 @@ test_frontend_component:
 test_backend_component:
   stage: test
   image: golang:${GOLANG_VERSION}
+  services:
+    - postgres:13
+  variables:
+    POSTGRES_DB: $POSTGRES_DB
+    POSTGRES_USER: $POSTGRES_USER
+    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
   script:
     - cd backend
     - go test ./server
@@ -65,7 +80,6 @@ test_backend_component:
     - merge_requests
     - develop
 
-# Job to deploy app to docker registry
 deploy:
   stage: deploy
   image: docker:20.10.16
@@ -73,7 +87,13 @@ deploy:
     - docker:20.10.16-dind
   script:
     - echo "Deploy App to Docker Registry"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
   only:
     - main
   environment:
     name: production
+  dependencies:
+    - build_frontend
+    - build_backend
