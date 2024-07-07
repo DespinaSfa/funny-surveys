@@ -1,24 +1,18 @@
-FROM node:latest as build
+FROM node:latest
+
 
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
-
+# Install dependencies
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 
-COPY . .
+# Copy the source code
+COPY . ./
 
-RUN npm run build
-
-# Serve the React app using nginx
-FROM nginx:alpine
-
-# Copy the build files from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose the port nginx is running on
+# Expose the development server port
 EXPOSE 3000
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the development server
+CMD ["npm", "start"]

@@ -1,4 +1,15 @@
 services:
+  frontend:
+    container_name: partypoll_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+
   db:
     image: postgres:latest
     container_name: postgres_db
@@ -13,8 +24,6 @@ services:
       - ./data:/var/lib/postgresql/data
 
   backend:
-    depends_on:
-      - db
     container_name: partypoll_backend
     build:
       context: ./backend
@@ -23,21 +32,10 @@ services:
       - ./backend:/app
     ports:
       - "3001:3001"
+    depends_on:
+      - db
     environment:
       - DB_HOST=db
       - DB_USER=daddy
       - DB_PASSWORD=bestvater
       - DB_NAME=partyPollDB
-
-  frontend:
-    depends_on:
-      - backend
-    container_name: partypoll_frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
