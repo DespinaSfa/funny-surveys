@@ -44,15 +44,15 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
 
 ## Testing
 ### Frontend
-- Cypress e2e and component test
-- Run `npm run test-e2e` and `npm run test-component` to start the tests
+- Cypress e2e und component test
+- Führe `npm run test-e2e` (Stell sicher, dass das Backend läuft) und `npm run test-component` aus, um die Tests zu starten
 - e2e test: Einloggen -> Erstellen eines Polls -> Ausloggen 
     - Unter: cypress -> e2e
 - component test : MultipleChoiceSelector + UserHandlerComponent (Dropdown Button im Header) 
     - Unter cycpress -> component
 
 ### Backend
-- Run `go test ./...` to run all tests and add the -v flag to get more details
+- Führe im Ordner `backend` `go test ./...` aus, um alle Tests zu starten. Füge die `-v` Flag für mehr Details hinzu
 - e2e test: Für alle CRUD Operationen 
     - server/routes_test.go
 - unit test: Für Datenbank
