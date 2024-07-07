@@ -29,17 +29,17 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
     oder erstelle die `.env` Datei durch das Ausführen vom `.env.sh` Skript.
 3. Starte das Projekt mit `docker compose up` (Hinweis: Stell sicher, dass Docker Desktop bzw Docker Deamon läuft)
 4. Öffne die App unter http://localhost:3000
-5. Verwende diese Nutzerdaten, um auf ein Profil mit Beispieldaten zuzugreifen: 
+5. Verwende diese Nutzerdaten, um auf ein Profil mit Beispieldaten zuzugreifen (Beim Login muss auf den "Login" Button geklickt werden): 
     - Username: User2
     - Passwort: User2
-6. Verwende diese Nutzerdaten, um auf ein leeres Profil zuzugreifen: 
+6. Verwende diese Nutzerdaten, um auf ein leeres Profil zuzugreifen (Beim Login muss auf den "Login" Button geklickt werden): 
     - Username: User1
     - Passwort: User1
 7. Fertig!
 </br>
 </br>
 
-### Hinweise:
+### Hinweis:
 - Nach jedem Neustart wird die Datenbank zurückgesetzt. Damit das nicht mehr der Fall ist, muss im Backend `db/db_operations.go` in der Funktion `populateDatabase()` "Drop all tables" gelöscht und "Check if the database is empty by checking for existing users" wieder auskommentiert werden.
 
 ## Testing
