@@ -6,9 +6,6 @@ stages:
 variables:
   GOLANG_VERSION: '1.22.2'
   NODE_VERSION: 'latest'
-  POSTGRES_USER: 'daddy'
-  POSTGRES_PASSWORD: 'bestvater'
-  POSTGRES_DB: 'partyPollDB'
 
 cache:
   paths:
@@ -64,6 +61,30 @@ test_frontend_component:
   only:
     - merge_requests
     - develop
+
+  test_frontend_e2e:
+  stage: test
+  image: node:${NODE_VERSION}
+  script:
+    - cd backend
+    - echo "Creating .env file with database configuration"
+    - echo "DB_USER=daddy" > .env
+    - echo "DB_PASSWORD=bestvater" >> .env
+    - echo "DB_NAME=partyPollDB" >> .env
+    - echo "DB_HOST=postgres" >> .env
+    - echo "DB_PORT=5432" >> .env
+    - cat .env
+    - go run ./main.go
+    - cd ..
+    - apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+    - cd frontend
+    - npm ci
+    - npm start &
+    - npm run test-e2e
+  only:
+    - merge_requests
+    - develop
+
 
 test_backend:
   stage: test
