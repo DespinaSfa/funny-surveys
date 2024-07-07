@@ -19,26 +19,26 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
 
 ## Getting started
 1. Clone das Projekt und stell sicher, dass du auf dem "main" branch bist. 
-2. Starte das Projekt mit `docker compose up` (Hinweis: Stell sicher, dass Docker Desktop bzw Docker Deamon läuft)
-3. Öffne die App unter http://localhost:3000
-4. Verwende diese Nutzerdaten, um auf ein Profil mit Beispieldaten zuzugreifen: 
-    - Username: User2
-    - Passwort: User2
-5. Verwende diese Nutzerdaten, um auf ein leeres Profil zuzugreifen: 
-    - Username: User1
-    - Passwort: User1
-6. Fertig!
-</br>
-</br>
-
-### Hinweise:
-- Nach jedem Neustart wird die Datenbank zurückgesetzt. Damit das nicht mehr der Fall ist, muss im Backend `db/db_operations.go` in der Funktion `populateDatabase()` "Drop all tables" gelöscht und "Check if the database is empty by checking for existing users" wieder auskommentiert werden.
-- Wenn das Projekt nicht mit `docker compose up` gestartet wird, wird eine `.env` datei im Backend mit folgenden Credentials benötigt:
+2. Lege im Ordner `backend` eine `.env` Datei mit folgenden Credentials an:
     - DB_HOST=localhost
     - DB_PORT=5432
     - DB_USER=daddy
     - DB_PASSWORD=bestvater
     - DB_NAME=partyPollDB
+3. Starte das Projekt mit `docker compose up` (Hinweis: Stell sicher, dass Docker Desktop bzw Docker Deamon läuft)
+4. Öffne die App unter http://localhost:3000
+5. Verwende diese Nutzerdaten, um auf ein Profil mit Beispieldaten zuzugreifen: 
+    - Username: User2
+    - Passwort: User2
+6. Verwende diese Nutzerdaten, um auf ein leeres Profil zuzugreifen: 
+    - Username: User1
+    - Passwort: User1
+7. Fertig!
+</br>
+</br>
+
+### Hinweise:
+- Nach jedem Neustart wird die Datenbank zurückgesetzt. Damit das nicht mehr der Fall ist, muss im Backend `db/db_operations.go` in der Funktion `populateDatabase()` "Drop all tables" gelöscht und "Check if the database is empty by checking for existing users" wieder auskommentiert werden.
 
 ## Testing
 ### Frontend
@@ -50,7 +50,7 @@ Um eine Umfrage (Poll) zu erstellen musst du eingeloggt sein. Nach dem erfolgrei
     - Unter cycpress -> component
 
 ### Backend
-- Run `go test ./...' to run all tests and add the -v flag to get more details
+- Run `go test ./...` to run all tests and add the -v flag to get more details
 - e2e test: Für alle CRUD Operationen 
     - server/routes_test.go
 - unit test: Für Datenbank
