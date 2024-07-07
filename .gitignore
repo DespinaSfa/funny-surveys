@@ -9,3 +9,4 @@
 
 # ignore .env file
 backend/.env
+/.env
