@@ -14,7 +14,7 @@ describe('Routing and create a poll', () => {
     cy.contains('label', 'Password').type('test')
 
     //Wrong password
-    cy.get('button').contains('Submit').click()
+    cy.get('button').contains('Login').click()
     cy.contains('An error occurred. Please try again.')
 
     //enter right password
@@ -22,7 +22,7 @@ describe('Routing and create a poll', () => {
     cy.contains('label', 'Password').type('User2')
 
     //login sucessfully
-    cy.get('button').contains('Submit').click()
+    cy.get('button').contains('Login').click()
 
     //dashboard
     cy.contains('About Your Polls')
