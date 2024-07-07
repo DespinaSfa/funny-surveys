@@ -6,6 +6,9 @@ stages:
 variables:
   GOLANG_VERSION: '1.22.2'
   NODE_VERSION: 'latest'
+  POSTGRES_USER: 'daddy'
+  POSTGRES_PASSWORD: 'bestvater'
+  POSTGRES_DB: 'partyPollDB'
 
 cache:
   paths:
