@@ -62,7 +62,7 @@ test_frontend_component:
     - merge_requests
     - develop
 
-test_backend_component:
+test_backend:
   stage: test
   image: golang:${GOLANG_VERSION}
   services:
@@ -75,6 +75,7 @@ test_backend_component:
     POSTGRES_PORT: 5432
   script:
     - cd backend
+    - go test ./server
     - go test ./db
   only:
     - merge_requests
